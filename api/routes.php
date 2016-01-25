@@ -670,6 +670,10 @@ elseif ($route->match('api-modulesid', null)) {
     $response->data = $module;
     $response->json($response);
 }
+// Public API module archives
+elseif ($route->match('api-module-archives', null)) {
+    $response->json($response);
+}
 // Public API modules installed
 elseif ($route->match('api-modules-installed', null)) {
     // Prepare and sanitize post input
