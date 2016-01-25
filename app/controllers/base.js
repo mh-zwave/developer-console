@@ -85,7 +85,7 @@ myAppController.controller('BaseController', function ($scope, $cookies, $locati
      * Expand/collapse navigation
      */
     $scope.naviExpanded = {};
-    $scope.expandNavi = function (key, status) {
+    $scope.expandNavi = function (key,event,status) {
         if (typeof status === 'boolean') {
             $scope.naviExpanded[key] = status;
         } else {
