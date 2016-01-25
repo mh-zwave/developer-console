@@ -45,7 +45,7 @@ myApp.config(['$routeProvider', function($routeProvider) {
                 }).
                  //Help
                 when('/help', {
-                    templateUrl: 'app/views/pages/help.html',
+                    templateUrl: 'views/help.php',
                     requireLogin: true
                 }).
                 //Login

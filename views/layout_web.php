@@ -22,9 +22,11 @@
                         </a>
                             <span class="divider-vertical"></span>
                             <a href="<?php echo Ut::uri('home') ?>"><i class="fa fa-home"></i></a>
+                             <span class="divider-vertical"></span>
+                            <a href="<?php echo Ut::uri('help') ?>"><i class="fa fa-question-circle"></i></a>
 
                     </div>
-                    ><!--<div id="navigation_right">
+                    <!--<div id="navigation_right">
                         <a href="<?php echo Ut::uri('login') ?>"><i class="fa fa-sign-in"></i>  Login</a>
                     </div> --> 
                 </div><!-- /#navigation --> 

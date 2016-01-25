@@ -57,6 +57,10 @@ if ($route->match('home', null)) {
 elseif ($route->match('login', null)) {
     $view->view = 'login';
 }
+// Help page
+elseif ($route->match('help', null)) {
+    $view->view = 'help';
+}
 // Login post
 elseif ($route->match('login/post', 2)) {
     // Check post 

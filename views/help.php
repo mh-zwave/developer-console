@@ -1,6 +1,4 @@
-<!-- Home -->
-<div ng-controller_="HomeController">
-
+<!-- Help -->
 <h1>How to create an automation module</h1>
 <br>
 <h2>General structure</h2>
@@ -276,4 +274,3 @@ Important: if you update your module you need to verify them again.</b>
 <br><br>
 
 <br><br>
-</div>
