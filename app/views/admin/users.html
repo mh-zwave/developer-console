@@ -1,0 +1,94 @@
+<!-- Module -->
+<div ng-controller="AdminUserController">
+    <bb-loader></bb-loader>
+    <div class="entry-header row">
+        <div class="col col-md-6">
+            <h1>Admin: {{_t('Users')}}</h1>
+        </div>
+        <div class="col col-md-6">
+            <div class="page-control form-inline">
+                <div class="input-group search-form hide-on-mobile">
+                    <input type="text" ng-model="q" class="form-control" value="{{q}}">
+                    <span class="input-group-addon"><i class="fa fa-search"></i></span> 
+                </div>
+                <button class="btn btn-success" ng-click="expandElement('addnew')" ng-if="!expand.addnew"><i class="fa fa-plus"></i> {{_t('Add new user')}}</button>
+            </div>
+        </div>
+    </div>
+    <div ng-if="expand.addnew">
+        <form name="form_user" id="form_skin" class="form form-page form-inline" ng-submit="createUser(users.model)" novalidate>
+            <fieldset>
+                <!-- login -->
+                <div class="form-group">
+                    <label for="mail">Email Address</label>
+                    <input name="mail" id="mail" type="text" class="form-control" value="" ng-model="users.model.mail" />
+                </div>
+                <!-- password -->
+                <div class="form-group">
+                    <label for="pw">Password</label>
+                    <input name="pw" id="pw" type="password" class="form-control" value="" ng-model="users.model.pw" />
+                </div>
+
+            </fieldset>
+            <fieldset class="submit-entry">
+                <button type="button" class="btn btn-default" ng-click="expandElement('addnew')"><i class="fa fa-times  text-danger"></i> <span ng-bind="_t('lb_cancel')"></span></button>
+                <button type="submit" class="btn btn-submit"><i class="fa fa-check"></i> <span ng-bind="_t('Save')"></span></button>
+            </fieldset>
+        </form>
+    </div>
+
+    <div>
+        <table class="table table-condensed table-report">
+            <thead>
+            <th>
+             <a href="" ng-click="orderBy('id')">#
+                    <span ng-show="predicate == 'id'"><i ng-show="!reverse" class="fa fa-sort-asc"></i><i ng-show="reverse" class="fa fa-sort-desc"></i></span>
+                </a>
+            </th>
+            <th>
+                <a href="" ng-click="orderBy('name')">Name
+                    <span ng-show="predicate == 'title'"><i ng-show="!reverse" class="fa fa-sort-asc"></i><i ng-show="reverse" class="fa fa-sort-desc"></i></span>
+                </a>
+            </th>
+            <th>
+                <a href="" ng-click="orderBy('mail')">Email
+                    <span ng-show="predicate == 'mail'"><i ng-show="!reverse" class="fa fa-sort-asc"></i><i ng-show="reverse" class="fa fa-sort-desc"></i></span>
+                </a>
+            </th>
+            <th>
+                <a href="" ng-click="orderBy('role')">Role
+                    <span ng-show="predicate == 'role'"><i ng-show="!reverse" class="fa fa-sort-asc"></i><i ng-show="reverse" class="fa fa-sort-desc"></i></span>
+                </a>
+            </th>
+            <th>
+                <a href="" ng-click="orderBy('confirmed')">Confirmed
+                    <span ng-show="predicate == 'confirmed'"><i ng-show="!reverse" class="fa fa-sort-asc"></i><i ng-show="reverse" class="fa fa-sort-desc"></i></span>
+                </a>
+            </th>
+            <th>&nbsp;</th>
+            </thead>
+            <tbody>
+                <tr dir-paginate="v in users.data| orderBy:predicate:reverse | filter:q | itemsPerPage: pageSize track by v.id" current-page="currentPage">
+                    <td>{{v.id}}</td>
+                    <td>{{v.name}}</td>
+                    <td>{{v.mail}}</td>
+                    <td>
+                        <span class="is-clickable" ng-if="v.role == 1" ng-click="updateUser({id: v.id, role: 2})"><i class="fa fa-user-secret fa-lg text-success"></i></span>
+                        <span class="is-clickable" ng-if="v.role == 2" ng-click="updateUser({id: v.id, role: 1})"><i class="fa fa-user fa-lg text-primary"></i></span>
+                    </td>
+                    <td>
+                        <span class="is-clickable" ng-click="updateUser({id: v.id, confirmed: 1})" ng-if="v.confirmed == 0"><i class="fa fa-ban text-danger fa-lg"></i></span>
+                        <span class="is-clickable" ng-click="updateUser({id: v.id, confirmed: 0})" ng-if="v.confirmed == 1"><i class="fa fa-check text-success fa-lg"></i></span>
+                    </td>
+                    <td class="td-action">
+                        <a class="btn btn-default" ng-href="#admin-users/{{v.id}}"><i class="fa fa-pencil text-info"></i></a>
+                        <a class="btn btn-default" href="" ng-click="deleteUser(v.id, _t('lb_delete_confirm'))" ng-disabled="v.id == user.id"><i class="fa fa-times text-danger"></i></a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <div class="text-center mobile-padding" ng-if_="collection.length > 0">
+            <dir-pagination-controls boundary-links="true"></dir-pagination-controls>
+        </div>
+    </div>
+</div>

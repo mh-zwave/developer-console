@@ -1,0 +1,132 @@
+<!-- Module ID  -->
+<div ng-controller="ModuleIdController">
+    <bb-loader></bb-loader>
+    <div ng-if="module.input.id > 0"> 
+    <h2>Module: {{module.input.title}}</h2>
+    <form name="form_module" id="form_module" class="form form-page" ng-submit="updateModule()" novalidate>
+        <fieldset>
+            <h3><i class="fa fa-chevron-down"></i> <span ng-bind="_t('Module info')"></span></h3>
+            <!-- title -->
+            <div class="form-group">
+                <label for="title">{{_t('Title')}}</label>
+                <input name="title" id="title" type="text" class="form-control" value="{{module.input.title}}" ng-model="module.input.title" />
+            </div>
+            <!-- description -->
+            <div class="form-group">
+                <label for="description">{{_t('Description')}}</label>
+                <textarea name="description" id="description" class="form-control" ng-model="module.input.description">{{module.input.description}}</textarea>
+            </div>
+             <!-- patchnotes -->
+            <div class="form-group">
+                <label for="patchnotes">{{_t('Patch notes')}}</label>
+                <textarea name="patchnotes" id="patchnotes" class="form-control" ng-model="module.input.patchnotes">{{module.input.patchnotes}}</textarea>
+            </div>
+            <!-- category -->
+            <div class="form-group form-inline">
+                <label for="category">{{_t('Category')}}: </label>  <span ng-repeat="v in cfg.categories" ng-if="module.input.category == v.id">{{v.name}}</span>
+               
+            </div>
+            <!-- maturity, version -->
+            <div class="form-group form-inline">
+                <label for="version">{{_t('Version')}}: </label> <span>{{module.input.version}}</span><br />
+                <label for="maturity">{{_t('Maturity')}}</label>
+                <select name="maturity" id="maturity" class="form-control" ng-model="module.input.maturity">
+                    <!-- <option value="">--- Select one ---</option>-->
+                    <option ng-repeat="v in cfg.maturity" ng-selected="module.input.maturity == v" value="{{v}}">{{v}}</option>
+                </select>
+            </div>
+
+        </fieldset>
+        <fieldset>
+            <h3><i class="fa fa-chevron-down"></i> <span ng-bind="_t('Author info')"></span></h3>
+            <!-- author -->
+            <div class="form-group">
+                <label for="author">{{_t('Author')}}</label>
+                <input name="author" id="author" type="text" class="form-control" value="{{module.input.author}}" ng-model="module.input.author" />
+            </div>
+            <!-- homepage -->
+            <div class="form-group">
+                <label for="homepage">{{_t('Homepage')}}</label>
+                <input name="homepage" id="homepage" type="text" class="form-control" value="{{module.input.homepage}}" ng-model="module.input.homepage" />
+            </div>
+
+        </fieldset>
+         <!-- Archive -->
+        <!--<fieldset>
+            
+            <h3><i class="fa fa-chevron-down"></i> <span ng-bind="_t('Archive')"></span></h3>
+            <div class="form-group">
+                <img class="report-img" ng-src="{{cfg.img.module + module.input.icon}}" alt="img" />
+                <bb-help-text trans="_t('Duis fringilla lobortis magna, vel feugiat odio euismod ut. Suspendisse potenti.')"></bb-help-text>
+                <input type="file" class="form-control_" file-model="myFile" /><br /> 
+                <button type="button" class="btn btn-primary" id="btn_upload_img" ng-click="uploadFile()"><i class="fa fa-upload"></i> {{_t('Upload module')}}</button>
+            </div>
+        </fieldset> -->
+        <fieldset class="submit-entry">
+            <button type="button" class="btn btn-default" bb-go-back><i class="fa fa-times  text-danger"></i> <span ng-bind="_t('lb_cancel')"></span></button>
+            <button type="submit" class="btn btn-submit"><i class="fa fa-check"></i> <span ng-bind="_t('Update')"></span></button>
+        </fieldset>
+    </form>
+    <h2>Tokens</h2>
+    <form name="form_token" id="form_token" class="form form-page" ng-submit="addToken()" novalidate>
+        <fieldset class="form-inline">
+            <input name="token" id="token" class="form-control" value="" ng-model="token.input.token" />
+            <button type="submit" class="btn btn-success"><i class="fa fa-plus"></i> {{_t('Add token')}}</button>
+        </fieldset>
+        <fieldset>
+            <table class="table table-condensed table-report">
+                <tbody>
+                    <tr ng-repeat="v in token.data">
+                        <td>{{v.token}}</td>
+                        <td class="td-action">
+                            <button class="btn btn-default" type="button" 
+                                    ng-click="deleteToken(v.id, _t('lb_delete_confirm'))"
+                                    ><i class="fa fa-times text-danger"></i></button>   
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </fieldset> 
+        <fieldset class="submit-entry">
+            <button type="button" class="btn btn-default" bb-go-back><i class="fa fa-times  text-danger"></i> <span ng-bind="_t('Cancel')"></span></button>
+        </fieldset>
+    </form>
+    <h2>Comments ({{comments.all.length}})</h2>
+    <h3 class="text-right is-clickable" ng-click="expandElement('appcommentadd')"><i class="fa fa-plus text-success"></i> Add comment</h3>
+    <form name="form_comment" id="form_comment" class="form form-page" ng-if="expand.appcommentadd" ng-submit="addComment(form_comment, comments.model)" novalidate>
+        <fieldset>
+            <!-- content -->
+            <div class="form-group">
+                <textarea name="content" id="content" class="form-control report-content" ng-blur="contentBlur = true" ng-model="comments.model.content" ng-required="true"></textarea>
+                <bb-validator input-name='form_comment.content.$error.required' trans='_t("field_required")' has-blur='contentBlur'></bb-validator> 
+            </div>
+            <!-- name -->
+            <div class="form-group form-inline">
+                <label>{{_t('lb_name')}}: </label>
+                <input name="name" id="name" type="text" class="form-control" value="{{comments.model.name}}" ng-blur="nameBlur = true" ng-model="comments.model.name" ng-required="true" />
+                <bb-validator input-name='form_comment.name.$error.required' trans='_t("field_required")' has-blur='nameBlur'></bb-validator> 
+            </div>
+        </fieldset>
+        <fieldset class="submit-entry">
+            <button type="button" class="btn btn-default" ng-click="expandElement('appcommentadd')"><i class="fa fa-times  text-danger"></i> <span ng-bind="_t('lb_cancel')"></span></button>
+            <button type="submit" class="btn btn-submit" ng-disabled="form_comment.$invalid"><i class="fa fa-check"></i> <span ng-bind="_t('lb_submit')"></span></button>
+        </fieldset>
+    </form>
+    <div class="form form-inline form-page" ng-if="!expand.appcommentadd">
+        <div class="fieldset">
+            <div  class="comment-entry comment-type-{{v.type}}" ng-repeat="v in comments.all track by v.id" ng-class-odd="'odd'" ng-class-even="'even'">
+                <div class="comment-header">
+                    <i class="fa fa-clock-o"></i> {{v.created_at}}  | <i class="fa" ng-class="v.type == 1 ? 'fa-user-plus text-success' : 'fa-user'"></i> {{v.name}}
+                     <button class="btn btn-default" type="button" 
+                                    ng-click="deleteComment(v.id, _t('lb_delete_confirm'))"
+                                    ><i class="fa fa-times text-danger"></i></button>   
+                </div>
+                <div class="comment-body">{{v.content}}</div>
+            </div>
+        </div>
+        <div class="fieldset submit-entry">
+            <button type="button" class="btn btn-default" bb-go-back><i class="fa fa-times  text-danger"></i> <span ng-bind="_t('Cancel')"></span></button>
+        </div>
+    </div>
+    </div>
+</div>

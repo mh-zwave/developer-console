@@ -1,0 +1,77 @@
+<!-- Module ID  -->
+<div ng-controller="SkinIdController">
+    <bb-loader></bb-loader>
+    <div ng-if="skin.input.id > 0"> 
+    <h2>Skin: {{skin.input.title}}</h2>
+    <form name="form_skin" id="form_skin" class="form form-page" ng-submit="updateSkin(form_skin)" novalidate>
+       
+        <fieldset>
+            <h3><i class="fa fa-chevron-down"></i> <span ng-bind="_t('Module info')"></span></h3>
+            <!-- title -->
+            <div class="form-group">
+                <label class="isrequired" for="title">{{_t('Title')}}</label>
+                <input name="title" id="title" type="text" class="form-control" value="{{skin.input.title}}" ng-model="skin.input.title" required />
+                <div class="valid-error text-danger" ng-show="(form_skin.title.$dirty && form_skin.title.$invalid) || (submitted && form_skin.title.$error.required)">
+                    <i class="fa fa-exclamation-triangle"></i> Title is required.
+                </div>
+            </div>
+            
+            <!-- maturity, version -->
+            <div class="form-group form-inline">
+                <label class="isrequired" for="ui_version">{{_t('UI version')}}</label>
+                <select name="ui_version" id="ui_version" class="form-control" ng-model="skin.input.ui_version" ng-required="true">
+                    <option value="">--- Select one ---</option>
+                    <option ng-repeat="v in cfg.ui_version" ng-selected="skin.input.ui_version == v" value="{{v}}">{{v}}</option>
+                </select>
+                <label class="isrequired" for="version">{{_t('Version')}}</label>
+                <input name="version" id="version" type="text" class="form-control" value="{{skin.input.version}}" ng-model="skin.input.version" ng-required="true" />
+                <div class="valid-error text-danger" ng-show="(form_skin.ui_version.$dirty && form_skin.ui_version.$invalid) || (submitted && form_skin.ui_version.$error.required)">
+                    <i class="fa fa-exclamation-triangle"></i> UI Version is required.
+                </div>
+                <div class="valid-error text-danger" ng-show="(form_skin.version.$dirty && form_skin.version.$invalid) || (submitted && form_skin.version.$error.required)">
+                    <i class="fa fa-exclamation-triangle"></i> Version is required.
+                </div>
+            </div>
+
+        </fieldset>
+        <fieldset>
+             <!-- Upload skin -->
+            <h3><i class="fa fa-chevron-down"></i> <span ng-bind="_t('Upgrade skin')"></span></h3>
+            <p class="form-control-static">File name: {{skin.input.file}} </p>
+            <input class="form-control" type="file" name="file" onchange="angular.element(this).scope().uploadSkin(this.files)"/>
+        </fieldset>
+        <fieldset>
+             <!-- Upload skin image -->
+            <h3><i class="fa fa-chevron-down"></i> <span ng-bind="_t('Upload image')"></span></h3>
+            <input class="form-control" type="file" name="file" onchange="angular.element(this).scope().uploadSkinImg(this.files)"/>
+           <img class="product-img" ng-src="{{cfg.img.skin + skin.input.icon}}" alt="img" ng-if="skin.input.icon" />
+        </fieldset>
+        <fieldset>
+             <!-- description -->
+            <div class="form-group">
+                <label for="description">{{_t('Description')}}</label>
+                <textarea name="description" id="description" class="form-control" ng-model="skin.input.description">{{skin.input.description}}</textarea>
+            </div>
+            </fieldset>
+        <fieldset>
+            <h3><i class="fa fa-chevron-down"></i> <span ng-bind="_t('Author info')"></span></h3>
+            <!-- author -->
+            <div class="form-group">
+                <label for="author">{{_t('Author')}}</label>
+                <input name="author" id="author" type="text" class="form-control" value="{{skin.input.author}}" ng-model="skin.input.author" />
+            </div>
+            <!-- homepage -->
+            <div class="form-group">
+                <label for="homepage">{{_t('Homepage')}}</label>
+                <input name="homepage" id="homepage" type="text" class="form-control" value="{{skin.input.homepage}}" ng-model="skin.input.homepage" />
+            </div>
+
+        </fieldset>
+        
+        <fieldset class="submit-entry">
+            <button type="button" class="btn btn-default" bb-go-back><i class="fa fa-times  text-danger"></i> <span ng-bind="_t('lb_cancel')"></span></button>
+            <button type="submit" class="btn btn-submit" ng-click="submitted=true"><i class="fa fa-check"></i> <span ng-bind="_t('Update')"></span></button>
+        </fieldset>
+    </form>
+    </div>
+</div>

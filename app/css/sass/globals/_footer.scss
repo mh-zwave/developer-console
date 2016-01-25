@@ -1,0 +1,24 @@
+/* Footer
+-------------------------------------------------- */
+
+#footer {
+/*    position: relative;
+    text-align: center;*/
+    height: 40px;
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    border-top: solid 1px $footer-border-color;
+     //background-color: $footer-bcg-color;
+    .container{
+        //margin-top: 10px;
+        font-size: $app-body-font-size * 0.9;
+        color: lighten($app-body-color, 40%);
+        text-align: center;
+        line-height: 40px;
+    }
+    
+}
+
+#footer a{}
+#footer a:hover{}

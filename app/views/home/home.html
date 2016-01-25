@@ -1,0 +1,33 @@
+<!-- Home -->
+<div ng-controller_="HomeController">
+    <div class="row">
+        <div class="col col-md-7">
+            <h1>Join SmartHome</h1>
+            <p>In ultricies suscipit metus accumsan varius. Mauris cursus justo eu lobortis suscipit. In ultricies mi leo, ut luctus neque ultricies vel. Aenean vehicula euismod lacinia. Cras scelerisque risus et leo consectetur, quis volutpat metus aliquam.</p>
+        </div>
+        <div class="col col-md-5">
+            <form name="form_join" id="form_join" class="form form-page" ng-submit="login(input)" novalidate>
+    <fieldset>
+        <h3><i class="fa fa-chevron-down"></i> {{_t('Create your personal account')}}</h3>
+        <!-- login -->
+        <div class="form-group">
+            <label for="email">{{_t('Email Address')}}</label>
+            <input name="email" id="email" type="text" class="form-control" value="{{input.login}}" ng-model="input.login" />
+            <bb-help-text trans="_t('You will receive account confirmation email.')"></bb-help-text>
+        </div>
+        <!-- password -->
+        <div class="form-group">
+            <label for="password">{{_t('Password')}}</label>
+            <input name="password" id="password" type="password" class="form-control" value="" ng-model="input.password" />
+            <bb-help-text trans="_t('Use at least 6 characters.')"></bb-help-text>
+        </div>
+
+    </fieldset>
+    <fieldset class="submit-entry">
+        <button type="submit" class="btn btn-primary btn-block">{{_t('Create an account')}}</button>
+    </fieldset>
+</form>
+<a class="btn btn-default btn-block" href="#login"><i class="fa fa-sign-in"></i> {{_t('Already have an account?')}}</a>
+        </div>
+    </div>
+</div>

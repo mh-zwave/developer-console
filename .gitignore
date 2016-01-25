@@ -1,0 +1,10 @@
+#.gitignore
+/_project/*
+/nbproject/*
+/archiv/*
+/storage/*
+/modules/*
+/temp/*
+/upload/*
+/api/config.php
+/api/configuration.php

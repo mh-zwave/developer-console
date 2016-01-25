@@ -1,0 +1,25 @@
+<!-- Module ID  -->
+<div ng-controller="AdminModuleIdController">
+    <bb-loader></bb-loader>
+    <h2>Email for: {{module.input.subject}}</h2>
+    <form name="form_module" id="form_module" class="form form-page" ng-submit="sendEmail()" novalidate>
+        <fieldset>
+            <!-- title -->
+            <div class="form-group">
+                <label for="subject">{{_t('Email subject')}}</label>
+                <input name="subject" id="subject" type="text" class="form-control" value="{{module.input.subject}}" ng-model="module.input.subject" />
+            </div>
+            <!-- body -->
+            <div class="form-group">
+                <label for="body">{{_t('Email body')}}</label>
+                <textarea name="body" id="body" class="form-control" ng-model="module.input.body">{{module.input.body}}</textarea>
+            </div>
+
+        </fieldset>
+        
+        <fieldset class="submit-entry">
+            <button type="button" class="btn btn-default" bb-go-back><i class="fa fa-times  text-danger"></i> <span ng-bind="_t('lb_cancel')"></span></button>
+            <button type="submit" class="btn btn-submit"><i class="fa fa-check"></i> <span ng-bind="_t('Send email')"></span></button>
+        </fieldset>
+    </form>
+</div>

@@ -1,0 +1,101 @@
+<!-- Module -->
+<div ng-controller="AdminModuleController">
+    <bb-loader></bb-loader>
+      <div class="entry-header row">
+        <div class="col col-md-6">
+            <h1>Admin: {{_t('Modules')}}</h1>
+        </div>
+        <div class="col col-md-6">
+            <div class="page-control form-inline">
+                <div class="input-group search-form hide-on-mobile">
+                <input type="text" ng-model="q" class="form-control" value="{{q}}">
+                <span class="input-group-addon"><i class="fa fa-search"></i></span> 
+            </div>
+            </div>
+        </div>
+    </div>
+    
+    <div>
+        <table class="table table-condensed table-report">
+            <thead>
+            <th>&nbsp;</th>
+            <th>
+                <a href="" ng-click="orderBy('title')">Title 
+                    <span ng-show="predicate == 'title'"><i ng-show="!reverse" class="fa fa-sort-asc"></i><i ng-show="reverse" class="fa fa-sort-desc"></i></span>
+                </a>
+            </th>
+            <th>
+                <a href="" ng-click="orderBy('category')">Category
+                    <span ng-show="predicate == 'category'"><i ng-show="!reverse" class="fa fa-sort-asc"></i><i ng-show="reverse" class="fa fa-sort-desc"></i></span>
+                </a>
+            </th>
+            <th>
+                <a href="" ng-click="orderBy('author')">Author
+                    <span ng-show="predicate == 'author'"><i ng-show="!reverse" class="fa fa-sort-asc"></i><i ng-show="reverse" class="fa fa-sort-desc"></i></span>
+                </a>
+            </th>
+            <th>
+                <a href="" ng-click="orderBy('version')">Version
+                    <span ng-show="predicate == 'version'"><i ng-show="!reverse" class="fa fa-sort-asc"></i><i ng-show="reverse" class="fa fa-sort-desc"></i></span>
+                </a>
+            </th>
+            <th>
+                <a href="" ng-click="orderBy('maturity')">Maturity
+                    <span ng-show="predicate == 'maturity'"><i ng-show="!reverse" class="fa fa-sort-asc"></i><i ng-show="reverse" class="fa fa-sort-desc"></i></span>
+                </a>
+            </th>
+            <th>
+                <a href="" ng-click="orderBy('last_updated')">Updated
+                    <span ng-show="predicate == 'last_updated'"><i ng-show="!reverse" class="fa fa-sort-asc"></i><i ng-show="reverse" class="fa fa-sort-desc"></i></span>
+                </a>
+            </th>
+             <th>
+                <a href="" ng-click="orderBy('verified')">Verification
+                    <span ng-show="predicate == 'verified'"><i ng-show="!reverse" class="fa fa-sort-asc"></i><i ng-show="reverse" class="fa fa-sort-desc"></i></span>
+                </a>
+            </th>
+            <th>
+                <a href="" ng-click="orderBy('featured')">Featured
+                    <span ng-show="predicate == 'featured'"><i ng-show="!reverse" class="fa fa-sort-asc"></i><i ng-show="reverse" class="fa fa-sort-desc"></i></span>
+                </a>
+            </th>
+            <th>&nbsp;</th>
+            </thead>
+            <tbody>
+                <tr ng-repeat_="v in module.data| orderBy:predicate:reverse | filter:q  track by v.id" dir-paginate="v in module.data| orderBy:predicate:reverse | filter:q | itemsPerPage: pageSize" current-page="currentPage">
+                    <td class="td-img">
+                        <img class="report-img" ng-src="{{cfg.img.module + v.icon}}" alt="img" />
+                    </td>
+                    <td>{{v.title}}</td>
+                    <td>{{v.category}}</td>
+                    <td>{{v.author}}</td>
+                    <td>{{v.version}}</td>
+                    <td>{{v.maturity}}</td>
+                    <td>{{v.last_updated}}</td>
+                    <td ng-switch="v.verified">
+                        <span ng-switch-when="1"><i class="fa fa-check fa-lg text-success"></i></span>
+                        <span ng-switch-when="2"><i class="fa fa-exclamation-circle fa-lg text-warning"></i> in proccess</span>
+                        <span ng-switch-when="0"><i class="fa fa-exclamation-triangle fa-lg text-danger"></i> not verified</span>
+                            
+                    </td>
+                    <td>
+                        <span class="is-clickable" ng-click="updateModule({id:v.id,featured: 1})" ng-if="v.featured == 0"><i class="fa fa-ban text-danger fa-lg"></i></span>
+                       <span class="is-clickable" ng-click="updateModule({id:v.id,featured: 0})" ng-if="v.featured == 1"><i class="fa fa-check text-success fa-lg"></i></span>
+                            
+                    </td>
+                    <td class="td-action">
+                        <a class="btn btn-default" ng-href="" ng-click="verifiModule(v.id,1)" ng-if="v.verified == 0  || v.verified == 2"><i class="fa fa-check text-success"></i></a>
+                        <a class="btn btn-default" href="" ng-click="verifiModule(v.id,0)" ng-if="v.verified == 1"><i class="fa fa-ban text-danger"></i></a>
+                        <a class="btn btn-default" ng-href="#admin-modules/{{v.id}}"><i class="fa fa-envelope text-info"></i></a>
+                        <a class="btn btn-default" ng-href="{{cfg.path.module + v.file}}"><i class="fa fa-download"></i></a>
+                        <a class="btn btn-default" ng-href="#modules/{{v.id}}"><i class="fa fa-pencil text-info"></i></a>
+                        <a class="btn btn-default" href="" ng-click="deleteModule(v.id,_t('lb_delete_confirm'))"><i class="fa fa-times text-danger"></i></a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <div class="text-center mobile-padding" ng-if_="collection.length > 0">
+            <dir-pagination-controls boundary-links="true"></dir-pagination-controls>
+        </div>
+    </div>
+</div>
