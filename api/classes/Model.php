@@ -301,6 +301,26 @@ class Model {
         }
         return $data;
     }
+    
+    /**
+     * Load list of archives
+     * 
+     * @param array $param
+     * @return array
+     */
+    public function archiveAll($param = array()) {
+        $data = array();
+        $q = "SELECT * FROM archiv ";
+        $q .= $this->where($param);
+        $q .= " ORDER BY id DESC";
+        $result = $this->db->query($q);
+        if ($result->num_rows > 0) {
+            while ($row = $result->fetch_object()) {
+                array_push($data, $row);
+            }
+        }
+        return $data;
+    }
 
     /**
      * Load list of tokens

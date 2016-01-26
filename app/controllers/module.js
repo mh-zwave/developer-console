@@ -151,6 +151,9 @@ myAppController.controller('ModuleIdController', function ($scope, $routeParams,
         },
         show: true
     };
+     $scope.archive = {
+        all: {}
+    };
     /**
      * Load data
      */
@@ -162,7 +165,7 @@ myAppController.controller('ModuleIdController', function ($scope, $routeParams,
 
         }, function (error) {
             $scope.loading = false;
-            alertify.alert("Unable to load data: " + error.statusText);
+            alertify.alert("Unable to load module: " + error.statusText);
         });
 
     };
@@ -246,7 +249,7 @@ myAppController.controller('ModuleIdController', function ($scope, $routeParams,
 
         }, function (error) {
             $scope.loading = false;
-            alertify.alert("Unable to load data: " + error.statusText);
+            alertify.alert("Unable to load comments: " + error.statusText);
         });
 
     };
@@ -294,6 +297,21 @@ myAppController.controller('ModuleIdController', function ($scope, $routeParams,
         });
 
     };
+    
+     /**
+     * Load archive
+     */
+    $scope.loadArchive = function () {
+        dataFactory.getApi('archive', '/' + $scope.module.id, true).then(function (response) {
+             $scope.archive.all = response.data.data;
+
+        }, function (error) {
+            $scope.loading = false;
+            alertify.alert("Unable to load an archive: " + error.statusText);
+        });
+
+    };
+    $scope.loadArchive();
 
 
 });

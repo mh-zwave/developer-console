@@ -38,16 +38,19 @@ var config_data = {
             'adminuserdelete': '?uri=adminuserdelete',
             'comments': '?uri=api-comments',
             'commentscreate': '?uri=api-comments-create',
-            'commentdelete': '?uri=commentdelete'
+            'commentdelete': '?uri=commentdelete',
+            'archive': '?uri=api-module-archive'
 
         },
         'path': {
             'module': 'modules/',
+            'archive': 'archiv/',
             'skin': 'storage/skins/'
         },
         // List of image pathes
         'img': {
             'module': 'modules/',
+            'archive': 'archiv/',
             'skin': 'storage/skins/',
             'iconPlaceholder': 'storage/icon-placeholder.png'
         },

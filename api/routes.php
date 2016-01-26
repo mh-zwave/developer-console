@@ -671,7 +671,8 @@ elseif ($route->match('api-modulesid', null)) {
     $response->json($response);
 }
 // Public API module archives
-elseif ($route->match('api-module-archives', null)) {
+elseif ($route->match('api-module-archive', 1)) {
+    $response->data = $model->archiveAll(array('module_id' => $route->getParam(0)));
     $response->json($response);
 }
 // Public API modules installed
