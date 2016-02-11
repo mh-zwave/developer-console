@@ -171,7 +171,7 @@ function check_available($user_id, $en_title, $path, $moduleName, $filetype) {
     mysql_connect($server, $db_user, $db_pw);
     mysql_select_db($db) or die("Datenbank konnte nicht gefunden werden.");
 
-    $sql = "SELECT * FROM modules WHERE title = '" . $en_title . "' AND user_id = " . $user_id;
+    $sql = "SELECT * FROM modules WHERE modulename = '" . $moduleName . "' AND user_id = " . $user_id;
     $result = mysql_query($sql);
     $count = 0;
     $current_module_id = 0;
@@ -276,7 +276,7 @@ function store_json($jsonarray, $targetdir, $path, $user_id, $filetype) {
         //$de_desc = $jsonarray_lang['m_descr'];
         //$de_title = $jsonarray_lang['m_title'];
         $de_desc = iconv(mb_detect_encoding($jsonarray_lang['m_descr'], mb_detect_order(), true), 'UTF-8', $jsonarray_lang['m_descr']);
-        $de_title = iconv(mb_detect_encoding($en_title = $jsonarray_lang['m_title'], mb_detect_order(), true), 'UTF-8', $en_title = $jsonarray_lang['m_title']);
+        $de_title = iconv(mb_detect_encoding($jsonarray_lang['m_title'], mb_detect_order(), true), 'UTF-8', $jsonarray_lang['m_title']);
     } else {
         //echo "DE: empty";
     }
@@ -289,7 +289,7 @@ function store_json($jsonarray, $targetdir, $path, $user_id, $filetype) {
         //$en_desc = $jsonarray_lang['m_descr'];
         //$en_title = $jsonarray_lang['m_title'];
         $en_desc =  iconv(mb_detect_encoding($jsonarray_lang['m_descr'], mb_detect_order(), true), 'UTF-8', $jsonarray_lang['m_descr']);
-        $en_title = iconv(mb_detect_encoding($en_title = $jsonarray_lang['m_title'], mb_detect_order(), true), 'UTF-8', $en_title = $jsonarray_lang['m_title']);
+        $en_title = iconv(mb_detect_encoding($jsonarray_lang['m_title'], mb_detect_order(), true), 'UTF-8', $jsonarray_lang['m_title']);
        
         
     } else {
@@ -306,7 +306,7 @@ function store_json($jsonarray, $targetdir, $path, $user_id, $filetype) {
         //$ru_desc = $jsonarray_lang['m_descr'];
        // $ru_title = $jsonarray_lang['m_title'];
          $ru_desc =  iconv(mb_detect_encoding($jsonarray_lang['m_descr'], mb_detect_order(), true), 'UTF-8', $jsonarray_lang['m_descr']);
-        $ru_title = iconv(mb_detect_encoding($en_title = $jsonarray_lang['m_title'], mb_detect_order(), true), 'UTF-8', $en_title = $jsonarray_lang['m_title']);
+        $ru_title = iconv(mb_detect_encoding($jsonarray_lang['m_title'], mb_detect_order(), true), 'UTF-8', $jsonarray_lang['m_title']);
     } else {
 
         //echo "ru: empty";
@@ -333,7 +333,7 @@ function store_json($jsonarray, $targetdir, $path, $user_id, $filetype) {
         mysql_query("set collation_connection='utf8_general_ci'");
 
 
-    $sql = "SELECT * FROM modules WHERE title = '" . $en_title . "' AND user_id = " . $user_id;
+    $sql = "SELECT * FROM modules WHERE modulename = '" . $moduleName . "' AND user_id = " . $user_id;
     $result = mysql_query($sql);
     $count = 0;
     $current_module_id = 0;
@@ -421,7 +421,7 @@ function store_json($jsonarray, $targetdir, $path, $user_id, $filetype) {
     } else {
         //new -> insert
         $name_exist = false;
-        $sql = "SELECT * FROM modules WHERE title = '" . $en_title . "'";
+        $sql = "SELECT * FROM modules WHERE modulename = '" . $moduleName . "'";
         $result = mysql_query($sql);
         $count = 0;
         $current_module_id = 0;
