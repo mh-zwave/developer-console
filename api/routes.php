@@ -346,12 +346,13 @@ elseif ($route->match('skincreate', null)) {
     $uploader = new Uploader();
     $uploader->setDir('storage/skins/');
     $uploader->setExtensions(array('gz', 'zip'));  //allowed extensions list//
-    $uploader->setMaxSize(.5);
-    $uploader->sameName(true); //set max file size to be allowed in MB//
+    $uploader->setMaxSize(.5); //set max file size to be allowed in MB//
+    $uploader->sameName(true);
     $uploader->setUniqueFile();
 
     if ($uploader->uploadFile('file')) {   //txtFile is the filebrowse element name //     
         $file = $uploader->getUploadName(); //get uploaded file name, renames on upload//
+        $file_name = strtok($file,  '.'); //get uploaded file name, renames on upload//
     } else {//upload failed
         //get upload error message 
         $response->status = 500;
@@ -361,8 +362,8 @@ elseif ($route->match('skincreate', null)) {
     if ($file) {
         $input = array(
             'user_id' => $user->id,
-            'name' => Ut::toSlug($file),
-            'title' => $file,
+            'name' => Ut::toSlug($file_name),
+            'title' => $file_name,
             'file' => $file,
             'author' => trim($user->first_name . ' ' . $user->last_name),
             'homepage' => $user->homepage,
@@ -381,6 +382,7 @@ elseif ($route->match('skincreate', null)) {
 elseif ($route->match('skinupdate', null)) {
     // Prepare and sanitize post input
     $_POST['active'] = 1;
+    $_POST['created_at'] = date("Y-m-d H:i:s");
     $api->setInputs($_POST);
     $skin = $model->skinFind(array('id' => $api->getInputVal('id'), 'user_id' => $user->id, 'name' => $api->getInputVal('name')));
     if (!$skin) {

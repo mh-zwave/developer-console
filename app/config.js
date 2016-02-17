@@ -187,7 +187,7 @@ var config_data = {
         // Maturity
         'maturity': ['stable', 'beta', 'alpha'],
         // UI versions
-        'ui_version': ['1.0.1', '1.0.2', '1.0.3'],
+        'ui_version': ['1.3.0'],
         // Local data path
         'local_data_url': 'storage/data/',
         // Language directory
