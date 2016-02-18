@@ -1,8 +1,8 @@
 <!-- Home -->
 <div class="row">
     <div class="col col-md-7">
-        <h1>Join SmartHome</h1>
-        <p>In ultricies suscipit metus accumsan varius. Mauris cursus justo eu lobortis suscipit. In ultricies mi leo, ut luctus neque ultricies vel. Aenean vehicula euismod lacinia. Cras scelerisque risus et leo consectetur, quis volutpat metus aliquam.</p>
+        <h1>z-wave.Me - Developer Console</h1>
+        <p></p>
         <a class="btn btn-default btn-block" href="<?php echo Ut::uri('join') ?>">Create your personal account</a>
     </div>
     <div class="col col-md-5">
