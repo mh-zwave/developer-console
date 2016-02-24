@@ -138,17 +138,15 @@ myAppFactory.factory('dataFactory', function($http,$q, myCache, cfg) {
              withCredentials: true,
         headers: {'Content-Type': undefined },
             transformRequest: angular.identity
-//            headers: {
-//                'Content-Type': undefined,
-//                'ZWAYSession': ZWAYSession
-//            }
         }).then(function(response) {
-             return response;
-//            if (typeof response.data === 'object') {
-//                return response;
-//            } else {// invalid response
-//                return $q.reject(response);
-//            }
+             //return response;
+            if (typeof response.data === 'object') {
+                return response;
+            } else {// invalid response
+                response.status = 500;
+                response.statusText = 'Unable to upload module!';
+                return $q.reject(response);
+            }
         }, function(response) {// something went wrong
             return $q.reject(response);
         });
