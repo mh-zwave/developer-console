@@ -654,7 +654,7 @@ elseif ($route->match('api-modulesid', null)) {
     $api->setInputs($_POST);
     $title_lang = 'title_' . $api->getInputVal('lang');
     $desc_lang = 'desc_' . $api->getInputVal('lang');
-    $module = $model-> moduleFindJoin(array('m.id' => $api->getInputVal('id')));
+    $module = $model->moduleFindJoin(array('m.id' => $api->getInputVal('id')));
     if (!$module) {
         $response->status = 404;
         $response->message = 'Not found';

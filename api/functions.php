@@ -57,6 +57,9 @@ function unpack_tar($path) {
     // Files are done, close files
     fclose($out_file);
     gzclose($file);
+    
+    //var_dump($out_file_name);
+    //return;
 
     $phar_data = new PharData($out_file_name);
     $phar_data->extractTo(str_replace(".tar", "", $out_file_name));
