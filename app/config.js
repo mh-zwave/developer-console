@@ -39,6 +39,7 @@ var config_data = {
             'comments': '?uri=api-comments',
             'commentscreate': '?uri=api-comments-create',
             'commentdelete': '?uri=commentdelete',
+            'commentnotnew': '?uri=commentnotnew',
             'archive': '?uri=api-module-archive'
 
         },

@@ -142,6 +142,7 @@ class Model {
         $data = array();
         $q = "SELECT m.*,"
                 . " ROUND(AVG(IFNULL(r.score, 0))) AS rating, "
+                . " SUM(IFNULL(c.isnew, 0)) AS commentsnew, "
                 . " COUNT(distinct r.id) AS ratingscnt, "
                 . " COUNT(distinct c.id) AS commentscnt "
                 . " FROM modules m "

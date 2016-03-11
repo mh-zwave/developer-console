@@ -158,6 +158,12 @@ myAppController.controller('ModuleIdController', function ($scope, $routeParams,
      * Load data
      */
     $scope.loadData = function () {
+        if($routeParams.author){
+             dataFactory.postApi('commentnotnew', {module_id: $scope.module.id}).then(function (response) {
+        }, function (error) {});
+            console.log('Updating comments...')
+        }
+        
         dataFactory.getApi('module', '/' + $scope.module.id, true).then(function (response) {
             $scope.module.data = response.data.data;
             $scope.comments.model.name = $scope.module.data.author;

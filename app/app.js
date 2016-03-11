@@ -24,7 +24,7 @@ myApp.config(['$routeProvider', function($routeProvider) {
                     templateUrl: 'app/views/modules/modules.html',
                 }).
                 //Module ID
-                when('/modules/:id', {
+                when('/modules/:id/:author?', {
                     templateUrl: 'app/views/modules/modules_id.html',
                     requireLogin: true
                 }).

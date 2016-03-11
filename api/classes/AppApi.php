@@ -337,7 +337,7 @@ class AppApi {
 
         $email = array(
             'from' => $this->cfg['email']['noreply'],
-            'from_name' => 'Administratur',
+            'from_name' => 'Administrator',
             'to' => $user->mail, //$this->cfg['email']['module_verification'],
             'subject' => $input['subject'],
             'body' => $this->getTemplate('views/emails/verification_failed.html', $data),

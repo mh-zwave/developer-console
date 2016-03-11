@@ -307,6 +307,23 @@ elseif ($route->match('tokendelete', null)) {
     $model->tokenDelete($api->getInputs());
     $response->json($response);
 }
+// API update comments with isnew = 0
+elseif ($route->match('commentnotnew', null)) {
+
+    // Prepare and sanitize post input
+    $api->setInputs($_POST);
+//    var_dump($api->getInputs());
+//    exit;
+
+    if (!$model->commentUpdate(array('isnew' => 0), array('module_id' => $api->getInputVal('module_id')))) {
+        $response->status = 500;
+        $response->message = 'Unable to update a comment';
+        $response->json($response);
+    }
+//    $input['id'] = $db->inserId();
+//    $response->data = $input;
+    $response->json($response);
+}
 // API comment delete
 elseif ($route->match('commentdelete', null)) {
 
