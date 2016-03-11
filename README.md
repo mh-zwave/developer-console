@@ -8,7 +8,6 @@ z-wave.Me - Developer Console
 - Modules: added new comments icon.
 
 #### Fixes
-- ???
 
 #### Changes
 - New column "isnew" added into comments table.
