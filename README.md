@@ -11,7 +11,6 @@ z-wave.Me - Developer Console
 
 #### Changes
 - New column "isnew" added into comments table.
-- ALTER TABLE `comments` ADD COLUMN `isnew` TINYINT NOT NULL DEFAULT '1' AFTER `name`;
 
 ## v1.0.0
 - Released.
