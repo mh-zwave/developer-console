@@ -4,6 +4,8 @@
     <div ng-if="module.input.id > 0"> 
     <h2>Module: {{module.input.title}}</h2>
     <form name="form_module" id="form_module" class="form form-page" ng-submit="updateModule()" novalidate>
+        <!-- Statistics -->
+         
         <fieldset>
             <h3><i class="fa fa-chevron-down"></i> <span ng-bind="_t('Module info')"></span></h3>
             <!-- title -->
@@ -51,22 +53,24 @@
             </div>
 
         </fieldset>
-         <!-- Archive -->
-        <!--<fieldset>
-            
-            <h3><i class="fa fa-chevron-down"></i> <span ng-bind="_t('Archive')"></span></h3>
-            <div class="form-group">
-                <img class="report-img" ng-src="{{cfg.img.module + module.input.icon}}" alt="img" />
-                <bb-help-text trans="_t('Duis fringilla lobortis magna, vel feugiat odio euismod ut. Suspendisse potenti.')"></bb-help-text>
-                <input type="file" class="form-control_" file-model="myFile" /><br /> 
-                <button type="button" class="btn btn-primary" id="btn_upload_img" ng-click="uploadFile()"><i class="fa fa-upload"></i> {{_t('Upload module')}}</button>
-            </div>
-        </fieldset> -->
         <fieldset class="submit-entry">
             <button type="button" class="btn btn-default" bb-go-back><i class="fa fa-times  text-danger"></i> <span ng-bind="_t('lb_cancel')"></span></button>
             <button type="submit" class="btn btn-submit"><i class="fa fa-check"></i> <span ng-bind="_t('Update')"></span></button>
         </fieldset>
     </form>
+     <h2>Statistics</h2>
+    <div class="form form-page">
+        <fieldset>
+            <div class="form-group">
+                 <p><i class="fa fa-download"></i> This app was downloaded: <strong>{{module.input.installed}}&times;</strong></p>
+                 <p><i class="fa fa-comments"></i> This app was commented: <strong>{{module.input.commentscnt}}&times;</strong></p>
+                 <p><i class="fa fa-thumbs-up"></i> This app was rated: <strong>{{module.input.ratingscnt}}&times;</strong></p>
+                 <p><i class="fa fa-star"></i> The average number of points scored: <strong>{{module.input.rating}}</strong> from 5</p>
+                
+            </div>
+
+        </fieldset>
+         </div>
     <h2>Tokens</h2>
     <form name="form_token" id="form_token" class="form form-page" ng-submit="addToken()" novalidate>
         <fieldset class="form-inline">

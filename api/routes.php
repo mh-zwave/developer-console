@@ -219,8 +219,8 @@ elseif ($route->match('modules', null)) {
 elseif ($route->match('module', 1)) {
     // Prepare and sanitize post input
     $api->setInputs(array('id' => $route->getParam(0)));
-    $where = ($user->role > 1 ? array('id' => $api->getInputVal('id'), 'user_id' => $user->id) : array('id' => $api->getInputVal('id')));
-    $module = $model->moduleFind($where);
+    $where = ($user->role > 1 ? array('m.id' => $api->getInputVal('id'), 'm.user_id' => $user->id) : array('m.id' => $api->getInputVal('id')));
+    $module = $model->moduleFindJoin($where);
     if (!count($module)) {
         $response->status = 403;
         $response->message = 'Forbidden';
