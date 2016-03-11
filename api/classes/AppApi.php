@@ -352,7 +352,7 @@ class AppApi {
      * @param array $param
      * return bool
      */
-    private function sendEmail($param) {
+    public function sendEmail($param) {
         $mail = new PHPMailer(true);
         try {
             $mail->CharSet = 'UTF-8';

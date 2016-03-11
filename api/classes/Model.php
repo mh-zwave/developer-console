@@ -140,12 +140,13 @@ class Model {
      */
     public function modulesAll($param = array()) {
         $data = array();
-        $q = "SELECT m.*,"
+        $q = "SELECT m.*,u.mail,"
                 . " ROUND(AVG(IFNULL(r.score, 0))) AS rating, "
                 . " SUM(IFNULL(c.isnew, 0)) AS commentsnew, "
                 . " COUNT(distinct r.id) AS ratingscnt, "
                 . " COUNT(distinct c.id) AS commentscnt "
                 . " FROM modules m "
+                . " LEFT JOIN user u ON m.user_id = u.id "
                 . " LEFT JOIN ratings r ON m.id = r.module_id "
                 . " LEFT JOIN comments c ON m.id = c.module_id ";
         $q .= $this->where($param);
@@ -168,11 +169,12 @@ class Model {
      */
     public function apiModulesAll($param = array(), $ids) {
         $data = array();
-        $q = "SELECT m.*,"
+        $q = "SELECT m.*,u.mail,"
                 . " ROUND(AVG(IFNULL(r.score, 0))) AS rating, "
                 . " COUNT(distinct r.id) AS ratingscnt, "
                 . " COUNT(distinct c.id) AS commentscnt "
                 . " FROM modules m "
+                . " LEFT JOIN user u ON m.user_id = u.id "
                 . " LEFT JOIN ratings r ON m.id = r.module_id "
                 . " LEFT JOIN comments c ON m.id = c.module_id ";
         $q .= $this->where($param);
@@ -231,12 +233,13 @@ class Model {
      */
     public function moduleFindJoin($param) {
         $data = array();
-         $q = "SELECT m.*,"
+         $q = "SELECT m.*,u.mail,"
                 . " ROUND(AVG(IFNULL(r.score, 0))) AS rating, "
                 . " ROUND(AVG(IFNULL(r.score, 0)),1) AS ratingsavg, "
                 . " COUNT(distinct r.id) AS ratingscnt, "
                 . " COUNT(distinct c.id) AS commentscnt "
                 . " FROM modules m "
+                . " LEFT JOIN user u ON m.user_id = u.id "
                 . " LEFT JOIN ratings r ON m.id = r.module_id "
                 . " LEFT JOIN comments c ON m.id = c.module_id ";
         $q .= $this->where($param);

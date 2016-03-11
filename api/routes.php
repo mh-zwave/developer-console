@@ -721,6 +721,16 @@ elseif ($route->match('api-comments-create', null)) {
         $response->message = 'Unable to add a comment';
         $response->json($response);
     }
+     if($api->getInputVal('type') != 1 && $module = $model->moduleFindJoin(array('m.id' => $api->getInputVal('module_id')))){
+         $email = array(
+            'from' => 'noreply@zwaveeurope.com',
+            'from_name' => $api->getInputVal('name'),
+            'to' => $module->mail,
+            'subject' => $module->title.' - new comment',
+            'body' => $api->getInputVal('content'), 
+        );
+        $api->sendEmail($email);
+     }
     $input['id'] = $db->inserId();
     $response->data = $input;
     $response->json($response);
@@ -729,8 +739,6 @@ elseif ($route->match('api-comments-create', null)) {
 elseif ($route->match('api-comments', 1)) {
     // Prepare and sanitize post input
     $api->setInputs(array('module_id' => $route->getParam(0)));
-    //var_dump($api->getInputs());
-    //die;
     $response->data = $model->commentsAll($api->getInputs());
     $response->json($response);
 }
