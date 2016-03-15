@@ -25,17 +25,10 @@
             </div>
             <!-- category -->
             <div class="form-group form-inline">
-                <label for="category">{{_t('Category')}}: </label>  <span ng-repeat="v in cfg.categories" ng-if="module.input.category == v.id">{{v.name}}</span>
-               
-            </div>
-            <!-- maturity, version -->
-            <div class="form-group form-inline">
-                <label for="version">{{_t('Version')}}: </label> <span>{{module.input.version}}</span><br />
-                <label for="maturity">{{_t('Maturity')}}</label>
-                <select name="maturity" id="maturity" class="form-control" ng-model="module.input.maturity">
-                    <!-- <option value="">--- Select one ---</option>-->
-                    <option ng-repeat="v in cfg.maturity" ng-selected="module.input.maturity == v" value="{{v}}">{{v}}</option>
-                </select>
+                <p>{{_t('Category')}}: <strong ng-repeat="v in cfg.categories" ng-if="module.input.category == v.id">{{v.name}}</strong></p>
+               <p>{{_t('Version')}}: <strong>{{module.input.version}}</strong></p> 
+                <p>{{_t('Maturity')}}: <strong>{{module.input.maturity}}</strong></p> 
+                <p>{{_t('Dependencies')}}: <strong>{{module.input.dependencies}}</strong></p> 
             </div>
 
         </fieldset>
@@ -166,6 +159,7 @@
                     <td>{{v.last_updated}}</td>
                     <td class="td-action">
                         <a class="btn btn-default" ng-href="{{cfg.path.archive + v.archiv}}"><i class="fa fa-download"></i></a>
+                        <button class="btn btn-default" ng-click="deleteArchive(v.id,v.modulename, _t('lb_delete_confirm'))"><i class="fa fa-times text-danger"></i></button>
                     </td>
                 </tr>
             </tbody>

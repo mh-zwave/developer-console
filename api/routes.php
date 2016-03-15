@@ -332,6 +332,27 @@ elseif ($route->match('commentdelete', null)) {
     $model->commentDelete($api->getInputs());
     $response->json($response);
 }
+// API archiv delete
+elseif ($route->match('archivedelete', null)) {
+
+    // Prepare and sanitize post input
+    $api->setInputs($_POST);
+   
+    $archive = $model->archiveFind($api->getInputs());
+    if (!$archive) {
+        $response->status = 404;
+        $response->message = 'Not found';
+        $response->json($response);
+    }
+    $model->archiveDelete(array('id'=>$archive->id));
+    if (is_file('archiv/' . $archive->image)) {
+        unlink('archiv/' . $archive->image);
+    }
+    if (is_file('archiv/' . $archive->archiv)) {
+        unlink('archiv/' . $archive->archiv);
+    }
+    $response->json($response);
+}
 // API skins
 elseif ($route->match('skins', null)) {
     $where = ($user->role > 1 ? array('user_id' => $user->id) : null);
@@ -691,7 +712,12 @@ elseif ($route->match('api-modulesid', null)) {
 }
 // Public API module archives
 elseif ($route->match('api-module-archive', 1)) {
-    $response->data = $model->archiveAll(array('module_id' => $route->getParam(0)));
+    if(!$route->getParam(0)){
+         $response->status = 404;
+        $response->message = 'Not found';
+        $response->json($response);
+    }
+    $response->data = $model->archiveAll(array('modulename' => $route->getParam(0)));
     $response->json($response);
 }
 // Public API modules installed

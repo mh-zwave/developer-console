@@ -307,6 +307,24 @@ class Model {
         return $data;
     }
     
+     /**
+     * Load a single archive
+     * 
+     * @param int $param
+     * @return array
+     */
+    public function archiveFind($param) {
+        $data = array();
+        $q = "SELECT * FROM archiv " . $this->where($param);
+        $result = $this->db->query($q);
+        if ($result->num_rows > 0) {
+            while ($row = $result->fetch_object()) {
+                $data = $row;
+            }
+        }
+        return $data;
+    }
+    
     /**
      * Load list of archives
      * 
@@ -325,6 +343,19 @@ class Model {
             }
         }
         return $data;
+    }
+     /**
+     * Delete an archive
+     * 
+     * @param int $param
+     * @return array
+     */
+    public function archiveDelete($param) {
+        if (!is_array($param) || count($param) < 1) {
+            return false;
+        }
+        $q = "DELETE FROM archiv " . $this->where($param);
+        return $this->db->query($q);
     }
 
     /**

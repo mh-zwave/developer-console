@@ -101,6 +101,8 @@ function read_json($path, $user_id, $filetype, $wrong_folder) {
     $version = $jsonarray['version'];
     $maturity = $jsonarray['maturity'];
     $moduleName = $jsonarray['moduleName'];
+    $dependencies = $jsonarray['dependencies'];
+    $modulejson = $jsonfile;
     $latest = date('Ymdhis');
     $lang_target = $path . "/lang";
 
@@ -161,7 +163,7 @@ function read_json($path, $user_id, $filetype, $wrong_folder) {
         $jsonfile = file_get_contents("$targetdir");
         $jsonarray = json_decode($jsonfile, true);
 
-        $response = store_json($jsonarray, $targetdir, $path, $user_id, $filetype);
+        $response = store_json($jsonarray, $targetdir, $path, $user_id, $filetype, $jsonfile);
     } else {
         return "error";
     }
@@ -258,7 +260,7 @@ function check_available($user_id, $en_title, $path, $moduleName, $filetype) {
     }
 }
 
-function store_json($jsonarray, $targetdir, $path, $user_id, $filetype) {
+function store_json($jsonarray, $targetdir, $path, $user_id, $filetype,$jsonfile) {
 
     $response = new Response;
     $category = $jsonarray['category'];
@@ -268,6 +270,8 @@ function store_json($jsonarray, $targetdir, $path, $user_id, $filetype) {
     $version = $jsonarray['version'];
     $maturity = $jsonarray['maturity'];
     $moduleName = $jsonarray['moduleName'];
+    $dependencies = implode(', ',$jsonarray['dependencies']);
+    $modulejson = $jsonfile;
 
     $lang_target = $path . "/lang";
 
@@ -370,6 +374,8 @@ function store_json($jsonarray, $targetdir, $path, $user_id, $filetype) {
 	last_updated = '" . date("Y-m-d H:i:s") . "',
 	user_id = '" . $user_id . "',
 	modulename = '" . $modulename_db . "',
+        modulejson = '" . $modulejson . "',
+        dependencies = '" . $dependencies . "',
         file = '" . $module_file . "',
 	detail_images = '0', 
 	verified = '0', 
@@ -412,8 +418,8 @@ function store_json($jsonarray, $targetdir, $path, $user_id, $filetype) {
             echo "copy $file schlug fehl...\n";
         }
 
-        $sql = "INSERT INTO archiv (module_id, modulename, image, version, last_updated, archiv) VALUES
-    (" . $last_id . ",'" . $moduleName . "','" . $moduleName . "_" . date("YmdHis") . '.png' . "','" . $version . "','" . date("Y-m-d H:i:s") . "','" . $insert_module . "')";
+        $sql = "INSERT INTO archiv (module_id, modulename,image, version, last_updated, archiv) VALUES
+        (" . $current_module_id . ",'" . $moduleName . "','" . $moduleName . "_" . date("YmdHis") . '.png' . "','" . $version . "','" . date("Y-m-d H:i:s") . "','" . $insert_module . "')";
         $result = mysql_query($sql);
         //Finished
         //Rederict to main.php
@@ -455,12 +461,14 @@ function store_json($jsonarray, $targetdir, $path, $user_id, $filetype) {
 	last_updated,
 	user_id,
 	modulename,
+        modulejson,
+        dependencies,
         file,
 	detail_images, 
 	verified, 
 	contributed)
 	VALUES('" . $category . "','" . $author . "','" . $homepage . "','" . $moduleName . '.png' . "','" . $version . "','" . $maturity . "','" . $en_title . "','" . $en_desc . "','" . date("Y-m-d H:i:s") . "','" . $user_id . "','"
-                    . $modulename_db . "','" . $module_file . "','0','0','0')";
+                    . $modulename_db . "','" . $modulejson . "','" . $dependencies . "','" . $module_file . "','0','0','0')";
             //echo $sql;
             $result = mysql_query($sql);
             $response->data = array('id' => mysql_insert_id());

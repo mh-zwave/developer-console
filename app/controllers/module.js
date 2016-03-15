@@ -168,6 +168,7 @@ myAppController.controller('ModuleIdController', function ($scope, $routeParams,
             $scope.module.data = response.data.data;
             $scope.comments.model.name = $scope.module.data.author;
             angular.extend($scope.module.input, $scope.module.data);
+             $scope.loadArchive(response.data.data.modulename);
 
         }, function (error) {
             $scope.loading = false;
@@ -307,8 +308,8 @@ myAppController.controller('ModuleIdController', function ($scope, $routeParams,
      /**
      * Load archive
      */
-    $scope.loadArchive = function () {
-        dataFactory.getApi('archive', '/' + $scope.module.id, true).then(function (response) {
+    $scope.loadArchive = function (modulename) {
+        dataFactory.getApi('archive', '/' + modulename, true).then(function (response) {
              $scope.archive.all = response.data.data;
 
         }, function (error) {
@@ -317,7 +318,29 @@ myAppController.controller('ModuleIdController', function ($scope, $routeParams,
         });
 
     };
-    $scope.loadArchive();
+    
+     /**
+     * Delete archive
+     */
+    $scope.deleteArchive = function (id,modulename, message) {
+        if (!id) {
+            return;
+        }
+       
+        var input = {id: id};
+        alertify.confirm(message, function () {
+            dataFactory.postApi('archivedelete', input).then(function (response) {
+                $scope.loadArchive(modulename);
+            }, function (error) {
+                $scope.loading = false;
+                alertify.alert("Unable to delete archive");
+            });
+        }, function () {
+            return;
+        });
+
+    };
+   
 
 
 });
