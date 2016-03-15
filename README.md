@@ -1,8 +1,8 @@
 z-wave.Me - Developer Console
 ===============
 
-## v1.0.1
-#### New features
+## v1.0.1 
+#### New features 
 - Module detail: posibility to delete archive.
 - Module detail: displaying dependencies.
 - Comments: send email when new comment has been posted.
