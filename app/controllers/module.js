@@ -185,7 +185,7 @@ myAppController.controller('ModuleIdController', function ($scope, $routeParams,
      */
     $scope.updateModule = function () {
         $scope.loading = {status: 'loading-spin', icon: 'fa-spinner fa-spin', message: $scope._t('Updating...')};
-        dataFactory.postApi('moduleupdate', $scope.module.input).then(function (response) {
+        dataFactory.postApi('moduleupdate', _.omit($scope.module.input, 'mail','rating','ratingsavg','ratingscnt','commentscnt')).then(function (response) {
             $scope.loading = {status: 'loading-fade', icon: 'fa-check text-success', message: $scope._t('Module successfully updated.')};
             $scope.loadData();
         }, function (error) {
