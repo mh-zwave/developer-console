@@ -337,14 +337,14 @@ elseif ($route->match('archivedelete', null)) {
 
     // Prepare and sanitize post input
     $api->setInputs($_POST);
-   
+
     $archive = $model->archiveFind($api->getInputs());
     if (!$archive) {
         $response->status = 404;
         $response->message = 'Not found';
         $response->json($response);
     }
-    $model->archiveDelete(array('id'=>$archive->id));
+    $model->archiveDelete(array('id' => $archive->id));
     if (is_file('archiv/' . $archive->image)) {
         unlink('archiv/' . $archive->image);
     }
@@ -390,7 +390,7 @@ elseif ($route->match('skincreate', null)) {
 
     if ($uploader->uploadFile('file')) {   //txtFile is the filebrowse element name //     
         $file = $uploader->getUploadName(); //get uploaded file name, renames on upload//
-        $file_name = strtok($file,  '.'); //get uploaded file name, renames on upload//
+        $file_name = strtok($file, '.'); //get uploaded file name, renames on upload//
     } else {//upload failed
         //get upload error message 
         $response->status = 500;
@@ -712,12 +712,18 @@ elseif ($route->match('api-modulesid', null)) {
 }
 // Public API module archives
 elseif ($route->match('api-module-archive', 1)) {
-    if(!$route->getParam(0)){
-         $response->status = 404;
+    if (!$route->getParam(0)) {
+        $response->status = 404;
         $response->message = 'Not found';
         $response->json($response);
     }
     $response->data = $model->archiveAll(array('modulename' => $route->getParam(0)));
+    
+    if (empty($response->data)) {
+        $response->status = 404;
+        $response->message = 'Not found';
+        $response->json($response);
+    }
     $response->json($response);
 }
 // Public API modules installed
@@ -747,16 +753,16 @@ elseif ($route->match('api-comments-create', null)) {
         $response->message = 'Unable to add a comment';
         $response->json($response);
     }
-     if($api->getInputVal('type') != 1 && $module = $model->moduleFindJoin(array('m.id' => $api->getInputVal('module_id')))){
-         $email = array(
+    if ($api->getInputVal('type') != 1 && $module = $model->moduleFindJoin(array('m.id' => $api->getInputVal('module_id')))) {
+        $email = array(
             'from' => 'noreply@zwaveeurope.com',
             'from_name' => $api->getInputVal('name'),
             'to' => $module->mail,
-            'subject' => $module->title.' - new comment',
-            'body' => $api->getInputVal('content'), 
+            'subject' => $module->title . ' - new comment',
+            'body' => $api->getInputVal('content'),
         );
         $api->sendEmail($email);
-     }
+    }
     $input['id'] = $db->inserId();
     $response->data = $input;
     $response->json($response);
@@ -773,13 +779,13 @@ elseif ($route->match('api-rating-create', null)) {
     // Prepare and sanitize post input
     $api->setInputs($_POST);
     // Already rated
-    $rating = $model->ratingFind(array('module_id' => $api->getInputVal('module_id'),'remote_id' => $api->getInputVal('remote_id')));
+    $rating = $model->ratingFind(array('module_id' => $api->getInputVal('module_id'), 'remote_id' => $api->getInputVal('remote_id')));
     if ($rating) {
         $response->status = 409;
         $response->message = 'Already rated';
         $response->json($response);
     }
-    if ((int)$api->getInputVal('score') > 5 || !$model->ratingCreate($api->getInputs())) {
+    if ((int) $api->getInputVal('score') > 5 || !$model->ratingCreate($api->getInputs())) {
         $response->status = 500;
         $response->message = 'Unable to rate the module';
         $response->json($response);

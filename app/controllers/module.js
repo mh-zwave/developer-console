@@ -256,7 +256,7 @@ myAppController.controller('ModuleIdController', function ($scope, $routeParams,
 
         }, function (error) {
             $scope.loading = false;
-            alertify.alert("Unable to load comments: " + error.statusText);
+            //alertify.alert("Unable to load comments: " + error.statusText);
         });
 
     };
@@ -314,7 +314,7 @@ myAppController.controller('ModuleIdController', function ($scope, $routeParams,
 
         }, function (error) {
             $scope.loading = false;
-            alertify.alert("Unable to load an archive: " + error.statusText);
+            //alertify.alert("Unable to load an archive: " + error.statusText);
         });
 
     };
