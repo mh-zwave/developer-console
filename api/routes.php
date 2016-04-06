@@ -683,7 +683,7 @@ elseif ($route->match('api-modules', null)) {
         $ids = $model->apiTokensModuleIds(rtrim($tokens, ','));
     }
 
-    $response->data = $model->apiModulesAll(array('verified' => 1), $ids);
+    $response->data = $model->apiModulesAll(array('verified' => 1,'active' => 1), $ids);
     $response->json($response);
 }
 // Public API module id
