@@ -62,20 +62,6 @@ myAppController.controller('ModuleController', function ($scope, $window, dataFa
     };
 
     /**
-     * Update module
-     */
-    $scope.updateModule = function (input) {
-        $scope.loading = {status: 'loading-spin', icon: 'fa-spinner fa-spin', message: $scope._t('Updating...')};
-        dataFactory.postApi('moduleupdate',input).then(function (response) {
-            $scope.loading = {status: 'loading-fade', icon: 'fa-check text-success', message: $scope._t('Module successfully updated.')};
-            $scope.loadData();
-        }, function (error) {
-            $scope.loading = false;
-            alertify.alert("Unable to update module: " + error.statusText);
-        });
-    };
-    
-     /**
      * Delete module
      */
     $scope.deleteModule = function (id, message) {
@@ -270,7 +256,7 @@ myAppController.controller('ModuleIdController', function ($scope, $routeParams,
 
         }, function (error) {
             $scope.loading = false;
-            //alertify.alert("Unable to load comments: " + error.statusText);
+            alertify.alert("Unable to load comments: " + error.statusText);
         });
 
     };
@@ -328,7 +314,7 @@ myAppController.controller('ModuleIdController', function ($scope, $routeParams,
 
         }, function (error) {
             $scope.loading = false;
-            //alertify.alert("Unable to load an archive: " + error.statusText);
+            alertify.alert("Unable to load an archive: " + error.statusText);
         });
 
     };

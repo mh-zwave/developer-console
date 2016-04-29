@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+
+<html>
+    <div ng-controller="SideCtrl">
+        <uib-accordion close-others="false">
+            <uib-accordion-group   heading="Server" is-open="true" is-disabled="false">
+                <p align="justify">
+                    Z-Way supporting to develop own modules in JavaScript, to extend the existing functionality. The Z-Way-server works internal also with JavaScript.
+                <p align="justify">The Z-Way-Server Files can be found in
+                <li>  <h1><small>.../automation/classes/</small></h1>
+                    <p>   folder at the Z-Way installation directory and the internal already existing apps can be found at the
+                <li>   <h1><small> .../automation/modules/</small></h1>
+                    <p>    folder. Own Modules have to be Placed at
+                <li>   <h1><small>.../automation/userModules/. </small></h1>
+                </li>
+            </uib-accordion-group>
+            <uib-accordion-group   heading="Module" is-open="true" is-disabled="false">
+                <p align="justify">
+                    A module, also called app or application in some cases, is a construction plan of a functional part of the Z-Way-Server, who can be instantiated multiple times. Every instance can have his own individual configuration, for example his own virtual Devices or other Parameters 
+                    picture 1: App Config.
+                    <br>
+                <figure>
+                    <img src="app/views/help/img/appconfig.png" alt="Z-Way Structure" style="">
+                    <br>
+                    <figcaption align="center">picture 1</figcaption>
+                </figure><br>
+                The result of instantiation 
+                (called “Add App” at the User Interface and realized inside the Module with the                
+                createInstance({...})
+                function) 
+                ends with on new instance of the Module.  A Module has the possibility to create virtual devices during the instantiation process. If this happens there will be shown one Element per instance on the UI 
+                picture 2: Instance on UI  and it is possible to access this device at the ZAutomation API  
+                code 1.
+                <br>
+                <figure>
+                    <img src="app/views/help/img/element.png" alt="Z-Way Structure" style="">
+                    <br>
+                    <figcaption align="center">picture 2</figcaption>
+                </figure><br>
+                <figure>
+
+                    <div ng-include="snippets.S1" /> 
+                    <br>
+                    <figcaption align="justify">code 1</figcaption>
+                </figure><br>
+                <p align="justify">
+                    A module consists out of JavaScript-, JSON- and Text-Files and has to be added to the (Service/automation/userModules/) folder. At this Folder every Module has its own folder and a similar inner structure.
+                <div ng-include="snippets.S2" /> 
+                <p align="justify">
+                    The folder name sets the label of the modul. The files from the Example Structure have to exist, for the correct loading of the modul at server start. It is necessary to restart the server after every modul change to apply them. In the following a short explaination of the most important modulparts.
+                </div><li>	<h1><small>htdocs/</small></h1>
+                    <div style="padding-left:5em">folder contains public accessable files for example the Icon, which will be used by the Webinterface, icon sjould be max 128 x 128px and a size of 200kb
+                    </div><li>	<h1><small>lang/</small></h1> 
+                    <div style="padding-left:5em">folder contains the individual language files for the user interface in JSON format for example the en.json for the English language and the de.json for the German language 
+                    </div><li>	<h1><small>index.js</small></h1> 
+                    <div style="padding-left:5em">file contains the prgrammlogic see <a href=# ng-click="$parent.$parent.setActive(3)">Operationlogic</a>
+                    </div><li>	<h1><small>module.json</small></h1>  
+                    <div style="padding-left:5em">file contains the declaration of the User Interface of the nodul see <a href=# ng-click="$parent.$parent.setActive(4)">Interface Logic</a>
+                        beside the file- and folder structur there are several rules who have to be correct, for the successful loading of the Modul descripted in the core chapter of operation Logic
+                    </div>   
+            </uib-accordion-group>
+        </uib-accordion>
+    </div>
+</html>
+

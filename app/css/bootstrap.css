@@ -2054,19 +2054,19 @@ pre code {
 @media (min-width: 769px) {
   /* line 10, sass/bootstrap/_grid.scss */
   .container {
-    width: 100%;
+    width: 750px;
   }
 }
 @media (min-width: 992px) {
   /* line 10, sass/bootstrap/_grid.scss */
   .container {
-    width: 100%;
+    width: 970px;
   }
 }
 @media (min-width: 1200px) {
   /* line 10, sass/bootstrap/_grid.scss */
   .container {
-    width: 100%;
+    width: 1170px;
   }
 }
 

@@ -21,7 +21,7 @@ class Db {
      * @return void
      */
     public function __construct($cfg) {
-        extract($cfg);
+        //extract($cfg);
         $this->hostname = $hostname;
         $this->username = $username;
         $this->password = $password;
@@ -34,7 +34,7 @@ class Db {
      * @return void
      */
     public function openConnection() {
-        $this->mysqli = new mysqli($this->hostname, $this->username, $this->password, $this->database);
+        //$this->mysqli = new mysqli($this->hostname, $this->username, $this->password, $this->database);
         if (mysqli_connect_errno()) {
             header( 'HTTP/1.1 500 DB Error' );
             die(mysqli_connect_error());

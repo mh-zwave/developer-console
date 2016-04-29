@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+
+<html>
+<div ng-controller="SideCtrl">
+    <uib-accordion>
+        <uib-accordion-group   heading="Z-way" is-open="true" is-disabled="false">
+            <p align="justify">
+                The Z-Way Server offers a connection between the Z-Wave-wireless-protocol and Users. The Hardware Independent Server-Software is mostly Developed in JavaScript.
+            </p>
+            <br>
+            <figure>
+            <img src="app/views/help/img/Diagramm1.png" alt="Z-Way Structure" style="">
+            <br>
+            <figcaption align="center">Z-Way Structure</figcaption>
+            </figure>
+            <p align="justify" >
+                <br>
+                The Z-Way Home Automation Software consists out of 3 parts:<br>
+            <li>User-Interface</li>
+            <li>JSON-API (or HTTP-API)</li>
+            <li>JavaScript Server</li>
+            <br>
+            <p align="justify">
+                The Z-Way Z-Wave Core is linking the Z-Wave Transceiver and the Z-Wave Device API with the Z-Way JavaScript Core, this is condition a to communicate with Z-Wave Compatible Hardware. Depending on this the Z-Wave Device API delivers a HTTP-Interface, which is used by the Expert UI. The Expert UI    is requires to include devices and adjust their Parameters, that means to manipulate the Devices directly. There is also an C-Library with the same functionality.
+            </p>       <p align="justify">
+                But the until now described components not offering any Kind of automation. But there is also an Z-way JavaScript Core who Extends the Z-Way Device API. There is the Place to define Modules to realize Automation. There are some Modules already pre-installed at the System. A Module Consists always out of the same parts, a description of the interface and the JavaScript logic (see. 
+
+                <a href=# ng-click="$parent.$parent.setActive(2)">Structure</a>).
+            </p>       <p align="justify">
+                At the Module Continuum Z-way take another step of abstraction for the devices. For example, a multifunctional sensor with 3 functions, is mapped to 3 different virtual devices. 
+            </p>       <p align="justify">
+                The virtual devices can only be one of the 4 different Types:
+            </p>
+            <br>
+            <li>Binary Sensor</li>
+            <li> 	Multilevel Sensor</li>
+            <li>	Binary Switch</li>
+            <li>	Multilevel Switch</li>
+            <br>
+            The Smart Home UI offers a graphical Interface, who allows to instantiate and configure the modules.  Because of the abstraction with JavaScript it is possible, with the accordingly 3rd Party Core, using Other wireless-protocols beside Z-Wave documented at.
+            <p align="justify">
+
+        </uib-accordion-group>
+    </uib-accordion> 
+</div>
+</html>
+

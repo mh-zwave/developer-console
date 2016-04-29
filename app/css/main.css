@@ -111,21 +111,16 @@ a:hover {
 }
 
 /* line 85, sass/globals/_body.scss */
-.active-false {
-  background-color: #f2dede !important;
-}
-
-/* line 90, sass/globals/_body.scss */
 .btn-tooltip {
   cursor: help;
 }
 
-/* line 93, sass/globals/_body.scss */
+/* line 88, sass/globals/_body.scss */
 .app-border {
   border: solid 4px #fff;
 }
 
-/* line 96, sass/globals/_body.scss */
+/* line 91, sass/globals/_body.scss */
 .app-gradient {
   background: #f6f6f6;
   /* Old browsers */
@@ -145,7 +140,7 @@ a:hover {
   /* IE6-9 */
 }
 
-/* line 100, sass/globals/_body.scss */
+/* line 95, sass/globals/_body.scss */
 .app-gradient-green {
   background: #1e5799;
   /* Old browsers */
@@ -165,42 +160,42 @@ a:hover {
   /* IE6-9 */
 }
 
-/* line 104, sass/globals/_body.scss */
+/* line 99, sass/globals/_body.scss */
 .app-shadow {
   -webkit-box-shadow: 1px 1px 5px 0px rgba(50, 50, 50, 0.29);
   -moz-box-shadow: 1px 1px 5px 0px rgba(50, 50, 50, 0.29);
   box-shadow: 1px 1px 5px 0px rgba(50, 50, 50, 0.29);
 }
 
-/* line 108, sass/globals/_body.scss */
+/* line 103, sass/globals/_body.scss */
 .bcg-active.false {
   background-color: #f2e8e8;
 }
 
 /* Hide element on is-mobile-true devices
 -------------------------------------------------- */
-/* line 115, sass/globals/_body.scss */
+/* line 110, sass/globals/_body.scss */
 .is-mobile-true .mobhidden {
   display: none !important;
 }
 
 /* Spinners
 -------------------------------------------------- */
-/* line 123, sass/globals/_body.scss */
+/* line 118, sass/globals/_body.scss */
 .module-spinner {
   display: none !important;
 }
 
 /* Images
 -------------------------------------------------- */
-/* line 129, sass/globals/_body.scss */
+/* line 124, sass/globals/_body.scss */
 .report-img {
   margin: 0;
   max-width: 36px;
   display: inline;
 }
 
-/* line 135, sass/globals/_body.scss */
+/* line 130, sass/globals/_body.scss */
 .product-img {
   margin: 0;
   max-width: 100px;
@@ -210,7 +205,7 @@ a:hover {
 
 /* Device assigned block
 -------------------------------------------------- */
-/* line 144, sass/globals/_body.scss */
+/* line 139, sass/globals/_body.scss */
 .device-assigned-block {
   background-color: #FCF8E3;
   padding: 10px;
@@ -220,7 +215,7 @@ a:hover {
   background-color: #fcf8e3;
 }
 
-/* line 153, sass/globals/_body.scss */
+/* line 148, sass/globals/_body.scss */
 .btn-device-admin {
   display: inline-block;
   padding: 6px 12px;
@@ -255,7 +250,7 @@ vertical-align: middle;
 }*/
 /* Tooltip
 -------------------------------------------------- */
-/* line 193, sass/globals/_body.scss */
+/* line 188, sass/globals/_body.scss */
 .tooltip-inner {
   background-color: #F6F6F6;
   color: #000;
@@ -264,7 +259,7 @@ vertical-align: middle;
   text-align: left;
 }
 
-/* line 200, sass/globals/_body.scss */
+/* line 195, sass/globals/_body.scss */
 .tooltip-arrow {
   border-bottom-color: #f2f2f2;
 }
@@ -3207,3 +3202,5 @@ http://codepen.io/MattIn4D/pen/LiKFC
     display: none !important;
   }
 }
+
+/*# sourceMappingURL=main.css.map */

@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html>
+    <div ng-controller="SideCtrl">
+        <uib-accordion close-others="false">
+            <uib-accordion-group   heading="Core" is-open="true" is-disabled="false">
+                <p align="justify">
+                    The Core Chapter explains the absolutely necessary program code for a Module text in marks are Placeholders for your own module or Parameter Names.
+                </p>
+                <uib-accordion close-others="false">
+                    <uib-accordion-group   heading="index.js" is-open="true" is-disabled="false">
+
+                        <figure>
+                            <div ng-include="snippets.S3"
+                                 <br>
+                                <figcaption align="justify">example index.js</figcaption>
+                        </figure><br>
+                    </uib-accordion-group>
+                    <uib-accordion-group   heading="module.json" is-open="true" is-disabled="false">
+                        <table>
+                            <tr>
+                                <td>
+                                    <figure>
+                                        <div ng-include="snippets.S4"
+                                             <br>
+                                            <figcaption align="justify">example module.js</figcaption>
+                                    </figure><br>
+                                </td>
+                                <td>
+                                    <table class="table table-hover table-bordered" style="width:100%">
+                                        <tr>
+                                            <th>tag</th>
+                                            <th>legend</th>
+                                        </tr>
+                                        <tr>
+                                            <td>singleton</td>
+                                            <td class="text-justify">Boolean to set if there can be multiple Instances of on Module or not</td> 
+                                        </tr>
+                                        <tr>
+                                            <td>dependencies</td>
+                                            <td class="text-justify">An array List of all module names from which this Module is dependent, these modules should be singleton, this module cannot be instantiated if these modules do not exist</td> 
+                                        </tr>
+                                        <tr>
+                                            <td>category</td>
+                                            <td class="text-justify">The app category which this module is part of can be 
+                                                <ul class="list-unstyled">
+                                                    <li>basic_gateway_modules; 
+                                                    <li>   legacy_products_workaround; 
+                                                    <li>   support_external_ui; 
+                                                    <li>   support_external_dev; 
+                                                    <li>    automation_basic; 
+                                                    <li>    device_enhancements; 
+                                                    <li>    developers_stuff; 
+                                                    <li>    complex_applications; 
+                                                    <li>   automation; security; 
+                                                    <li>    peripherals; 
+                                                    <li>    surveillance; 
+                                                    <li>    logging; 
+                                                    <li>   scripting; 
+                                                    <li>  scheduling; 
+                                                    <li>   climate; 
+                                                    <li>   environment; 
+                                                    <li>  scenes; 
+                                                    <li>   notifications; 
+                                                    <li>  tagging; 
+                                                </ul>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>author</td>
+                                            <td class="text-justify">author name of the Module </td>
+                                        </tr>
+                                         <tr>
+                                            <td></td>
+                                            <td class="text-justify"></td>
+                                        </tr>
+                                         <tr>
+                                            <td></td>
+                                            <td class="text-justify"></td>
+                                        </tr>
+                                    </table> 
+                                </td>
+                            <tr>
+                        </table>
+                    </uib-accordion-group>
+                    <uib-accordion-group   heading="schema" is-open="true" is-disabled="false">
+                    </uib-accordion-group>
+                    <uib-accordion-group   heading="namespaces" is-open="true" is-disabled="false">
+                    </uib-accordion-group>
+                    <uib-accordion-group   heading="config(vdev)" is-open="true" is-disabled="false">
+                        <uib-accordion close-others="false">
+                            <uib-accordion-group   heading="defaults" is-open="true" is-disabled="false">
+                            </uib-accordion-group>  <uib-accordion-group   heading="overlay" is-open="true" is-disabled="false">
+                            </uib-accordion-group>  <uib-accordion-group   heading="handler" is-open="true" is-disabled="false">
+                            </uib-accordion-group>
+                        </uib-accordion>
+                    </uib-accordion-group>
+                </uib-accordion>
+            </uib-accordion-group>
+            <uib-accordion-group   heading="Communication" is-open="true" is-disabled="false">
+                <uib-accordion close-others="false">
+                    <uib-accordion-group   heading="ZAutomation API" is-open="true" is-disabled="false">
+                        <uib-accordion close-others="false">
+                            <uib-accordion-group   heading="Instances" is-open="true" is-disabled="false">
+                            </uib-accordion-group>
+                            <uib-accordion-group   heading="Devices" is-open="true" is-disabled="false">
+                            </uib-accordion-group>
+                        </uib-accordion>
+                    </uib-accordion-group>
+                    <uib-accordion-group   heading="Notification" is-open="true" is-disabled="false">
+                    </uib-accordion-group>
+                    <uib-accordion-group   heading="Eventbus" is-open="true" is-disabled="false">
+                        <uib-accordion close-others="false">
+                            <uib-accordion-group   heading="Controller" is-open="true" is-disabled="false">
+                            </uib-accordion-group>
+                            <uib-accordion-group   heading="DeviceCollection" is-open="true" is-disabled="false">
+                            </uib-accordion-group>
+                        </uib-accordion>
+                    </uib-accordion-group>
+                    <uib-accordion-group   heading="Functions" is-open="true" is-disabled="false">
+                    </uib-accordion-group>
+                </uib-accordion>
+            </uib-accordion-group>
+        </uib-accordion>
+    </div>
+</html>
