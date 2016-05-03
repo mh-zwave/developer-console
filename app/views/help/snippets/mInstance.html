@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<div hljs hljs-no-escape style="width: 40em">
+var result = self.controller.createInstance({
+    "instanceId": "0", // in every case 0
+    "moduleId": "{module}",
+    "active": "true", // in every case "true"
+    "title": "Custom module",
+    "description": "This module ...",
+    "params": {
+        "custom": 42
+        // ...
+     }
+});
+
+ console.log(result.id); // result contains for example the numeric
+
+</div>

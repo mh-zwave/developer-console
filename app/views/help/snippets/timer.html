@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<div hljs hljs-no-escape style="width: 40em">
+// Add event listener in init-Function
+// The timer has to be defined as an instance variable in order to ,obtain a reference
+// in the stop function
+this.timer = setInterval(function() { 
+    // initialize a periodical task
+    // do something
+ }, 60 * 1000);
+
+ // Remove event listener in stop-Function
+ if (this.timer) {
+    clearInterval(this.timer);
+ }
+
+</div>
+

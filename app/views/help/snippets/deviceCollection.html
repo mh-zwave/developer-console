@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<div hljs hljs-no-escape style="width: 40em">
+ // Add event listener in init-Function
+ self.controller.devices.on({deviceId}, {event}, function() { 
+    // events! are for example ’change:metrics:level’ or user-defined events
+    // do something ...
+ });
+...
+ // Remove event listener in stop-Function
+ this.controller.devices.off({deviceId}, {event}, function() {});
+...
+ //own Device Event
+ self.controller.devices.emit({device Id}:{event})</div>

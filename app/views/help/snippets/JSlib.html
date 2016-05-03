@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<div hljs hljs-no-escape style="width: 40em">
+{module}.prototype.init = function (config) {
+    // ...
+    var file = "/userModules/{module}/lib/{library}.js";
+    var stat = fs.stat(file);
+    if (stat && stat.type === "file") {
+        executeFile(file);
+        console.log("File " + file + " successfully load");
+    } else {
+        console.log("File " + file + " not found");
+     }
+};
+</div>

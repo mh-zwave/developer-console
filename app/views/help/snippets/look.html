@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<div hljs hljs-no-escape style="width: 40em">
+"schema" : {
+		"type" : "object",
+		"properties" : {
+			"room": {
+				"type": "integer",
+				"required": true
+			}
+		},
+"personas": {
+                "type": "array",
+                "items": {
+                    "title": "Device",
+                    "type": "radio",
+                    "enum": ["Adult", "Child"],
+                    "default": "Child",
+                    "required": true
+                }
+	},
+	"options": {
+		"fields": {
+			"room": {
+				"label": "__l_room_id__",
+				"type": "integer",
+				"helper": "__l_room_help__"
+			}
+		},
+"personas": {
+                "label": "__l_Personas__",
+                "type": "array",
+                "toolbarSticky": true,
+                "items": {
+                    "type": "radio"
+                }
+            }
+	}
+</div>

@@ -4,8 +4,21 @@ To change this license header, choose License Headers in Project Properties.
 To change this template file, choose Tools | Templates
 and open the template in the editor.
 -->
-<html>
-    <body>
-        <div>TODO write content</div>
-    </body>
-</html>
+<div ng-controller="SideCtrl">
+    <uib-accordion close-others="false">
+        <uib-accordion-group   heading="Look" is-open="true" is-disabled="false">
+            <p class="text-justify">
+                For all Parameters in the schema section see schema must be an field in the options section for example where you can instert a parameter label and an helptext. 
+                <br>oriented by the used technology of <a href="http://www.alpacajs.org/">Alpaca.js</a>
+            </p>
+            <div ng-include="getSnippetLocation('look')"></div>
+        </uib-accordion-group>
+        <uib-accordion-group   heading="Language" is-open="true" is-disabled="false">
+            <p class="text-justify">
+                In the language Jason you have to insert the values like this
+            </p>
+
+            <div ng-include="getSnippetLocation('language')"></div>
+        </uib-accordion-group>
+    </uib-accordion>
+</div>

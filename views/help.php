@@ -38,8 +38,12 @@
 
 
 
-
-<h1>How to create an automation module</h1>
+<nav class="navbar navbar-default">
+    <a class="navbar-brand" href="#">
+<i class="fa fa-question-circle"></i>
+    </a>
+<h1 class="navbar-text">How to create an automation module</h1>
+</nav>
 <div ng-controller="helpCtrl">
 
     <uib-tabset active="active" >
@@ -51,13 +55,18 @@
     </uib-tabset>
 </div>
 
-<footer>
+<nav class="navbar navbar-default">
     <hr>
+    <ul>
     <li><a href="https://github.com/Z-Wave-Me/home-automation/wiki">Documentation</a></li>
     <li><a href="http://docs.zwayhomeautomation.apiary.io/">API Documentation</a></li>
     <li><a href="http://razberry.z-wave.me/docs/zwayDev.pdf">Z-Way Developers Documentation</a></li>
     <li><a href="https://github.com/Z-Wave-Me/home-automation/issues">Issues, bugs and feature requests are welcome</a></li>
-</footer>
+    <li><a href="http://www.alpacajs.org/">Alpaca.js</a></li>
+    </ul>
+    <br>
+</nav>
+           
 
 
 

@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 
-<html>
     <div ng-controller="SideCtrl">
         <uib-accordion close-others="false">
             <uib-accordion-group   heading="Server" is-open="true" is-disabled="false">
@@ -39,16 +38,18 @@
                 </figure><br>
                 <figure>
 
-                    <div ng-include="snippets.S1" /> 
+                    <div ng-include="getSnippetLocation('S1')"> </div>
                     <br>
                     <figcaption align="justify">code 1</figcaption>
-                </figure><br>
+                </figure>
+                <br>
                 <p align="justify">
                     A module consists out of JavaScript-, JSON- and Text-Files and has to be added to the (Service/automation/userModules/) folder. At this Folder every Module has its own folder and a similar inner structure.
-                <div ng-include="snippets.S2" /> 
+                <div ng-include="getSnippetLocation('S2')" /> 
                 <p align="justify">
                     The folder name sets the label of the modul. The files from the Example Structure have to exist, for the correct loading of the modul at server start. It is necessary to restart the server after every modul change to apply them. In the following a short explaination of the most important modulparts.
-                </div><li>	<h1><small>htdocs/</small></h1>
+
+                <li>	<h1><small>htdocs/</small></h1>
                     <div style="padding-left:5em">folder contains public accessable files for example the Icon, which will be used by the Webinterface, icon sjould be max 128 x 128px and a size of 200kb
                     </div><li>	<h1><small>lang/</small></h1> 
                     <div style="padding-left:5em">folder contains the individual language files for the user interface in JSON format for example the en.json for the English language and the de.json for the German language 
@@ -57,9 +58,10 @@
                     </div><li>	<h1><small>module.json</small></h1>  
                     <div style="padding-left:5em">file contains the declaration of the User Interface of the nodul see <a href=# ng-click="$parent.$parent.setActive(4)">Interface Logic</a>
                         beside the file- and folder structur there are several rules who have to be correct, for the successful loading of the Modul descripted in the core chapter of operation Logic
-                    </div>   
+                    </div> 
+
             </uib-accordion-group>
         </uib-accordion>
     </div>
-</html>
+
 

@@ -4,127 +4,372 @@ To change this license header, choose License Headers in Project Properties.
 To change this template file, choose Tools | Templates
 and open the template in the editor.
 -->
-<html>
-    <div ng-controller="SideCtrl">
-        <uib-accordion close-others="false">
-            <uib-accordion-group   heading="Core" is-open="true" is-disabled="false">
-                <p align="justify">
-                    The Core Chapter explains the absolutely necessary program code for a Module text in marks are Placeholders for your own module or Parameter Names.
-                </p>
-                <uib-accordion close-others="false">
-                    <uib-accordion-group   heading="index.js" is-open="true" is-disabled="false">
+<div ng-controller="SideCtrl">
+    <uib-accordion close-others="false">
+        <uib-accordion-group   heading="Core" is-open="true" is-disabled="false">
+            <p align="justify">
+                The Core Chapter explains the absolutely necessary program code for a Module text in marks are Placeholders for your own module or Parameter Names.
+            </p>
+            <uib-accordion close-others="false">
+                <uib-accordion-group   heading="index.js" is-open="true" is-disabled="false">
 
-                        <figure>
-                            <div ng-include="snippets.S3"
-                                 <br>
-                                <figcaption align="justify">example index.js</figcaption>
-                        </figure><br>
-                    </uib-accordion-group>
-                    <uib-accordion-group   heading="module.json" is-open="true" is-disabled="false">
-                        <table>
-                            <tr>
-                                <td>
-                                    <figure>
-                                        <div ng-include="snippets.S4"
-                                             <br>
-                                            <figcaption align="justify">example module.js</figcaption>
-                                    </figure><br>
-                                </td>
-                                <td>
-                                    <table class="table table-hover table-bordered" style="width:100%">
-                                        <tr>
-                                            <th>tag</th>
-                                            <th>legend</th>
-                                        </tr>
-                                        <tr>
-                                            <td>singleton</td>
-                                            <td class="text-justify">Boolean to set if there can be multiple Instances of on Module or not</td> 
-                                        </tr>
-                                        <tr>
-                                            <td>dependencies</td>
-                                            <td class="text-justify">An array List of all module names from which this Module is dependent, these modules should be singleton, this module cannot be instantiated if these modules do not exist</td> 
-                                        </tr>
-                                        <tr>
-                                            <td>category</td>
-                                            <td class="text-justify">The app category which this module is part of can be 
-                                                <ul class="list-unstyled">
-                                                    <li>basic_gateway_modules; 
-                                                    <li>   legacy_products_workaround; 
-                                                    <li>   support_external_ui; 
-                                                    <li>   support_external_dev; 
-                                                    <li>    automation_basic; 
-                                                    <li>    device_enhancements; 
-                                                    <li>    developers_stuff; 
-                                                    <li>    complex_applications; 
-                                                    <li>   automation; security; 
-                                                    <li>    peripherals; 
-                                                    <li>    surveillance; 
-                                                    <li>    logging; 
-                                                    <li>   scripting; 
-                                                    <li>  scheduling; 
-                                                    <li>   climate; 
-                                                    <li>   environment; 
-                                                    <li>  scenes; 
-                                                    <li>   notifications; 
-                                                    <li>  tagging; 
-                                                </ul>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>author</td>
-                                            <td class="text-justify">author name of the Module </td>
-                                        </tr>
-                                         <tr>
-                                            <td></td>
-                                            <td class="text-justify"></td>
-                                        </tr>
-                                         <tr>
-                                            <td></td>
-                                            <td class="text-justify"></td>
-                                        </tr>
-                                    </table> 
-                                </td>
-                            <tr>
-                        </table>
-                    </uib-accordion-group>
-                    <uib-accordion-group   heading="schema" is-open="true" is-disabled="false">
-                    </uib-accordion-group>
-                    <uib-accordion-group   heading="namespaces" is-open="true" is-disabled="false">
-                    </uib-accordion-group>
-                    <uib-accordion-group   heading="config(vdev)" is-open="true" is-disabled="false">
-                        <uib-accordion close-others="false">
-                            <uib-accordion-group   heading="defaults" is-open="true" is-disabled="false">
-                            </uib-accordion-group>  <uib-accordion-group   heading="overlay" is-open="true" is-disabled="false">
-                            </uib-accordion-group>  <uib-accordion-group   heading="handler" is-open="true" is-disabled="false">
-                            </uib-accordion-group>
-                        </uib-accordion>
-                    </uib-accordion-group>
-                </uib-accordion>
-            </uib-accordion-group>
-            <uib-accordion-group   heading="Communication" is-open="true" is-disabled="false">
-                <uib-accordion close-others="false">
-                    <uib-accordion-group   heading="ZAutomation API" is-open="true" is-disabled="false">
-                        <uib-accordion close-others="false">
-                            <uib-accordion-group   heading="Instances" is-open="true" is-disabled="false">
-                            </uib-accordion-group>
-                            <uib-accordion-group   heading="Devices" is-open="true" is-disabled="false">
-                            </uib-accordion-group>
-                        </uib-accordion>
-                    </uib-accordion-group>
-                    <uib-accordion-group   heading="Notification" is-open="true" is-disabled="false">
-                    </uib-accordion-group>
-                    <uib-accordion-group   heading="Eventbus" is-open="true" is-disabled="false">
-                        <uib-accordion close-others="false">
-                            <uib-accordion-group   heading="Controller" is-open="true" is-disabled="false">
-                            </uib-accordion-group>
-                            <uib-accordion-group   heading="DeviceCollection" is-open="true" is-disabled="false">
-                            </uib-accordion-group>
-                        </uib-accordion>
-                    </uib-accordion-group>
-                    <uib-accordion-group   heading="Functions" is-open="true" is-disabled="false">
-                    </uib-accordion-group>
-                </uib-accordion>
-            </uib-accordion-group>
-        </uib-accordion>
-    </div>
-</html>
+                    <figure>
+                        <div ng-include="getSnippetLocation('S3')"></div>
+                        <br>
+                        <figcaption align="justify">example index.js</figcaption>
+                    </figure><br>
+                </uib-accordion-group>
+                <uib-accordion-group   heading="module.json" is-open="true" is-disabled="false">
+                    <table>
+                        <tr>
+                            <td>
+                                <figure>
+                                    <div ng-include="getSnippetLocation('S4')"></div>
+                                    <br>
+                                    <figcaption align="justify">example module.js</figcaption>
+                                </figure><br>
+                            </td>
+                            <td>
+                                <table class="table table-hover table-bordered" style="width:100%">
+                                    <tr>
+                                        <th>tag</th>
+                                        <th>legend</th>
+                                    </tr>
+                                    <tr>
+                                        <td>singleton</td>
+                                        <td class="text-justify">Boolean to set if there can be multiple Instances of on Module or not</td>
+                                    </tr>
+                                    <tr>
+                                        <td>dependencies</td>
+                                        <td class="text-justify">An array List of all module names from which this Module is dependent, these modules should be singleton, this module cannot be instantiated if these modules do not exist</td>
+                                    </tr>
+                                    <tr>
+                                        <td>category</td>
+                                        <td class="text-justify">The app category which this module is part of can be
+                                            <ul class="list-unstyled">
+                                                <li>basic_gateway_modules;</li>
+                                                <li>   legacy_products_workaround;</li>
+                                                <li>   support_external_ui;</li>
+                                                <li>   support_external_dev;</li>
+                                                <li>    automation_basic;</li>
+                                                <li>    device_enhancements;</li>
+                                                <li>    developers_stuff;</li>
+                                                <li>    complex_applications;</li>
+                                                <li>   automation; security;</li>
+                                                <li>    peripherals;</li>
+                                                <li>    surveillance;</li>
+                                                <li>    logging;</li>
+                                                <li>   scripting;</li>
+                                                <li>  scheduling;</li>
+                                                <li>   climate;</li>
+                                                <li>   environment;</li>
+                                                <li>  scenes;</li>
+                                                <li>   notifications;</li>
+                                                <li>  tagging;</li>
+                                            </ul>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>author</td>
+                                        <td class="text-justify">author name of the Module </td>
+                                    </tr>
+                                    <tr>
+                                        <td>homepage</td>
+                                        <td class="text-justify">If you have a news homepage, it can be linked here</td>
+                                    </tr>
+                                    <tr>
+                                        <td>icon</td>
+                                        <td class="text-justify">Name of the icon which is shown for this module on the UI</td>
+                                    </tr>
+                                    <tr>
+                                        <td>moduleName</td>
+                                        <td class="text-justify">Module name have to the same like the class reference</td>
+                                    </tr>
+                                    <tr>
+                                        <td>version</td>
+                                        <td class="text-justify">Version number of this module</td>
+                                    </tr>
+                                    <tr>
+                                        <td>maturity</td>
+                                        <td class="text-justify">Status if the app is still in development or released</td>
+                                    </tr>
+                                    <tr>
+                                        <td>repository</td>
+                                        <td class="text-justify">Repository: optional</td>
+                                    </tr>
+                                    <tr>
+                                        <td>repository type</td>
+                                        <td class="text-justify">Kind of the repository</td>
+                                    </tr>
+                                    <tr>
+                                        <td>repository source</td>
+                                        <td class="text-justify">Address of the repository</td>
+                                    </tr>
+                                    <tr>
+                                        <td>defaults</td>
+                                        <td class="text-justify"></td>
+                                    </tr>
+                                    <tr>
+                                        <td>defaults title</td>
+                                        <td class="text-justify">The title placeholder for the Language files</td>
+                                    </tr>
+                                    <tr>
+                                        <td>description</td>
+                                        <td class="text-justify">The description placeholder for the language files</td>
+                                    </tr>
+                                    <tr>
+                                        <td>schema</td>
+                                        <td class="text-justify">Description of the data structure of the form for instantiating the module see schema</td>
+                                    </tr>
+                                    <tr>
+                                        <td>options</td>
+                                        <td class="text-justify">Showing options of the form for instantiating the module for instantiating the module see Interface Logic</td>
+                                    </tr>
+                                </table>
+                            </td>
+                        </tr>
+                    </table>
+                </uib-accordion-group>
+                <uib-accordion-group   heading="schema" is-open="true" is-disabled="false">
+                    <p class="text-justify">Here is the Place to define Module Parameters
+                        The structure of the schema is the following
+                    <div ng-include="getSnippetLocation('S5')"/>
+                    Inside the Properties space the single Properties can be defined,
+                    they become the Parameters of the Module during the Initiation. There can be several types of Properties examples are:
+
+                    <li>Primitive Datatypes like integer, float or string</li>
+                    <div ng-include="getSnippetLocation('S6')"/>
+                    <li>Enums with a choice</li>
+                    <div ng-include="getSnippetLocation('S7')"/>
+                    <li>Ore a List of Z-Way devices from an specific namespace
+                        For Example.:"namespaces:devices_all:deviceId"  for all devices</li>
+                    <div ng-include="getSnippetLocation('S8')"/>
+                    <p class="text-justify">namespaces can also be specified like
+                        namespaces:devices_doorlock:deviceId,namespaces:devices_switchBinary:deviceId
+                        which means devices doorlock and all binary switches
+                        oriented by the used technology of <a href="http://www.alpacajs.org/">Alpaca.js</a>
+                    </p>
+                    </li>
+                </uib-accordion-group>
+                <uib-accordion-group   heading="namespaces" is-open="true" is-disabled="false">
+                    <p class="text-justify">
+                    <li>are the Parameters after namespaces:in the schema point in the module.json</li>
+                    <li>   Namespaces prototype for an namespace parameter</li>
+                    <li>  (write convention) devices_DEVICETYPE.PATH</li>
+                    <li>   there also a REST path <h1><small>server:port/v1/namespaces/{devices_DEVICETYPE}.{PATH}</small></h1></li>
+
+                    <br>
+                    <h4>Devicetypes:</h4>
+                    <ul class="list-unstyled">
+                        <li>battery</li>
+                        <li> doorlock</li>
+                        <li> thermostat</li>
+                        <li> switchBinary</li>
+                        <li> switchMultilevel</li>
+                        <li> sensorBinary</li>
+                        <li> sensorMultilevel</li>
+                        <li>switchToggle</li>
+                    </ul>
+                    <br><h4>Probetypes:</h4><br>
+                    <table class="table table-hover table-bordered" style="width:100%">
+                        <tr>
+                            <th>DEVICETYPE</th>
+                            <th>PATH(optional)</th>
+                            <th>Virtual Device Type</th>
+                        </tr>
+
+                        <tr>
+                            <td>all</td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td rowspan="3">switchMultilevel</td>
+                            <td><br></td>
+                            <td rowspan="3">switchMultilevel</td>
+                        </tr>
+                        <tr>
+                            <td>motor</td>
+                        </tr>
+                        <tr><td>multilevel</td></tr>
+                        <tr><td rowspan="9">sensorBinary</td>
+                            <td><br></td>
+                            <td rowspan="9">sensorBinary</td>
+                        </tr>
+                        <tr> <td>general_purpose</td></tr>
+                        <tr><td>smoke</td></tr>
+                        <tr><td>co</td></tr>
+                        <tr><td>flood</td></tr>
+                        <tr><td>cooling</td></tr>
+                        <tr><td>tamper</td></tr>
+                        <tr><td>door-window</td></tr>
+                        <tr><td>motion</td></tr>
+                        <tr><td rowspan="7">sensorMultilevel</td>
+                            <td><br></td>
+                            <td rowspan="14">sensorMultilevel</td>
+                        </tr>
+                        <tr><td>temperature</td></tr>
+                        <tr><td>luminosity</td></tr>
+                        <tr><td>energy</td></tr>
+                        <tr><td>humidity</td></tr>
+                        <tr><td>barometer</td></tr>
+                        <tr><td>ultraviolet</td></tr>
+                        <tr><td rowspan="7">meter</td><td><br></td></tr>
+                        <tr><td>meterElectric_kilowatt_per_hour</td></tr>
+                        <tr><td>meterElectric_watt</td></tr>
+                        <tr><td>meterElectric_pulse_count</td></tr>
+                        <tr><td>meterElectric_voltage</td></tr>
+                        <tr><td>meterElectric_ampere</td></tr>
+                        <tr><td>meterElectric_power_factor</td></tr>
+                        <tr><td rowspan="6">switchColor</td><td><br></td>
+                            <td rowspan="6">switchMultilevel</td></tr>
+                        <tr><td>switchColor_soft_white</td></tr>
+                        <tr><td>switchColor_cold_white</td></tr>
+                        <tr><td>switchColor_red</td></tr>
+                        <tr><td>switchColor_green</td></tr>
+                        <tr><td>switchColor_blue</td></tr>
+                        <tr> <td rowspan="2">thermostatMode</td><td><br></td><td rowspan="2">switchBinary</td></tr>
+                        <tr><td>thermostate_mode</td></tr>
+                        <tr> <td rowspan="2">thermostatSetPoint</td><td><br></td><td rowspan="2">thermostat</td></tr>
+                        <tr><td>thermostate_set_point</td></tr>
+                        <tr><td rowspan="13">alarm</td><td><br></td><td rowspan="26">sensorBinary</td></tr>
+                        <tr><td>alarm_general_purpose</td></tr>
+                        <tr><td>alarm_smoke</td></tr>
+                        <tr><td>alarm_co</td></tr>
+                        <tr><td>alarm_coo</td></tr>
+                        <tr><td>alarm_heat</td></tr>
+                        <tr><td>alarm_flood</td></tr>
+                        <tr><td>alarm_door</td></tr>
+                        <tr><td>alarm_burglar</td></tr>
+                        <tr><td>alarm_power</td></tr>
+                        <tr><td>alarm_system</td></tr>
+                        <tr><td>alarm_emergency</td></tr>
+                        <tr><td>alarm_clock</td></tr>
+                        <tr><td rowspan="13">alarmSensor</td><td><br></td></tr>
+                        <tr><td>alarmSensor_general_purpose</td></tr>
+                        <tr><td>alarmSensor_smoke</td></tr>
+                        <tr><td>alarmSensor_co</td></tr>
+                        <tr><td>alarmSensor_coo</td></tr>
+                        <tr><td>alarmSensor_heat</td></tr>
+                        <tr><td>alarmSensor_flood</td></tr>
+                        <tr><td>alarmSensor_door</td></tr>
+                        <tr><td>alarmSensor_burglar</td></tr>
+                        <tr><td>alarmSensor_power</td></tr>
+                        <tr><td>alarmSensor_system</td></tr>
+                        <tr><td>alarmSensor_emergency</td></tr>
+                        <tr><td>alarmSensor_clock</td></tr>                         
+                    </table>
+                </uib-accordion-group>
+
+                <uib-accordion-group   heading="config(vdev)" is-open="true" is-disabled="false">
+                    <p class="text-justify">
+                        The vDev variable defines the interface for the ZAutomation API and the UI (Elements)
+                    </p>
+                    <div ng-include="getSnippetLocation('vdev1')"></div>
+
+                    <uib-accordion close-others="false">
+                        <uib-accordion-group   heading="defaults" is-open="true" is-disabled="false">
+
+                            <p class="text-justify">
+                                contains the initial values for the UI when the module is created
+                            </p>
+                            <div ng-include="getSnippetLocation('vdev2')"></div>
+                            <p class="text-justify">
+                                To have access to the metrics later on there is
+                            <li><h1><small>vDev.get(“metrics:NAME”)</small></h1> 
+                                for reading and</li>
+                            <li><h1><small>vDev.set(“metrics:NAME”,VALUE)</small></h1> 
+                                for writing
+                            </li>
+                        </uib-accordion-group>  
+                        <uib-accordion-group   heading="overlay" is-open="true" is-disabled="false">
+                            <p class="text-justify"> defines, how an module is presented in UI view 'Elements' e.g. deviceType: 'sensorBinary' has an On/Off toggle button</p>
+                            <div ng-include="getSnippetLocation('vdev3')"></div>
+                        </uib-accordion-group>  
+                        <uib-accordion-group   heading="handler" is-open="true" is-disabled="false">
+                            <p class="text-justify">
+                                processing of incoming commands over ZAutomation API</p>
+                            <li>try it: http://localhost:8083/ZAutomation/api/v1/devices/”virtualdeviceid”/command/on</li>
+                            <div class="alert alert-warning" role="alert">    pay attention to your actual virtual device id </div>
+                            <div ng-include="getSnippetLocation('vdev4')"></div>                          
+                        </uib-accordion-group>
+                    </uib-accordion>
+                </uib-accordion-group>
+            </uib-accordion>
+        </uib-accordion-group>
+        <uib-accordion-group   heading="Communication" is-open="true" is-disabled="false">
+            <uib-accordion close-others="false">
+                <uib-accordion-group   heading="ZAutomation API" is-open="true" is-disabled="false">
+                    <p class="text-justify">
+                        The 
+                        <a href="http://docs.zwayhomeautomation.apiary.io/">ZAutomation API </a> 
+                        offers the access to the Z-Way-Server over the HTTP-Protocol. 
+                        Now describing some basic call-mechanics and essential recourses.
+                        The home Point of all requests is </p>
+                    <h1><small>server:port/ZAutomation/api/v1. </small></h1>
+                    For example 
+                    <h1><small>   server:port/ZAutomation/api/v1/devices </small></h1>
+                    <p class="text-justify">give you this answer</p>
+                    <br>
+                    <div ng-include="getSnippetLocation('ZAutomation')"></div> 
+                    <uib-accordion close-others="false">
+                        <uib-accordion-group   heading="Instances" is-open="true" is-disabled="false">
+                            <h3>REST</h3>
+                            <h1><small>GET server:port/ZAutomation/api/v1/instances</small></h1>
+                            <p class="text-justify">	offers a list off all Module Instances as Json</p>
+                            <h1><small>GET server:port /ZAutomation/api/v1/instances/AppClassName</small></h1>
+                            <p class="text-justify">	load a list of all Instances of one module</p>
+                            <br>
+                            <h3>Module</h3>
+                            <p class="text-justify">to search an instance in all Instances</p>
+                            <div ng-include="getSnippetLocation('ZAutomation2')"></div> 
+                        </uib-accordion-group>
+                        <uib-accordion-group   heading="Devices" is-open="true" is-disabled="false">
+                            <h3>REST</h3>
+                            <p class="text-justify">
+                                Read and Write of Properties of virtual devices. To read the device parameter server:port/ZAutomation/api/v1/devices/{id}. And to change the Properties /ZAutomation/api/v1/devices/{id}/command/{command}{?params} .
+                            </p> 
+                            <li>    {id} Id of the virtual devices example see ZAutomation API (DummyDevice_9)</li>
+                            <li>    {command} name of the command see Command standart commands are set and exact</li>
+                            <li>    {params} sending of values for example level for exact (?exact=10)</li>
+                            <br>
+                            <h3>Module</h3>
+                            <p class="text-justify">
+                                To Search a virtual device in all devices
+                            </p>
+                            <div ng-include="getSnippetLocation('ZAutomation3')"></div> 
+                        </uib-accordion-group>
+                    </uib-accordion>
+                </uib-accordion-group>
+                <uib-accordion-group   heading="Notification" is-open="true" is-disabled="false">
+                    <p class="text-justify">
+                        With Notifications a message is written in the logfile and on the UI Console, can be used to send messages to the UI or logging errors.
+                    </p>
+                    <div ng-include="getSnippetLocation('notification')"></div> 
+                </uib-accordion-group>
+                <uib-accordion-group   heading="Eventbus" is-open="true" is-disabled="false">
+                    <p class="text-justify">
+                        The Event bus is a server global communication system, who can be used by devices and Modules
+                    </p>
+                    <uib-accordion close-others="false">
+                        <uib-accordion-group   heading="Controller" is-open="true" is-disabled="false">
+                            <div ng-include="getSnippetLocation('controller')"></div> 
+                        </uib-accordion-group>
+                        <uib-accordion-group   heading="DeviceCollection" is-open="true" is-disabled="false">
+                            <p class="text-justify">
+                                The advantage for Using the eventbus on the List of Virtual Devices, is the easier adressation of Devices. The Eventbus direkt on the Controller does not identify the device.
+                            </p>
+                            <div ng-include="getSnippetLocation('deviceCollection')"></div> 
+                        </uib-accordion-group>
+                    </uib-accordion>
+                </uib-accordion-group>
+                <uib-accordion-group   heading="Functions" is-open="true" is-disabled="false">
+                    <p class="text-justify">
+                        Own Functions can be made with
+                    </p>
+                    <div ng-include="getSnippetLocation('functions')"></div> 
+                </uib-accordion-group>
+            </uib-accordion>
+        </uib-accordion-group>
+    </uib-accordion>
+</div>                       

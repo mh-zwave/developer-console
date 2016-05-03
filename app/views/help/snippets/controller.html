@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<div hljs hljs-no-escape style="width: 40em">
+// Add event listener in init-Function
+ self.controller.on({event}, function() { 
+    // events are for example ’core.start’ or user-defined events
+    // do something ...
+});
+...
+// Remove event listener in stop-Function
+self.controller.off({event}, function() {});
+//emit an event
+...
+self.controller.emit({event})</div>

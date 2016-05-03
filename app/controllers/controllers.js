@@ -27,7 +27,7 @@ myAppController.controller('ErrorController', function ($scope, $routeParams, da
 });
 
 myAppController.controller('helpCtrl', function ($scope, $window) {
-    
+
     $scope.status = {
         isFirstOpen: true,
         isFirstDisabled: false
@@ -72,35 +72,29 @@ myAppController.controller('helpCtrl', function ($scope, $window) {
     $scope.setActive = function (id) {
         $scope.active = id;
     };
-   
-    
 
-       
+
+
+
 
 });
 
 myAppController.controller('SideCtrl', function ($scope) {
-    
-     $scope.status = {
+
+    $scope.status = {
         isFirstOpen: true,
         isFirstDisabled: false
     };
-     $scope.snippets={
-         "S1":"../app/views/help/snippets/S1.html",
-         "S2":"../app/views/help/snippets/S2.html",
-         "S3":"../app/views/help/snippets/S3.html",
-         "S4":"../app/views/help/snippets/S4.html",
-         "S5":"../app/views/help/snippets/S5.html",
-         "S6":"../app/views/help/snippets/S6.html",
-         "S7":"../app/views/help/snippets/S7.html"
-    
+
+    $scope.getSnippetLocation = function (id) {
+        return "../app/views/help/snippets/" + id + ".html";
     };
 });
 
 myAppController.config(function (hljsServiceProvider) {
-  hljsServiceProvider.setOptions({
-    // replace tab with 4 spaces
-    tabReplace: '    '
+    hljsServiceProvider.setOptions({
+        // replace tab with 4 spaces
+        tabReplace: '    '
 
-  });
+    });
 });
