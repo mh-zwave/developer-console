@@ -36,32 +36,32 @@ myAppController.controller('helpCtrl', function ($scope, $window) {
         {
             "id": 1,
             "name": "Theory",
-            "url": '../app/views/help/theory.html'
+            "url": 'app/views/help/theory.html'
         },
         {
             "id": 2,
             "name": "Structure",
-            "url": '../app/views/help/structure.html'
+            "url": 'app/views/help/structure.html'
         },
         {
             "id": 3,
             "name": "Operation Logic",
-            "url": '../app/views/help/operationLogic.html'
+            "url": 'app/views/help/operationLogic.html'
         },
         {
             "id": 4,
             "name": "Interface Logic",
-            "url": '../app/views/help/interfaceLogic.html'
+            "url": 'app/views/help/interfaceLogic.html'
         },
         {
             "id": 5,
             "name": "Stuff",
-            "url": '../app/views/help/stuff.html'
+            "url": 'app/views/help/stuff.html'
         },
         {
             "id": 6,
             "name": "Upload-Process",
-            "url": '../app/views/help/uploadProcess.html'
+            "url": 'app/views/help/uploadProcess.html'
         }
     ];
 
@@ -87,7 +87,7 @@ myAppController.controller('SideCtrl', function ($scope) {
     };
 
     $scope.getSnippetLocation = function (id) {
-        return "../app/views/help/snippets/" + id + ".html";
+        return "app/views/help/snippets/" + id + ".html";
     };
 });
 
