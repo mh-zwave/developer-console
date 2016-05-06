@@ -61,6 +61,19 @@ myAppController.controller('SkinController', function($scope, $location, dataFac
              alertify.alert("Unable to upload skin. "  + error.statusText);
         });
     };
+    /**
+     * Update skin
+     */
+    $scope.updateSkin = function(input) {
+        $scope.loading = {status: 'loading-spin', icon: 'fa-spinner fa-spin', message: $scope._t('Updating...')};
+        dataFactory.postApi('skinupdate', input).then(function(response) {
+            $scope.loading = {status: 'loading-fade', icon: 'fa-check text-success', message: $scope._t('Skin successfully updated.')};
+            $scope.loadData();
+        }, function(error) {
+           $scope.loading = false;
+                alertify.alert("Unable to update skin. " + error.statusText);
+        });
+    };
 
     /**
      * Delete module
@@ -99,6 +112,7 @@ myAppController.controller('SkinIdController', function($scope, $routeParams, $r
     $scope.loadData = function() {
         dataFactory.getApi('skin', '/' + $scope.skin.id, true).then(function(response) {
             $scope.skin.data = response.data.data;
+            $scope.skin.data.active = parseInt($scope.skin.data.active,10)
             angular.extend($scope.skin.input, $scope.skin.data);
 
         }, function(error) {
@@ -120,7 +134,7 @@ myAppController.controller('SkinIdController', function($scope, $routeParams, $r
         }
         $scope.loading = {status: 'loading-spin', icon: 'fa-spinner fa-spin', message: $scope._t('Updating...')};
         dataFactory.postApi('skinupdate', $scope.skin.input).then(function(response) {
-            $scope.loading = {status: 'loading-fade', icon: 'fa-check text-success', message: $scope._t('Module successfully updated.')};
+            $scope.loading = {status: 'loading-fade', icon: 'fa-check text-success', message: $scope._t('Skin successfully updated.')};
             $scope.loadData();
         }, function(error) {
            $scope.loading = false;

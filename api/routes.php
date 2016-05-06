@@ -377,12 +377,12 @@ elseif ($route->match('skin', 1)) {
 elseif ($route->match('skincreate', null)) {
     // Prepare and sanitize post input
     //$api->setInputs($_POST);
-
+    $skin_path = 'storage/skins/';
     $ext = pathinfo($_FILES['file']['name'], PATHINFO_EXTENSION);
     //var_dump(Ut::toSlug($_FILES['file']['name']));
     $file = false;
     $uploader = new Uploader();
-    $uploader->setDir('storage/skins/');
+    $uploader->setDir($skin_path);
     $uploader->setExtensions(array('gz', 'zip'));  //allowed extensions list//
     $uploader->setMaxSize(.5); //set max file size to be allowed in MB//
     $uploader->sameName(true);
@@ -391,6 +391,14 @@ elseif ($route->match('skincreate', null)) {
     if ($uploader->uploadFile('file')) {   //txtFile is the filebrowse element name //     
         $file = $uploader->getUploadName(); //get uploaded file name, renames on upload//
         $file_name = strtok($file, '.'); //get uploaded file name, renames on upload//
+        if ($file_name === 'default') {// Filename default is not allowed
+            if (is_file($skin_path . $file)) {
+                unlink($skin_path . $file);
+            }
+            $response->status = 500;
+            $response->message = 'File name "' . $file_name . '" is not allowed. Please select a different name and try again.';
+            $response->json($response);
+        }
     } else {//upload failed
         //get upload error message 
         $response->status = 500;
@@ -405,6 +413,7 @@ elseif ($route->match('skincreate', null)) {
             'file' => $file,
             'author' => trim($user->first_name . ' ' . $user->last_name),
             'homepage' => $user->homepage,
+            'created_at' => date("Y-m-d H:i:s"),
         );
         if (!$model->skinCreate($input)) {
             $response->status = 500;
@@ -419,8 +428,7 @@ elseif ($route->match('skincreate', null)) {
 // API skin update
 elseif ($route->match('skinupdate', null)) {
     // Prepare and sanitize post input
-    $_POST['active'] = 1;
-    $_POST['created_at'] = date("Y-m-d H:i:s");
+    $_POST['updated_at'] = date("Y-m-d H:i:s");
     $api->setInputs($_POST);
     $skin = $model->skinFind(array('id' => $api->getInputVal('id'), 'user_id' => $user->id, 'name' => $api->getInputVal('name')));
     if (!$skin) {
@@ -683,7 +691,7 @@ elseif ($route->match('api-modules', null)) {
         $ids = $model->apiTokensModuleIds(rtrim($tokens, ','));
     }
 
-    $response->data = $model->apiModulesAll(array('verified' => 1,'active' => 1), $ids);
+    $response->data = $model->apiModulesAll(array('verified' => 1, 'active' => 1), $ids);
     $response->json($response);
 }
 // Public API module id
@@ -718,7 +726,7 @@ elseif ($route->match('api-module-archive', 1)) {
         $response->json($response);
     }
     $response->data = $model->archiveAll(array('modulename' => $route->getParam(0)));
-    
+
     if (empty($response->data)) {
         $response->status = 404;
         $response->message = 'Not found';

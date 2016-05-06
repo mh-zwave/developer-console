@@ -6,7 +6,16 @@
     <form name="form_skin" id="form_skin" class="form form-page" ng-submit="updateSkin(form_skin)" novalidate>
        
         <fieldset>
-            <h3><i class="fa fa-chevron-down"></i> <span ng-bind="_t('Module info')"></span></h3>
+            <h3><i class="fa fa-chevron-down"></i> <span ng-bind="_t('Skin info')"></span></h3>
+             <!-- title -->
+            <div class="form-group form-inline">
+                    <input type="checkbox" name="expert_view" 
+                           ng-model="skin.input.active"
+                           ng-true-value="1"
+                           ng-false-value="0"
+                           ng-checked="skin.input.active === 1" />
+                    <label ng-bind="_t('Active')"></label>
+                </div>
             <!-- title -->
             <div class="form-group">
                 <label class="isrequired" for="title">{{_t('Title')}}</label>
