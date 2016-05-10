@@ -375,36 +375,34 @@ elseif ($route->match('skin', 1)) {
 }
 // API skin create
 elseif ($route->match('skincreate', null)) {
-    // Prepare and sanitize post input
-    //$api->setInputs($_POST);
+    $name = Ut::toSlug(strtok($_FILES['file']['name'], '.'));
+    // Check if model skin exists
+    $skin = $model->skinFind(array('name' => $name));
+    if ($skin) {
+        $response->status = 409;
+        $response->message = 'The skin with the name '.$name.' already exists! Please rename your skin and try to upload again.';
+        $response->json($response);
+    }
     $skin_path = 'storage/skins/';
-    $ext = pathinfo($_FILES['file']['name'], PATHINFO_EXTENSION);
-    //var_dump(Ut::toSlug($_FILES['file']['name']));
-    $file = false;
+    $skin_path_temp = 'storage/skins/temp/';
+    
     $uploader = new Uploader();
     $uploader->setDir($skin_path);
     $uploader->setExtensions(array('gz', 'zip'));  //allowed extensions list//
     $uploader->setMaxSize(.5); //set max file size to be allowed in MB//
+    $uploader->setCustomName($name);
     $uploader->sameName(true);
     $uploader->setUniqueFile();
 
-    if ($uploader->uploadFile('file')) {   //txtFile is the filebrowse element name //     
-        $file = $uploader->getUploadName(); //get uploaded file name, renames on upload//
-        $file_name = strtok($file, '.'); //get uploaded file name, renames on upload//
-        if ($file_name === 'default') {// Filename default is not allowed
-            if (is_file($skin_path . $file)) {
-                unlink($skin_path . $file);
-            }
-            $response->status = 500;
-            $response->message = 'File name "' . $file_name . '" is not allowed. Please select a different name and try again.';
-            $response->json($response);
-        }
-    } else {//upload failed
-        //get upload error message 
+    // Upload a file
+    if(!$file = $api->uploadSkin($uploader, $skin_path,$skin_path_temp)){
+        $error = $api->getErrors();
         $response->status = 500;
-        $response->message = $uploader->getMessage();
+        $response->message = $error[0];
         $response->json($response);
     }
+    $file_name = strtok($file, '.');
+    
     if ($file) {
         $input = array(
             'user_id' => $user->id,
@@ -414,6 +412,7 @@ elseif ($route->match('skincreate', null)) {
             'author' => trim($user->first_name . ' ' . $user->last_name),
             'homepage' => $user->homepage,
             'created_at' => date("Y-m-d H:i:s"),
+            'updated_at' => date("Y-m-d H:i:s"),
         );
         if (!$model->skinCreate($input)) {
             $response->status = 500;
@@ -465,24 +464,44 @@ elseif ($route->match('skindelete', null)) {
     $response->json($response);
 }
 // API skin upload
-elseif ($route->match('skinupload', null)) {
-    // Prepare and sanitize post input
-    //$api->setInputs($_POST);
-
-    $ext = pathinfo($_FILES['file']['name'], PATHINFO_EXTENSION);
-    //var_dump(Ut::toSlug($_FILES['file']['name']));
-    $file = false;
-    $uploader = new Uploader();
-    $uploader->setDir('storage/skins/');
-    $uploader->setExtensions(array('gz', 'zip'));  //allowed extensions list//
-    $uploader->setMaxSize(.5);
-    $uploader->sameName(true);
-
-    if (!$uploader->uploadFile('file')) {
+elseif ($route->match('skinupload', 1)) {
+     $api->setInputs(array('name' => $route->getParam(0)));
+     $name = Ut::toSlug(strtok($_FILES['file']['name'], '.'));
+     // Check if skin name and uploaded name are equal
+     if ($api->getInputVal('name') !== $name) {
         $response->status = 500;
-        $response->message = $uploader->getMessage();
+        $response->message = 'The uploaded file must be named:  ' . $api->getInputVal('name').'!!! Your file name is: '.$name;
         $response->json($response);
     }
+    // Check if model skin exists
+    $skin = $model->skinFind(array('user_id' => $user->id, 'name' => $api->getInputVal('name')));
+    if (!$skin) {
+        $response->status = 404;
+        $response->message = 'Skin not found';
+        $response->json($response);
+    }
+    $skin_path = 'storage/skins/';
+    $skin_path_temp = 'storage/skins/temp/';
+    
+    $uploader = new Uploader();
+    $uploader->setDir($skin_path);
+    $uploader->setExtensions(array('gz', 'zip'));  //allowed extensions list//
+    $uploader->setMaxSize(.5); //set max file size to be allowed in MB//
+    $uploader->sameName(true);
+
+    // Atempt to upload a file
+    if(!$file = $api->uploadSkin($uploader, $skin_path,$skin_path_temp)){
+        $error = $api->getErrors();
+        $response->status = 500;
+        $response->message = $error[0];
+        $response->json($response);
+    }
+    $file_name = strtok($file, '.');
+    $input = array(
+            'file' => $file,
+            'updated_at' => date("Y-m-d H:i:s"),
+        );
+    $model->skinUpdate($input, array('id' => $skin->id));
     $response->json($response);
 }
 
@@ -501,14 +520,14 @@ elseif ($route->match('skinimgupload', null)) {
     $uploader->setDir('storage/skins/');
     $uploader->setExtensions(array('png', 'jpg', 'gif'));  //allowed extensions list//
     $uploader->setMaxSize(.2);
-    $uploader->setCustomName($api->getInputVal('id') . '-' . time());
+    $uploader->setCustomName($skin->name.'-'.$api->getInputVal('id') . '-' . time());
 
     if (!$uploader->uploadFile('file')) {
         $response->status = 500;
         $response->message = $uploader->getMessage();
         $response->json($response);
     }
-    $model->skinUpdate(array('icon' => $uploader->getUploadName()), array('id' => $skin->id));
+    $model->skinUpdate(array('icon' => $uploader->getUploadName(), 'updated_at' => date("Y-m-d H:i:s")), array('id' => $skin->id));
     $path = 'storage/skins/' . $api->getInputVal('current');
     if (is_file($path)) {
         unlink($path);

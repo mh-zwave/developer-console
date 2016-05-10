@@ -314,6 +314,33 @@ class Ut {
     }
 
     /**
+     * Delete a file or recursively delete a directory
+     * 
+     * @param string $dir Path to file or directory
+     * @return void
+     */
+    public static function cleanDirectory($dir) {
+//        var_dump($dir);
+//        return;
+        if (is_dir($dir)) {
+            $objects = scandir($dir);
+            foreach ($objects as $object) {
+                if ($object != "." && $object != "..") {
+                    if(filetype($dir . "/" . $object) === "dir"){
+                         Ut::cleanDirectory($dir . "/" . $object);
+                    }
+                    else{
+                        unlink($dir . "/" . $object); 
+                    }
+                       
+                }
+            }
+            reset($objects);
+            rmdir($dir);
+        }
+    }
+
+    /**
      * Fill template with data
      *
      * @resource string $resource

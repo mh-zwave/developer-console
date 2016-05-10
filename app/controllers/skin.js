@@ -149,14 +149,9 @@ myAppController.controller('SkinIdController', function($scope, $routeParams, $r
         $scope.loading = {status: 'loading-spin', icon: 'fa-spinner fa-spin', message: $scope._t('uploading')};
         var fd = new FormData();
         fd.append('file', files[0]);
-         if(files[0].name !== $scope.skin.input.file){
-            $scope.loading = false;
-            alertify.alert("The uploaded file must be named  " + $scope.skin.input.file); 
-            return;
-        }
-        dataFactory.uploadFile($scope.cfg.api['skinupload'],fd).then(function(response) {
+        dataFactory.uploadFile($scope.cfg.api['skinupload'] +  '/' + $scope.skin.input.name,fd).then(function(response) {
              $scope.loading = {status: 'loading-fade', icon: 'fa-check text-success', message: $scope._t('success_upload')};
-             $scope.loadData();
+             //$scope.loadData();
            
         }, function(error) {
             $scope.loading = false;
