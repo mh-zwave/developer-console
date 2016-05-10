@@ -151,7 +151,7 @@ myAppController.controller('SkinIdController', function($scope, $routeParams, $r
         fd.append('file', files[0]);
         dataFactory.uploadFile($scope.cfg.api['skinupload'] +  '/' + $scope.skin.input.name,fd).then(function(response) {
              $scope.loading = {status: 'loading-fade', icon: 'fa-check text-success', message: $scope._t('success_upload')};
-             //$scope.loadData();
+             $scope.loadData();
            
         }, function(error) {
             $scope.loading = false;
