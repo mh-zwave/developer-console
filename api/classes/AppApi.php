@@ -397,6 +397,70 @@ class AppApi {
     }
 
     /**
+     * Unpack a tar.gz file
+     * 
+     * @param string $path
+     * @param string $target
+     * return bool
+     */
+    public function unpackTarGz($path,$target) {
+       
+        // decompress from gz
+        $p = new PharData($path);
+        $p->decompress(); // creates /path/to/my.tar
+// unarchive from the tar
+        $phar = new PharData(strtok($path, '.').'.gz');
+        $phar->extractTo(strtok($path, '.'));
+        
+        var_dump($path,$target,strtok($path, '.'));
+        die;
+    }
+
+    /**
+     * Unpack a tar.gz file
+     * 
+     * @param string $path
+     * @param string $target
+     * return bool
+     */
+    public function unpackTarGz_($path, $target) {
+        if (!is_dir($target)) {
+            mkdir($target);
+        }
+        // This input should be from somewhere else, hard-coded in this example
+        $file_name = $path;
+
+        // Raising this value may increase performance
+        $buffer_size = 4096; // read 4kb at a time
+        $out_file_name = str_replace('.gz', '', $file_name);
+
+        // Open our files (in binary mode)
+        $file = gzopen($file_name, 'rb');
+        $out_file = fopen($out_file_name, 'wb');
+
+        // Keep repeating until the end of the input file
+        while (!gzeof($file)) {
+            // Read buffer-size bytes
+            // Both fwrite and gzread and binary-safe
+            fwrite($out_file, gzread($file, $buffer_size));
+        }
+        // Files are done, close files
+        fclose($out_file);
+        gzclose($file);
+
+        //var_dump($out_file_name);
+        //return;
+
+        $phar_data = new PharData($out_file_name);
+        $phar_data->extractTo(str_replace(".tar", "", $out_file_name));
+
+        //unlink($out_file_name);
+        unset($phar_data);
+        Phar::unlinkArchive($out_file_name);
+        return true;
+    }
+
+    /**
      * Pack to a tar.gz archive
      * 
      * @param string $path
@@ -417,23 +481,84 @@ class AppApi {
     }
 
     /**
+     * Upload and repack a file
+     * 
+     * @param string $input
+     * @param object $uploader
+     * @param string  $file_path
+     * @param string $file_path_temp
+     * return bool
+     */
+    public function uploadRepackFile($input, $uploader, $file_path, $file_path_temp) {
+        //file is the filebrowse element name
+        if (!$uploader->uploadFile($input)) {
+            $this->setErrors($uploader->getMessage());
+            return false;
+        }
+        //get uploaded file name, renames on upload//
+        $file = $uploader->getUploadName();
+        $file_name = strtok($file, '.');
+        $file_extension = $uploader->getExtension($file);
+        switch ($file_extension) {
+            case 'gz':
+                //unpackTarGz($path, $target)
+                if (!$this->unpackTarGz($file_path . $file_name.'.tar.gz', $file_path_temp . $file_name)) {
+                    $this->setErrors('Unable to unpack file "' . $file . '"');
+                    return false;
+                }
+                //$this->setErrors('Unknown file extension in "' . $file . '"');
+                return $file_name . '.tar.gz';
+            case 'zip':
+                if (!$this->unpackZip($file_path . $file, $file_path_temp . $file_name)) {
+                    $this->setErrors('Unable to unpack file "' . $file . '"');
+                    return false;
+                }
+                break;
+            default:
+                $this->setErrors('Unknown file extension in "' . $file . '"');
+                return false;
+        }
+        //do {
+        /* if ($file_extension !== 'zip') {
+          break;
+          } */
+        // Unpack zip file
+        // Unlink uploaded Zip file
+        unlink($file_path . $file);
+        if (is_file($file_path . $file_name . '.tar.gz')) {
+            unlink($file_path . $file_name . '.tar.gz');
+        }
+        // Create a tar.gz archive
+        if (!$this->packTargz($file_path_temp . $file_name, $file_path . $file_name)) {
+            $this->setErrors('Unable to create tar.gz from file "' . $file . '"');
+            return false;
+        }
+        // Clean temp directory
+        //Ut::cleanDirectory($file_path_temp . $file_name);
+        $file = $file_name . '.tar.gz';
+        //} while (false);
+
+        return $file;
+    }
+
+    /**
      * Pack to a tar.gz archive
      * 
      * @param string $path
      * @param string $target
      * return bool
      */
-    public function uploadSkin($uploader, $skin_path,$skin_path_temp) {
+    public function uploadSkin($uploader, $skin_path, $skin_path_temp) {
         //file is the filebrowse element name
         if (!$uploader->uploadFile('file')) {
             $this->setErrors($uploader->getMessage());
             return false;
-        } 
-         //get uploaded file name, renames on upload//
+        }
+        //get uploaded file name, renames on upload//
         $file = $uploader->getUploadName();
-        $file_name = strtok($file, '.'); 
+        $file_name = strtok($file, '.');
         $file_extension = $uploader->getExtension($file);
-        
+
         // Filename default is not allowed
         if ($file_name === 'default') {
             if (is_file($skin_path . $file)) {
@@ -448,24 +573,24 @@ class AppApi {
             }
             // Unpack zip file
             if (!$this->unpackZip($skin_path . $file, $skin_path_temp . $file_name)) {
-                 $this->setErrors('Unable to unpack file "' . $file . '"');
-                 return false;
+                $this->setErrors('Unable to unpack file "' . $file . '"');
+                return false;
             }
             // Unlink uploaded Zip file
             unlink($skin_path . $file);
-            if(is_file($skin_path . $file_name.'.tar.gz')){
-                 unlink($skin_path . $file_name.'.tar.gz');
+            if (is_file($skin_path . $file_name . '.tar.gz')) {
+                unlink($skin_path . $file_name . '.tar.gz');
             }
             // Create a tar.gz archive
             if (!$this->packTargz($skin_path_temp . $file_name, $skin_path . $file_name)) {
                 $this->setErrors('Unable to create tar.gz from file "' . $file . '"');
-                 return false;
+                return false;
             }
             // Clean temp directory
             Ut::cleanDirectory($skin_path_temp . $file_name);
             $file = $file_name . '.tar.gz';
         } while (false);
-        
+
         return $file;
     }
 

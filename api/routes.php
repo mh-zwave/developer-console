@@ -361,7 +361,7 @@ elseif ($route->match('skins', null)) {
 }
 // API skin id
 elseif ($route->match('skin', 1)) {
-    // Prepare and sanitize post input
+    // Prepare and sanitize input
     $api->setInputs(array('id' => $route->getParam(0)));
     $where = ($user->role > 1 ? array('id' => $api->getInputVal('id'), 'user_id' => $user->id) : array('id' => $api->getInputVal('id')));
     $skin = $model->skinFind($where);
@@ -533,6 +533,96 @@ elseif ($route->match('skinimgupload', null)) {
         unlink($path);
     }
     $response->data = array('icon' => $uploader->getUploadName());
+    $response->json($response);
+}
+// API icons
+elseif ($route->match('icons', null)) {
+    $where = ($user->role > 1 ? array('user_id' => $user->id) : null);
+    $response->data = $model->iconsAll($where);
+    $response->json($response);
+}
+// API icon
+elseif ($route->match('icon', 1)) {
+    // Prepare and sanitize input
+    $api->setInputs(array('id' => $route->getParam(0)));
+    $where = ($user->role > 1 ? array('id' => $api->getInputVal('id'), 'user_id' => $user->id) : array('id' => $api->getInputVal('id')));
+    $skin = $model->iconFind($where);
+    if (!count($skin)) {
+        $response->status = 404;
+        $response->message = 'Not found';
+        $response->json($response);
+    }
+    $response->data = $skin;
+    $response->json($response);
+}
+// API Icon create
+elseif ($route->match('iconcreate', null)) {
+    //$name = Ut::toSlug(strtok($_FILES['file']['name'], '.'));
+    $name = strtok($_FILES['file']['name'], '.');
+    // Check if model skin exists
+    $skin = $model->iconFind(array('name' => $name));
+    if ($skin) {
+        $response->status = 409;
+        $response->message = 'The icon set with the name '.$name.' already exists! Please rename your icon set and try to upload again.';
+        $response->json($response);
+    }
+    $icon_path = 'storage/icons/';
+    $icon_path_temp = 'storage/icons/'.$name.'/';
+    // Uploader init
+    $uploader = new Uploader();
+    $uploader->setDir($icon_path);
+    $uploader->setExtensions(array('gz', 'zip'));  //allowed extensions list//
+    $uploader->setMaxSize(.5); //set max file size to be allowed in MB//
+    $uploader->setCustomName($name);
+    $uploader->sameName(true);
+    $uploader->setUniqueFile();
+   
+    // Upload a file
+    if(!$file = $api->uploadRepackFile('file',$uploader, $icon_path,$icon_path)){
+        $error = $api->getErrors();
+        $response->status = 500;
+        $response->message = $error[0];
+        $response->json($response);
+    }
+    $file_name = strtok($file, '.');
+     //var_dump($uploader,$icon_path,$icon_path_temp,$file_name);
+    //return;
+    
+    if ($file) {
+        $input = array(
+            'user_id' => $user->id,
+            'name' => Ut::toSlug($file_name),
+            'title' => $file_name,
+            'file' => $file,
+            'author' => trim($user->first_name . ' ' . $user->last_name),
+            'homepage' => $user->homepage,
+            'created_at' => date("Y-m-d H:i:s"),
+            'updated_at' => date("Y-m-d H:i:s"),
+        );
+        if (!$model->iconCreate($input)) {
+            $response->status = 500;
+            $response->message = 'Unable to upload a icon set';
+            $response->json($response);
+        }
+        $input['id'] = $db->inserId();
+    }
+    $response->data = $input;
+    $response->json($response);
+}
+// API Icon update
+elseif ($route->match('iconupdate', null)) {
+    $response->json($response);
+}
+// API Icon delete
+elseif ($route->match('icondelete', null)) {
+    $response->json($response);
+}
+// API Icon upload
+elseif ($route->match('iconupload', null)) {
+    $response->json($response);
+}
+// API Icon image upload
+elseif ($route->match('iconimgupload', null)) {
     $response->json($response);
 }
 // API user
@@ -824,6 +914,11 @@ elseif ($route->match('api-rating-create', null)) {
 // Public API skins
 elseif ($route->match('api-skins', null)) {
     $response->data = $model->skinsAll(array('active' => 1));
+    $response->json($response);
+}
+// Public API icons
+elseif ($route->match('api-icons', null)) {
+    $response->data = $model->iconsAll(array('active' => 1));
     $response->json($response);
 }
 // Logout

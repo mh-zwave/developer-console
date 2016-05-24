@@ -494,6 +494,80 @@ class Model {
         $q = "DELETE FROM skins " . $this->where($param);
         return $this->db->query($q);
     }
+    
+    /**
+     * Load list of icons
+     * 
+     * @param array $param
+     * @return array
+     */
+    public function iconsAll($param = array()) {
+        $data = array();
+        $q = "SELECT * FROM icons ";
+        $q .= $this->where($param);
+        $q .= " ORDER BY id DESC";
+        $result = $this->db->query($q);
+        if ($result->num_rows > 0) {
+            while ($row = $result->fetch_object()) {
+                array_push($data, $row);
+            }
+        }
+        return $data;
+    }
+    
+    /**
+     * Load a single icon
+     * 
+     * @param int $param
+     * @return array
+     */
+    public function iconFind($param) {
+        $data = array();
+        $q = "SELECT * FROM icons " . $this->where($param);
+        $result = $this->db->query($q);
+        if ($result->num_rows > 0) {
+            while ($row = $result->fetch_object()) {
+                $data = $row;
+            }
+        }
+        return $data;
+    }
+    
+    /**
+     * Create an icon
+     * 
+     * @param array $param
+     * @return bool
+     */
+    public function iconCreate($param = array()) {
+        $q = "INSERT icons SET " . $this->setAttributes($param);
+        return $this->db->query($q);
+    }
+    
+    /**
+     * Update an icon
+     * 
+     * @param array $param
+     * @return bool
+     */
+    public function iconUpdate($param, $where) {
+        $q = "UPDATE icons SET " . $this->setAttributes($param) . $this->where($where);
+        return $this->db->query($q);
+    }
+    
+    /**
+     * Delete an icon
+     * 
+     * @param int $param
+     * @return array
+     */
+    public function iconDelete($param) {
+        if (!is_array($param) || count($param) < 1) {
+            return false;
+        }
+        $q = "DELETE FROM icons " . $this->where($param);
+        return $this->db->query($q);
+    }
 
     /**
      * Create a password
