@@ -8,6 +8,7 @@ class Uploader {
     private $allowAll;
     private $maxSize;
     private $uploadName;
+    private $uploadOriginalName;
     private $seqnence;
     public $name = 'Uploader';
     public $useTable = false;
@@ -59,6 +60,14 @@ class Uploader {
         return $this->uploadName;
     }
 
+    function setUploadOriginalName($name) {
+        $this->uploadOriginalName = $name;
+    }
+
+    function getUploadOriginalName() {
+        return $this->uploadOriginalName;
+    }
+
     function setSequence($seq) {
         $this->imageSeq = $seq;
     }
@@ -84,6 +93,7 @@ class Uploader {
         $size = $_FILES[$fileBrowse]["size"];
         $name = $_FILES[$fileBrowse]["name"];
         $ext = $this->getExtension($name);
+        $this->setUploadOriginalName($name);
         if ($this->uniqueFile) {
             $files = scandir($this->destinationPath);
             if (in_array($name, $files)) {
@@ -98,10 +108,10 @@ class Uploader {
         } else if (empty($name)) {
             $this->setMessage("File not selected ");
         } else if ($size > $this->maxSize) {
-            $this->setMessage("Too large file! Allowed size is max: ".$this->maxSize.' Kb');
+            $this->setMessage("Too large file! Allowed size is max: " . $this->maxSize . ' Kb');
         } else if ($this->allowAll || (!$this->allowAll && in_array($ext, $this->extensions))) {
             if ($this->customName) {
-                $this->uploadName = $this->customName. "." . $ext;
+                $this->uploadName = $this->customName . "." . $ext;
             } else {
                 if ($this->sameName == false) {
                     $this->uploadName = $this->imageSeq . "-" . substr(md5(rand(1111, 9999)), 0, 8) . $this->getRandom() . rand(1111, 1000) . rand(99, 9999) . "." . $ext;
@@ -117,7 +127,7 @@ class Uploader {
                 $this->setMessage("Upload failed , try later!");
             }
         } else {
-            $this->setMessage("Invalid file format! Allowed formats are: ".implode(', ',$this->extensions));
+            $this->setMessage("Invalid file format! Allowed formats are: " . implode(', ', $this->extensions));
         }
         return $result;
     }

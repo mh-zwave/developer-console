@@ -380,7 +380,7 @@ elseif ($route->match('skincreate', null)) {
     $skin = $model->skinFind(array('name' => $name));
     if ($skin) {
         $response->status = 409;
-        $response->message = 'The skin with the name '.$name.' already exists! Please rename your skin and try to upload again.';
+        $response->message = 'The skin with the name '.$name.' already exists! Please rename your skin and try it to upload again.';
         $response->json($response);
     }
     $skin_path = 'storage/skins/';
@@ -557,13 +557,17 @@ elseif ($route->match('icon', 1)) {
 }
 // API Icon create
 elseif ($route->match('iconcreate', null)) {
-    //$name = Ut::toSlug(strtok($_FILES['file']['name'], '.'));
-    $name = strtok($_FILES['file']['name'], '.');
+    $original_name = strtok($_FILES['file']['name'], '.');
+    $name = Ut::toSlug(strtok($_FILES['file']['name'], '.'));
     // Check if model skin exists
-    $skin = $model->iconFind(array('name' => $name));
-    if ($skin) {
+    $icon = $model->iconFind(array('name' => $name));
+    if ($icon) {
         $response->status = 409;
-        $response->message = 'The icon set with the name '.$name.' already exists! Please rename your icon set and try to upload again.';
+        $response->message = '';
+        if($original_name !== $name){
+             $response->message .= 'The file '.$original_name.' will be renamed to '.$name.'. ';
+        }
+        $response->message .= 'The icon set with the name '.$name.' already exists! Please rename your icon set and try to upload again.';
         $response->json($response);
     }
     $icon_path = 'storage/icons/';
@@ -572,7 +576,7 @@ elseif ($route->match('iconcreate', null)) {
     $uploader = new Uploader();
     $uploader->setDir($icon_path);
     $uploader->setExtensions(array('gz', 'zip'));  //allowed extensions list//
-    $uploader->setMaxSize(.5); //set max file size to be allowed in MB//
+    $uploader->setMaxSize(2); //set max file size to be allowed in MB//
     $uploader->setCustomName($name);
     $uploader->sameName(true);
     $uploader->setUniqueFile();

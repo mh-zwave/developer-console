@@ -411,9 +411,9 @@ class AppApi {
 // unarchive from the tar
         $phar = new PharData(strtok($path, '.').'.gz');
         $phar->extractTo(strtok($path, '.'));
-        
-        var_dump($path,$target,strtok($path, '.'));
-        die;
+        return true;
+        //var_dump($path,$target,strtok($path, '.'));
+        //die;
     }
 
     /**
@@ -507,7 +507,8 @@ class AppApi {
                     return false;
                 }
                 //$this->setErrors('Unknown file extension in "' . $file . '"');
-                return $file_name . '.tar.gz';
+                //return $file_name . '.tar.gz';
+                break;
             case 'zip':
                 if (!$this->unpackZip($file_path . $file, $file_path_temp . $file_name)) {
                     $this->setErrors('Unable to unpack file "' . $file . '"');
@@ -537,7 +538,6 @@ class AppApi {
         //Ut::cleanDirectory($file_path_temp . $file_name);
         $file = $file_name . '.tar.gz';
         //} while (false);
-
         return $file;
     }
 
