@@ -555,6 +555,23 @@ elseif ($route->match('icon', 1)) {
     $response->data = $skin;
     $response->json($response);
 }
+// API icon
+elseif ($route->match('iconpreview', 1)) {
+    // Prepare and sanitize input
+    $api->setInputs(array('name' => $route->getParam(0)));
+    $dir = 'storage/icons/'.$api->getInputVal('name').'/';
+    $files = Ut::getFilesIndDir($dir,array('jpg','jpeg','png','gif'));
+    //var_dump(Ut::getFilesIndDir($dir));
+//    $where = array('name' => $api->getInputVal('name'));
+//    $skin = $model->iconFind($where);
+//    if (!count($skin)) {
+//        $response->status = 404;
+//        $response->message = 'Not found';
+//        $response->json($response);
+//    }
+    $response->data = $files;
+    $response->json($response);
+}
 // API Icon create
 elseif ($route->match('iconcreate', null)) {
     $original_name = strtok($_FILES['file']['name'], '.');
@@ -615,18 +632,112 @@ elseif ($route->match('iconcreate', null)) {
 }
 // API Icon update
 elseif ($route->match('iconupdate', null)) {
+   // Prepare and sanitize post input
+    $_POST['updated_at'] = date("Y-m-d H:i:s");
+    $api->setInputs($_POST);
+    $skin = $model->iconFind(array('id' => $api->getInputVal('id'), 'user_id' => $user->id, 'name' => $api->getInputVal('name')));
+    if (!$skin) {
+        $response->status = 404;
+        $response->message = 'Not found';
+        $response->json($response);
+    }
+    $model->iconUpdate($api->getInputs(), array('id' => $api->getInputVal('id')));
     $response->json($response);
 }
 // API Icon delete
 elseif ($route->match('icondelete', null)) {
+    // Prepare and sanitize post input
+    $api->setInputs($_POST);
+    $icon = $model->iconFind(array('id' => $api->getInputVal('id'), 'user_id' => $user->id));
+    if (!count($icon)) {
+        $response->status = 404;
+        $response->message = 'Not found';
+        $response->json($response);
+    }
+    if (!$model->iconDelete(array('id' => $api->getInputVal('id'), 'user_id' => $user->id))) {
+        $response->status = 500;
+        $response->message = 'Unable to delete the icon';
+        $response->json($response);
+    }
+    $path = 'storage/icons/';
+    if (is_file($path.$icon->file)) {
+        unlink($path.$icon->file);
+    }
+    if (is_file($path.$icon->icon)) {
+        unlink($path.$icon->icon);
+    }
+    Ut::cleanDirectory($path.$icon->name);
     $response->json($response);
 }
 // API Icon upload
-elseif ($route->match('iconupload', null)) {
+elseif ($route->match('iconupload', 1)) {
+     $api->setInputs(array('name' => $route->getParam(0)));
+     $name = Ut::toSlug(strtok($_FILES['file']['name'], '.'));
+     // Check if skin name and uploaded name are equal
+     if ($api->getInputVal('name') !== $name) {
+        $response->status = 500;
+        $response->message = 'The uploaded file must be named:  ' . $api->getInputVal('name').'!!! Your file name is: '.$name;
+        $response->json($response);
+    }
+    // Check if model exists
+    $icon = $model->iconFind(array('user_id' => $user->id, 'name' => $api->getInputVal('name')));
+    if (!$icon) {
+        $response->status = 404;
+        $response->message = 'Icon not found';
+        $response->json($response);
+    }
+     $icon_path = 'storage/icons/';
+    $icon_path_temp = 'storage/icons/'.$name.'/';
+    
+    $uploader = new Uploader();
+    $uploader->setDir($icon_path);
+    $uploader->setExtensions(array('gz', 'zip'));  //allowed extensions list//
+    $uploader->setMaxSize(.5); //set max file size to be allowed in MB//
+    $uploader->sameName(true);
+
+    // Atempt to upload a file
+    if(!$file = $api->uploadRepackFile('file',$uploader, $icon_path,$icon_path)){
+        $error = $api->getErrors();
+        $response->status = 500;
+        $response->message = $error[0];
+        $response->json($response);
+    }
+    $file_name = strtok($file, '.');
+    $input = array(
+            'file' => $file,
+            'updated_at' => date("Y-m-d H:i:s"),
+        );
+    $model->iconUpdate($input, array('id' => $icon->id));
     $response->json($response);
 }
 // API Icon image upload
 elseif ($route->match('iconimgupload', null)) {
+    // Prepare and sanitize post input
+    $api->setInputs($_POST);
+
+    $icon = $model->iconFind(array('id' => $api->getInputVal('id'), 'user_id' => $user->id));
+    if (!$icon) {
+        $response->status = 404;
+        $response->message = 'Not found';
+        $response->json($response);
+    }
+    $uploader = new Uploader();
+    $uploader->setDir('storage/icons/');
+    $uploader->setExtensions(array('png', 'jpg', 'gif'));  //allowed extensions list//
+    $uploader->setMaxSize(.2);
+    $uploader->setCustomName($icon->name.'-'.$api->getInputVal('id') . '-' . time());
+
+    if (!$uploader->uploadFile('file')) {
+        $response->status = 500;
+        $response->message = $uploader->getMessage();
+        $response->json($response);
+    }
+    $model->iconUpdate(array('icon' => $uploader->getUploadName(), 'updated_at' => date("Y-m-d H:i:s")), array('id' => $icon->id));
+    $path = 'storage/icons/' . $api->getInputVal('current');
+    if (is_file($path)) {
+        unlink($path);
+    }
+    $response->data = array('icon' => $uploader->getUploadName());
     $response->json($response);
 }
 // API user

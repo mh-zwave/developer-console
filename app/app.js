@@ -38,6 +38,16 @@ myApp.config(['$routeProvider', function($routeProvider) {
                     templateUrl: 'app/views/skins/skins_id.html',
                     requireLogin: true
                 }).
+                // Icons
+                when('/icons', {
+                    requireLogin: true,
+                    templateUrl: 'app/views/icons/icons.html',
+                }).
+                //Icon ID
+                when('/icons/:id', {
+                    templateUrl: 'app/views/icons/icons_id.html',
+                    requireLogin: true
+                }).
                 //My settings
                 when('/mysettings', {
                     templateUrl: 'app/views/mysettings/mysettings.html',

@@ -28,6 +28,7 @@ var config_data = {
             'skinimgupload': '?uri=skinimgupload',
             'icons': '?uri=icons',
             'icon': '?uri=icon',
+            'iconpreview': '?uri=iconpreview',
             'iconcreate': '?uri=iconcreate',
             'iconupdate': '?uri=iconupdate',
             'icondelete': '?uri=icondelete',
@@ -54,13 +55,15 @@ var config_data = {
         'path': {
             'module': 'modules/',
             'archive': 'archiv/',
-            'skin': 'storage/skins/'
+            'skin': 'storage/skins/',
+            'icon': 'storage/icons/'
         },
         // List of image pathes
         'img': {
             'module': 'modules/',
             'archive': 'archiv/',
             'skin': 'storage/skins/',
+             'icon': 'storage/icons/',
             'iconPlaceholder': 'storage/icon-placeholder.png'
         },
         'categories': [

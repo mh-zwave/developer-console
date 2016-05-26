@@ -34,6 +34,7 @@
         <script src="app/controllers/controllers.js"></script>
         <script src="app/controllers/module.js"></script>
         <script src="app/controllers/skin.js"></script>
+        <script src="app/controllers/icon.js"></script>
         <script src="app/controllers/mysettings.js"></script>
         <script src="app/controllers/adminmodule.js"></script>
         <script src="app/controllers/adminuser.js"></script>
@@ -75,6 +76,10 @@
                             <!-- Skins -->
                             <li class="subnavi-skins" ng-class="isActive('skins')">
                                 <a href="#skins"><i class="fa fa-puzzle-piece"></i> {{_t('Skins')}} <i class="fa fa-chevron-right subnavi-arrow"></i></a>
+                            </li>
+                            <!-- icons -->
+                            <li class="subnavi-skins" ng-class="isActive('icons')">
+                                <a href="#icons"><i class="fa fa-puzzle-piece"></i> {{_t('Icons')}} <i class="fa fa-chevron-right subnavi-arrow"></i></a>
                             </li>
                              <?php endif; ?>
                             <!-- My access -->

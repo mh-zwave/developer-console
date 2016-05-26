@@ -339,6 +339,32 @@ class Ut {
             rmdir($dir);
         }
     }
+    
+    /**
+     * Get files in the directory
+     * 
+     * @param string $dir Path to file or directory
+     * @return void
+     */
+    public static function getFilesIndDir($dir,$ext = array()) {
+        $files = array();
+        if (is_dir($dir)) {
+            $objects = scandir($dir);
+            foreach ($objects as $object) {
+                if ($object != "." && $object != ".." && is_file($dir.$object)) {
+                     if(!empty($ext)){
+                         if(in_array(strtolower(pathinfo($object, PATHINFO_EXTENSION)),$ext)){
+                            array_push($files, $object); 
+                         }
+                         
+                    }else{
+                         array_push($files, $object);
+                    }
+                }
+            }
+        }
+        return $files;
+    }
 
     /**
      * Fill template with data
