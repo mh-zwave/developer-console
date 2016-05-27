@@ -79,7 +79,7 @@
                             </li>
                             <!-- icons -->
                             <li class="subnavi-skins" ng-class="isActive('icons')">
-                                <a href="#icons"><i class="fa fa-puzzle-piece"></i> {{_t('Icons')}} <i class="fa fa-chevron-right subnavi-arrow"></i></a>
+                                <a href="#icons"><i class="fa fa-picture-o"></i> {{_t('Icons')}} <i class="fa fa-chevron-right subnavi-arrow"></i></a>
                             </li>
                              <?php endif; ?>
                             <!-- My access -->

@@ -102,18 +102,19 @@ myAppController.controller('IconController', function($scope, $location, dataFac
 myAppController.controller('IconIdController', function($scope, $routeParams, $route, dataFactory, _) {
     $scope.icon = {
         id: parseInt($routeParams.id),
-        data: [],
-        tokens: [],
-        input: {}
+        input: {},
+        preview: {}
     };
     /**
      * Load data
      */
     $scope.loadData = function() {
         dataFactory.getApi('icon', '/' + $scope.icon.id, true).then(function(response) {
-            $scope.icon.data = response.data.data;
-            $scope.icon.data.active = parseInt($scope.icon.data.active,10);
-            angular.extend($scope.icon.input, $scope.icon.data);
+            //$scope.icon.data = response.data.data;
+            //$scope.icon.data.active = parseInt($scope.icon.data.active,10);
+           response.data.data.active = parseInt(response.data.data.active,10);
+            angular.extend($scope.icon.input, response.data.data);
+             $scope.loadIconPreviews();
 
         }, function(error) {
             $scope.loading = false;
@@ -124,6 +125,21 @@ myAppController.controller('IconIdController', function($scope, $routeParams, $r
     if ($scope.icon.id > 0) {
         $scope.loadData();
     }
+    
+     /**
+     * Load icon previews
+     */
+    $scope.loadIconPreviews = function() {
+        dataFactory.getApi('iconpreview', '/' + $scope.icon.input.name, true).then(function(response) {
+            $scope.icon.preview = response.data.data;
+
+        }, function(error) {
+            $scope.loading = false;
+                alertify.alert("Unable to load icon previews.");
+        });
+
+    };
+   
 
     /**
      * Update icon

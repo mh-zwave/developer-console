@@ -344,6 +344,7 @@ class Ut {
      * Get files in the directory
      * 
      * @param string $dir Path to file or directory
+     * @param array $ext List of allowed extensions
      * @return void
      */
     public static function getFilesIndDir($dir,$ext = array()) {

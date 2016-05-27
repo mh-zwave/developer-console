@@ -555,23 +555,6 @@ elseif ($route->match('icon', 1)) {
     $response->data = $skin;
     $response->json($response);
 }
-// API icon
-elseif ($route->match('iconpreview', 1)) {
-    // Prepare and sanitize input
-    $api->setInputs(array('name' => $route->getParam(0)));
-    $dir = 'storage/icons/'.$api->getInputVal('name').'/';
-    $files = Ut::getFilesIndDir($dir,array('jpg','jpeg','png','gif'));
-    //var_dump(Ut::getFilesIndDir($dir));
-//    $where = array('name' => $api->getInputVal('name'));
-//    $skin = $model->iconFind($where);
-//    if (!count($skin)) {
-//        $response->status = 404;
-//        $response->message = 'Not found';
-//        $response->json($response);
-//    }
-    $response->data = $files;
-    $response->json($response);
-}
 // API Icon create
 elseif ($route->match('iconcreate', null)) {
     $original_name = strtok($_FILES['file']['name'], '.');
@@ -1034,6 +1017,16 @@ elseif ($route->match('api-skins', null)) {
 // Public API icons
 elseif ($route->match('api-icons', null)) {
     $response->data = $model->iconsAll(array('active' => 1));
+    $response->json($response);
+}
+// API icon previews
+elseif ($route->match('api-iconpreview', 1)) {
+    // Prepare and sanitize input
+    $api->setInputs(array('name' => $route->getParam(0)));
+    $dir = 'storage/icons/'.$api->getInputVal('name').'/';
+    $files = Ut::getFilesIndDir($dir,array('jpg','jpeg','png','gif'));
+    // Response
+    $response->data = $files;
     $response->json($response);
 }
 // Logout

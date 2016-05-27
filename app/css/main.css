@@ -269,6 +269,13 @@ vertical-align: middle;
   border-bottom-color: #f2f2f2;
 }
 
+/* Accordion
+-------------------------------------------------- */
+/* line 205, sass/globals/_body.scss */
+.accordion-entry-title {
+  cursor: pointer;
+}
+
 /* Header
 -------------------------------------------------- */
 /* line 3, sass/globals/_header.scss */
@@ -2394,12 +2401,13 @@ http://codepen.io/MattIn4D/pen/LiKFC
   border-color: #d3d3d3;
 }
 
-/* Homepage styles */
-/* Login
--------------------------------------------------- */
-/* line 5, sass/modules/_login.scss */
-#page_login #main_content.container, #page_password #main_content.container {
-  max-width: 500px;
+/* Icon styles */
+/* line 2, sass/modules/_icons.scss */
+.icon-preview {
+  display: inline-block;
+  margin: 10px;
+  max-width: 48px;
+  max-height: 48px;
 }
 
 /* Mobile body
