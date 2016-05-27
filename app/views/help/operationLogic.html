@@ -8,7 +8,7 @@ and open the template in the editor.
     <uib-accordion close-others="false">
         <uib-accordion-group   heading="Core" is-open="true" is-disabled="false">
             <p align="justify">
-                The Core Chapter explains the absolutely necessary program code for a Module text in marks are Placeholders for your own module or Parameter Names.
+                The core chapter explains the absolutely necessary program code for a module text in marks are placeholders for your own module or parameter names.
             </p>
             <uib-accordion close-others="false">
                 <uib-accordion-group   heading="index.js" is-open="true" is-disabled="false">
@@ -37,11 +37,11 @@ and open the template in the editor.
                                     </tr>
                                     <tr>
                                         <td>singleton</td>
-                                        <td class="text-justify">Boolean to set if there can be multiple Instances of on Module or not</td>
+                                        <td class="text-justify">Boolean to set if there can be multiple instances of on module or not</td>
                                     </tr>
                                     <tr>
                                         <td>dependencies</td>
-                                        <td class="text-justify">An array List of all module names from which this Module is dependent, these modules should be singleton, this module cannot be instantiated if these modules do not exist</td>
+                                        <td class="text-justify">An array list of all module names from which this module is dependent, these modules should be singleton, this module cannot be instantiated if these modules do not exist</td>
                                     </tr>
                                     <tr>
                                         <td>category</td>
@@ -71,7 +71,7 @@ and open the template in the editor.
                                     </tr>
                                     <tr>
                                         <td>author</td>
-                                        <td class="text-justify">author name of the Module </td>
+                                        <td class="text-justify">author name of the module </td>
                                     </tr>
                                     <tr>
                                         <td>homepage</td>
@@ -83,7 +83,7 @@ and open the template in the editor.
                                     </tr>
                                     <tr>
                                         <td>moduleName</td>
-                                        <td class="text-justify">Module name have to the same like the class reference</td>
+                                        <td class="text-justify">Module name has to be the same like the class reference</td>
                                     </tr>
                                     <tr>
                                         <td>version</td>
@@ -111,7 +111,7 @@ and open the template in the editor.
                                     </tr>
                                     <tr>
                                         <td>defaults title</td>
-                                        <td class="text-justify">The title placeholder for the Language files</td>
+                                        <td class="text-justify">The title placeholder for the language files</td>
                                     </tr>
                                     <tr>
                                         <td>description</td>
@@ -131,18 +131,18 @@ and open the template in the editor.
                     </table>
                 </uib-accordion-group>
                 <uib-accordion-group   heading="schema" is-open="true" is-disabled="false">
-                    <p class="text-justify">Here is the Place to define Module Parameters
+                    <p class="text-justify">Here is the place to define module parameters
                         The structure of the schema is the following
                     <div ng-include="getSnippetLocation('S5')"/>
-                    Inside the Properties space the single Properties can be defined,
-                    they become the Parameters of the Module during the Initiation. There can be several types of Properties examples are:
+                    Inside the properties space the single properties can be defined,
+                    to become the parameters of the module during the initiation. There can be several types of properties examples are:
 
-                    <li>Primitive Datatypes like integer, float or string</li>
+                    <li>Primitive datatypes like integer, float or string</li>
                     <div ng-include="getSnippetLocation('S6')"/>
                     <li>Enums with a choice</li>
                     <div ng-include="getSnippetLocation('S7')"/>
-                    <li>Ore a List of Z-Way devices from an specific namespace
-                        For Example.:"namespaces:devices_all:deviceId"  for all devices</li>
+                    <li>Ore a list of Z-Way devices from an specific namespace
+                        For example.:"namespaces:devices_all:deviceId"  for all devices</li>
                     <div ng-include="getSnippetLocation('S8')"/>
                     <p class="text-justify">namespaces can also be specified like
                         namespaces:devices_doorlock:deviceId,namespaces:devices_switchBinary:deviceId
@@ -156,7 +156,7 @@ and open the template in the editor.
                     <li>are the Parameters after namespaces:in the schema point in the module.json</li>
                     <li>   Namespaces prototype for an namespace parameter</li>
                     <li>  (write convention) devices_DEVICETYPE.PATH</li>
-                    <li>   there also a REST path <h1><small>server:port/v1/namespaces/{devices_DEVICETYPE}.{PATH}</small></h1></li>
+                    <li>   there is also a REST path <h1><small>server:port/v1/namespaces/{devices_DEVICETYPE}.{PATH}</small></h1></li>
 
                     <br>
                     <h4>Devicetypes:</h4>
@@ -303,7 +303,7 @@ and open the template in the editor.
                     <p class="text-justify">
                         The 
                         <a href="http://docs.zwayhomeautomation.apiary.io/">ZAutomation API </a> 
-                        offers the access to the Z-Way-Server over the HTTP-Protocol. 
+                        offers the access to the Z-Way server over the HTTP-protocol. 
                         Now describing some basic call-mechanics and essential recourses.
                         The home Point of all requests is </p>
                     <h1><small>server:port/ZAutomation/api/v1. </small></h1>
@@ -316,9 +316,9 @@ and open the template in the editor.
                         <uib-accordion-group   heading="Instances" is-open="true" is-disabled="false">
                             <h3>REST</h3>
                             <h1><small>GET server:port/ZAutomation/api/v1/instances</small></h1>
-                            <p class="text-justify">	offers a list off all Module Instances as Json</p>
+                            <p class="text-justify">	offers a list of all module instances as Json</p>
                             <h1><small>GET server:port /ZAutomation/api/v1/instances/AppClassName</small></h1>
-                            <p class="text-justify">	load a list of all Instances of one module</p>
+                            <p class="text-justify">	load a list of all instances of one module</p>
                             <br>
                             <h3>Module</h3>
                             <p class="text-justify">to search an instance in all Instances</p>
@@ -327,7 +327,7 @@ and open the template in the editor.
                         <uib-accordion-group   heading="Devices" is-open="true" is-disabled="false">
                             <h3>REST</h3>
                             <p class="text-justify">
-                                Read and Write of Properties of virtual devices. To read the device parameter server:port/ZAutomation/api/v1/devices/{id}. And to change the Properties /ZAutomation/api/v1/devices/{id}/command/{command}{?params} .
+                                Reading and writing of properties of virtual devices. To read the device parameter server:port/ZAutomation/api/v1/devices/{id}. And to change the Properties /ZAutomation/api/v1/devices/{id}/command/{command}{?params} .
                             </p> 
                             <li>    {id} Id of the virtual devices example see ZAutomation API (DummyDevice_9)</li>
                             <li>    {command} name of the command see Command standart commands are set and exact</li>
@@ -335,7 +335,7 @@ and open the template in the editor.
                             <br>
                             <h3>Module</h3>
                             <p class="text-justify">
-                                To Search a virtual device in all devices
+                                To search a virtual device in all devices
                             </p>
                             <div ng-include="getSnippetLocation('ZAutomation3')"></div> 
                         </uib-accordion-group>
@@ -343,13 +343,13 @@ and open the template in the editor.
                 </uib-accordion-group>
                 <uib-accordion-group   heading="Notification" is-open="true" is-disabled="false">
                     <p class="text-justify">
-                        With Notifications a message is written in the logfile and on the UI Console, can be used to send messages to the UI or logging errors.
+                        With Notifications a message is written in the logfile and on the UI console, can be used to send messages to the UI or logging errors.
                     </p>
                     <div ng-include="getSnippetLocation('notification')"></div> 
                 </uib-accordion-group>
                 <uib-accordion-group   heading="Eventbus" is-open="true" is-disabled="false">
                     <p class="text-justify">
-                        The Event bus is a server global communication system, who can be used by devices and Modules
+                        The Eventbus is a server global communication system, thst can be used by devices and modules
                     </p>
                     <uib-accordion close-others="false">
                         <uib-accordion-group   heading="Controller" is-open="true" is-disabled="false">
@@ -357,7 +357,7 @@ and open the template in the editor.
                         </uib-accordion-group>
                         <uib-accordion-group   heading="DeviceCollection" is-open="true" is-disabled="false">
                             <p class="text-justify">
-                                The advantage for Using the eventbus on the List of Virtual Devices, is the easier adressation of Devices. The Eventbus direkt on the Controller does not identify the device.
+                                The advantage of using the Eventbus on the list of virtual devices, is the easier adressation of devices. The Eventbus direct on the controller does not identify the device.
                             </p>
                             <div ng-include="getSnippetLocation('deviceCollection')"></div> 
                         </uib-accordion-group>
@@ -365,7 +365,7 @@ and open the template in the editor.
                 </uib-accordion-group>
                 <uib-accordion-group   heading="Functions" is-open="true" is-disabled="false">
                     <p class="text-justify">
-                        Own Functions can be made with
+                        Own functions can be made with
                     </p>
                     <div ng-include="getSnippetLocation('functions')"></div> 
                 </uib-accordion-group>

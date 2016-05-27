@@ -1,8 +1,8 @@
 <!DOCTYPE html>
   <div hljs hljs-no-escape style="width: 40em">
         /** Constructor method:
-        this Line is a call of the Superconstruktor 
-        has always to be first line of the Constructor:**/
+        this Line is a call of the superconstruktor 
+        has always to be first line of the constructor:**/
         function AppClassName (id, controller) {
             AppClassName.super_.call(this, id, controller);
         }
@@ -11,9 +11,9 @@
         //definition of the class reference:
         _module = AppClassName;
         /** Initialization method:
-        Variable for referenciate to the class in own Methods, 
+        Variable for referenciate to the class in own methods, 
         because this is context dependent in JavaScript
-        Here you can register Listeners see EventBus **/
+        Here you can register listeners see EventBus **/
         AppClassName.prototype.init = function (config) {
             AppClassName.super_.prototype.init.call(this, config);
             var self = this;
@@ -23,6 +23,6 @@
         AppClassName.prototype.stop = function () {
             AppClassName.super_.prototype.stop.call(this);
         };
-        //Own Methods: Write your own Methods here
+        //Own methods: Write your own methods here
         AppClassName.prototype.Methodname= function(parameter){
         }</div>
