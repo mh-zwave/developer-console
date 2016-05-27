@@ -676,6 +676,7 @@ elseif ($route->match('iconupload', 1)) {
     $uploader->setDir($icon_path);
     $uploader->setExtensions(array('gz', 'zip'));  //allowed extensions list//
     $uploader->setMaxSize(.5); //set max file size to be allowed in MB//
+    $uploader->setCustomName($name);
     $uploader->sameName(true);
 
     // Atempt to upload a file
