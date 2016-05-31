@@ -49,9 +49,26 @@ $api = new AppApi($model, $cfg, $user);
 
 // Home page
 if ($route->match('home', null)) {
+    $modules = $model-> modulesAll(array('verified' => 1, 'active' => 1),4);
 //    var_dump(Ut::user());
 //    var_dump(Ut::formData('mail'));
 //    $form->mail = Ut::formData('mail');
+}
+// App list
+elseif ($route->match('apps', null)) {
+    $view->view = 'apps/apps';
+    $modules = $model-> modulesAll(array('verified' => 1, 'active' => 1));
+}
+// App id
+elseif ($route->match('app/id', 2)) {
+    // Prepare and sanitize post input
+    $api->setInputs(array('id' => $route->getParam(0)));
+    //die($route->getParam(0));
+    $module = $model->moduleFindJoin(array('m.id' => $api->getInputVal('id')));
+    if (!$module) {
+       Ut::redirectTo(Ut::uri('report'), array('404 Page not found'));
+    }
+    $view->view = 'apps/apps_id';
 }
 // Login page
 elseif ($route->match('login', null)) {

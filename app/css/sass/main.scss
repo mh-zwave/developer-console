@@ -7,16 +7,17 @@
 @import "bootstrap/_variables";
 @import "bootstrap/_mixins";
 
-// Css 3
-//@import "css3/_border-radius";
+// Web css
+@import "web/_home"; 
+@import "web/_widget"; 
 // Vendors
 //@import "vendor/_colorpicker";
-// Partials
+// App css
 //@import "globals/_grid";
 @import "globals/_body";
 @import "globals/_header";
 @import "globals/_footer";
-@import "globals/_navi"; 
+@import "globals/_navi";
 @import "globals/_table"; 
 @import "globals/_button"; 
 @import "globals/_form";

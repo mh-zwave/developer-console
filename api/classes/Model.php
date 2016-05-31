@@ -138,7 +138,7 @@ class Model {
      * @param array $param
      * @return array
      */
-    public function modulesAll($param = array()) {
+    public function modulesAll($param = array(),$limit = false) {
         $data = array();
         $q = "SELECT m.*,u.mail,"
                 . " ROUND(AVG(IFNULL(r.score, 0))) AS rating, "
@@ -151,6 +151,7 @@ class Model {
                 . " LEFT JOIN comments c ON m.id = c.module_id ";
         $q .= $this->where($param);
         $q .= " GROUP BY m.id ORDER BY m.id DESC ";
+        $q .= ($limit ? ' LIMIT '.$limit : '');
         $result = $this->db->query($q);
         if ($result->num_rows > 0) {
             while ($row = $result->fetch_object()) {

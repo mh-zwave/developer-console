@@ -326,20 +326,18 @@ class Ut {
             $objects = scandir($dir);
             foreach ($objects as $object) {
                 if ($object != "." && $object != "..") {
-                    if(filetype($dir . "/" . $object) === "dir"){
-                         Ut::cleanDirectory($dir . "/" . $object);
+                    if (filetype($dir . "/" . $object) === "dir") {
+                        Ut::cleanDirectory($dir . "/" . $object);
+                    } else {
+                        unlink($dir . "/" . $object);
                     }
-                    else{
-                        unlink($dir . "/" . $object); 
-                    }
-                       
                 }
             }
             reset($objects);
             rmdir($dir);
         }
     }
-    
+
     /**
      * Get files in the directory
      * 
@@ -347,19 +345,18 @@ class Ut {
      * @param array $ext List of allowed extensions
      * @return void
      */
-    public static function getFilesIndDir($dir,$ext = array()) {
+    public static function getFilesIndDir($dir, $ext = array()) {
         $files = array();
         if (is_dir($dir)) {
             $objects = scandir($dir);
             foreach ($objects as $object) {
-                if ($object != "." && $object != ".." && is_file($dir.$object)) {
-                     if(!empty($ext)){
-                         if(in_array(strtolower(pathinfo($object, PATHINFO_EXTENSION)),$ext)){
-                            array_push($files, $object); 
-                         }
-                         
-                    }else{
-                         array_push($files, $object);
+                if ($object != "." && $object != ".." && is_file($dir . $object)) {
+                    if (!empty($ext)) {
+                        if (in_array(strtolower(pathinfo($object, PATHINFO_EXTENSION)), $ext)) {
+                            array_push($files, $object);
+                        }
+                    } else {
+                        array_push($files, $object);
                     }
                 }
             }
@@ -393,6 +390,17 @@ class Ut {
         }
         return $ext;
     }
+    /**
+     * Get image or placeholder
+     *
+     * @resource string $resource
+     */
+    public static function getImageOrPlaceholder($image,$placeholder = 'app/img/icon-placeholder.png') {
+        if(!is_file($image)){
+            return $placeholder;
+        }
+        return $image;
+    }
 
     /**
      * Convert string to slug
@@ -408,6 +416,22 @@ class Ut {
 
 
         //return strtr($string, $table);
+    }
+
+    /**
+     * Cut text after (x) amount of characters
+     *
+     * @param string $str
+     * @param int $chars
+     * @param string $end
+     * @return  string
+     */
+    public static function cutText($str, $chars, $end = '...') {
+        if (strlen($str) <= $chars){
+            return $str;
+        }
+        $new = substr($str, 0, $chars + 1);
+        return substr($new, 0, strrpos($new, ' ')) . $end;
     }
 
 }
