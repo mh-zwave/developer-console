@@ -8,15 +8,18 @@
 class Model {
 
     private $db;
+     private $cfg;
 
     /**
      * Class constructor
      * 
      * @param string $db
+     * @param array $cfg
      * @return void
      */
-    public function __construct($db) {
+    public function __construct($db,$cfg) {
         $this->db = $db;
+         $this->cfg = $cfg;
     }
 
     /**
@@ -138,8 +141,8 @@ class Model {
      * @param array $param
      * @return array
      */
-    public function modulesAll($param = array(),$limit = false) {
-        $data = array();
+    public function modulesAll($param = array(), $limit = false) {
+        //$data = array();
         $q = "SELECT m.*,u.mail,"
                 . " ROUND(AVG(IFNULL(r.score, 0))) AS rating, "
                 . " SUM(IFNULL(c.isnew, 0)) AS commentsnew, "
@@ -151,10 +154,22 @@ class Model {
                 . " LEFT JOIN comments c ON m.id = c.module_id ";
         $q .= $this->where($param);
         $q .= " GROUP BY m.id ORDER BY m.id DESC ";
-        $q .= ($limit ? ' LIMIT '.$limit : '');
+        $q .= ($limit ? ' LIMIT ' . $limit : '');
         $result = $this->db->query($q);
+        
+        return $this-> _modulesAll($result);
+    }
+    /**
+     * Set all modules data
+     * @param object $result
+     * @return array
+     */
+    private function _modulesAll($result) {
+        $data = array();
         if ($result->num_rows > 0) {
             while ($row = $result->fetch_object()) {
+                $row->icon_path = $this->cfg['server'].Ut::getImageOrPlaceholder('modules/' . $row->icon);
+                $row->file_path = (is_file('modules/' . $row->file) ? $this->cfg['server'].'modules/' . $row->file : NULL);
                 array_push($data, $row);
             }
         }
@@ -226,6 +241,7 @@ class Model {
         }
         return $data;
     }
+
     /**
      * Load a single module with joined data
      * 
@@ -234,7 +250,7 @@ class Model {
      */
     public function moduleFindJoin($param) {
         $data = array();
-         $q = "SELECT m.*,u.mail,"
+        $q = "SELECT m.*,u.mail,"
                 . " ROUND(AVG(IFNULL(r.score, 0))) AS rating, "
                 . " ROUND(AVG(IFNULL(r.score, 0)),1) AS ratingsavg, "
                 . " COUNT(distinct r.id) AS ratingscnt, "
@@ -307,8 +323,8 @@ class Model {
         }
         return $data;
     }
-    
-     /**
+
+    /**
      * Load a single archive
      * 
      * @param int $param
@@ -325,7 +341,7 @@ class Model {
         }
         return $data;
     }
-    
+
     /**
      * Load list of archives
      * 
@@ -345,7 +361,8 @@ class Model {
         }
         return $data;
     }
-     /**
+
+    /**
      * Delete an archive
      * 
      * @param int $param
@@ -495,7 +512,7 @@ class Model {
         $q = "DELETE FROM skins " . $this->where($param);
         return $this->db->query($q);
     }
-    
+
     /**
      * Load list of icons
      * 
@@ -515,7 +532,7 @@ class Model {
         }
         return $data;
     }
-    
+
     /**
      * Load a single icon
      * 
@@ -533,7 +550,7 @@ class Model {
         }
         return $data;
     }
-    
+
     /**
      * Create an icon
      * 
@@ -544,7 +561,7 @@ class Model {
         $q = "INSERT icons SET " . $this->setAttributes($param);
         return $this->db->query($q);
     }
-    
+
     /**
      * Update an icon
      * 
@@ -555,7 +572,7 @@ class Model {
         $q = "UPDATE icons SET " . $this->setAttributes($param) . $this->where($where);
         return $this->db->query($q);
     }
-    
+
     /**
      * Delete an icon
      * 
@@ -704,7 +721,7 @@ class Model {
         }
         return $data;
     }
-    
+
     /**
      * Load a single rating
      * 
@@ -733,7 +750,7 @@ class Model {
         $q = "INSERT ratings SET " . $this->setAttributes($param);
         return $this->db->query($q);
     }
-    
+
     /**
      * Delete a rating
      * 
@@ -747,7 +764,7 @@ class Model {
         $q = "DELETE FROM ratings " . $this->where($param);
         return $this->db->query($q);
     }
-    
+
     /**
      * Delete a lang
      * 

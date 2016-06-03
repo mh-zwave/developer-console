@@ -5,6 +5,9 @@
  *
  * @author Martin Vach
  */
+// Set config
+$cfg['server'] = Ut::serverPath();
+
 // Route init
 $route = new Route(trim($_GET['uri'], '/'));
 
@@ -21,7 +24,7 @@ $response = new Response;
 $db = new Db($cfg['db_' . $environment]);
 $db->openConnection();
 // Model init
-$model = new Model($db);
+$model = new Model($db,$cfg);
 
 
 // User init
@@ -55,21 +58,21 @@ if ($route->match('home', null)) {
 //    $form->mail = Ut::formData('mail');
 }
 // App list
-elseif ($route->match('apps', null)) {
-    $view->view = 'apps/apps';
-    $modules = $model-> modulesAll(array('verified' => 1, 'active' => 1));
-}
-// App id
-elseif ($route->match('app/id', 2)) {
-    // Prepare and sanitize post input
-    $api->setInputs(array('id' => $route->getParam(0)));
-    //die($route->getParam(0));
-    $module = $model->moduleFindJoin(array('m.id' => $api->getInputVal('id')));
-    if (!$module) {
-       Ut::redirectTo(Ut::uri('report'), array('404 Page not found'));
-    }
-    $view->view = 'apps/apps_id';
-}
+//elseif ($route->match('apps', null)) {
+//    $view->view = 'apps/apps';
+//    $modules = $model-> modulesAll(array('verified' => 1, 'active' => 1));
+//}
+//// App id
+//elseif ($route->match('app/id', 2)) {
+//    // Prepare and sanitize post input
+//    $api->setInputs(array('id' => $route->getParam(0)));
+//    //die($route->getParam(0));
+//    $module = $model->moduleFindJoin(array('m.id' => $api->getInputVal('id')));
+//    if (!$module) {
+//       Ut::redirectTo(Ut::uri('report'), array('404 Page not found'));
+//    }
+//    $view->view = 'apps/apps_id';
+//}
 // Login page
 elseif ($route->match('login', null)) {
     $view->view = 'login';

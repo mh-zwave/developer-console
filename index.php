@@ -22,7 +22,6 @@ if(ini_get('session.auto_start') != 1) {
 $cfg = require_once 'api/config.php';
 if($_SERVER['HTTP_HOST'] == 'dev.dev'){
     $environment = 'local';
-    $cfg['server'] = 'http://dev.dev/module_store_int/';
 
 }else{
     $environment = 'live';

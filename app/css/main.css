@@ -1735,27 +1735,34 @@ img {
 .widget-entry .widget-entry-in .widget-header h3 a {
   color: #404040;
 }
-/* line 27, ../sass/common/_widget.scss */
+/* line 26, ../sass/common/_widget.scss */
+.widget-entry .widget-entry-in .widget-header .widget-info-text {
+  display: inline-block;
+  margin: 5px 0 0 0;
+  font-size: 95%;
+  color: #737373;
+}
+/* line 33, ../sass/common/_widget.scss */
 .widget-entry .widget-entry-in .widget-footer {
   margin: 10px 0;
 }
 
 /* Widget rating
 -------------------------------------------------- */
-/* line 37, ../sass/common/_widget.scss */
+/* line 43, ../sass/common/_widget.scss */
 .widget-rating {
   font-size: 130%;
   padding: 0 10px 0 0;
   color: #bfbfbf;
 }
-/* line 41, ../sass/common/_widget.scss */
+/* line 47, ../sass/common/_widget.scss */
 .widget-rating.israted {
   color: #f4c37d;
 }
 
 /* Widget detail
 -------------------------------------------------- */
-/* line 48, ../sass/common/_widget.scss */
+/* line 54, ../sass/common/_widget.scss */
 .widget-img-detail {
   /*    float: left;
       position: relative;
@@ -1770,14 +1777,14 @@ img {
       }*/
 }
 
-/* line 63, ../sass/common/_widget.scss */
+/* line 69, ../sass/common/_widget.scss */
 .widget-detail-header .widget-detail-img {
   display: block;
   text-align: left;
   margin: 0 auto;
 }
 
-/* line 74, ../sass/common/_widget.scss */
+/* line 80, ../sass/common/_widget.scss */
 .widget-detail-list {
   border-top: solid 1px #d3d3d3;
   margin: 10px 0 0 0;

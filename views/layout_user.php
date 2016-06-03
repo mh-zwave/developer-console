@@ -66,12 +66,12 @@
         <!-- Ang Content Container -->
         <div id="main_content" class="container" ng-view></div>
         <div class="clearfix"></div>
-
         <div id="footer">
-            
+            <div id="footer_in">
                 <div class="container">
                     © 2015 Z-WAVE.ME
                 </div>
+            </div>         
         </div>
     </body>
 </html>

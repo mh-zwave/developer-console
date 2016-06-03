@@ -195,6 +195,17 @@ var config_data = {
                 "icon": ""
             }
         ],
+        // Order by
+        orderby: {
+            apps: {
+                'mostRatedDESC': '-rating',
+                'creationTimeDESC': '-id',
+                'creationTimeASC': 'id',
+                'titleASC': 'title',
+                'titleDESC': '-title',
+                'updateTimeDESC': '-updateTime'
+            },
+        },
          // Default toke
         'default_token': 'Beta_zwe_internal',
         // Maturity

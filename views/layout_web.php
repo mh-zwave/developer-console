@@ -18,16 +18,16 @@
         </div><!-- /#header --> 
         <!-- Ang Content Container -->
         <div id="main_content" class="container">
-             <?php Ut::flashHtml() ?>
-            <?php require_once 'views/'.$view->view.'.php' ?>
+            <?php Ut::flashHtml() ?>
+            <?php require_once 'views/' . $view->view . '.php' ?>
         </div>
         <div class="clearfix"></div>
-
         <div id="footer">
-            
+            <div id="footer_in">
                 <div class="container">
                     © 2015 Z-WAVE.ME
                 </div>
+            </div>         
         </div>
     </body>
 </html>

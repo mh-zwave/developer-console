@@ -390,13 +390,14 @@ class Ut {
         }
         return $ext;
     }
+
     /**
      * Get image or placeholder
      *
      * @resource string $resource
      */
-    public static function getImageOrPlaceholder($image,$placeholder = 'app/img/icon-placeholder.png') {
-        if(!is_file($image)){
+    public static function getImageOrPlaceholder($image, $placeholder = 'app/img/icon-placeholder.png') {
+        if (!is_file($image)) {
             return $placeholder;
         }
         return $image;
@@ -427,11 +428,29 @@ class Ut {
      * @return  string
      */
     public static function cutText($str, $chars, $end = '...') {
-        if (strlen($str) <= $chars){
+        if (strlen($str) <= $chars) {
             return $str;
         }
         $new = substr($str, 0, $chars + 1);
         return substr($new, 0, strrpos($new, ' ')) . $end;
+    }
+    /**
+     * Build a server path
+     * @return string
+     */
+    public static function serverPath() {
+        $s = &$_SERVER;
+        $ssl = (!empty($s['HTTPS']) && $s['HTTPS'] == 'on') ? true : false;
+        $sp = strtolower($s['SERVER_PROTOCOL']);
+        $protocol = substr($sp, 0, strpos($sp, '/')) . (($ssl) ? 's' : '');
+        $port = $s['SERVER_PORT'];
+        $port = ((!$ssl && $port == '80') || ($ssl && $port == '443')) ? '' : ':' . $port;
+        $host = isset($s['HTTP_X_FORWARDED_HOST']) ? $s['HTTP_X_FORWARDED_HOST'] : (isset($s['HTTP_HOST']) ? $s['HTTP_HOST'] : null);
+        $host = isset($host) ? $host : $s['SERVER_NAME'] . $port;
+        $uri = $protocol . '://' . $host . $s['REQUEST_URI'];
+        $segments = explode('?', $uri, 2);
+        $url = $segments[0];
+        return $url;
     }
 
 }

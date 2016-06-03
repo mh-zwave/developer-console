@@ -23,6 +23,12 @@
                     color: $widget-heading-color;
                 }
             }
+            .widget-info-text{
+                display: inline-block;
+                margin: $spacing-half 0 0 0;
+                font-size: 95%;
+                color: lighten($widget-color,40%)
+            }
         }
         .widget-footer{
             //padding: 0 $spacing-double;

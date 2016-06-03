@@ -108,30 +108,14 @@ angular.forEach(config_data, function(key, value) {
 });
 
 /**
- * Route Access Control and Authentication
+ * Angular run function
+ * @function run
  */
-//myApp.run(function($rootScope, $location, dataService) {
-//    $rootScope.$on("$routeChangeStart", function(event, next, current) {
-//        var user;
-//        if (next.requireLogin) {
-//            user = dataService.getUser();
-//            if (!user) {
-//                //alert('You need to be authenticated to see this page!');
-//                //event.preventDefault();
-//                $location.path('/');
-//                return;
-//            }
-//            if (next.roles && angular.isArray(next.roles)) {
-//                if (next.roles.indexOf(user.role) === -1) {
-//                    //alert('You have no permissions to see this page!');
-//                    //$location.path('/elements');
-//                     $location.path('/error/403');
-//                    return;
-//                }
-//            }
-//        }
-//    });
-//});
+myApp.run(function ($rootScope, $location, dataService, cfg) {
+    // Run ubderscore js in views
+    $rootScope._ = _;
+    
+});
 
 // Intercepting HTTP calls with AngularJS.
 myApp.config(function($provide, $httpProvider) {

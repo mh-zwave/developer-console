@@ -1,12 +1,14 @@
 /**
- * App filters
+ * @overview Filters that are used to format data within views and controllers.
  * @author Martin Vach
  */
+
 /**
- * Display HTML tags in scope
+ * Allow to display html tags in the scope
+ * @function toTrusted
  */
-myApp.filter('toTrusted', ['$sce', function($sce) {
-        return function(text) {
+myApp.filter('toTrusted', ['$sce', function ($sce) {
+        return function (text) {
             if (text == null) {
                 return '';
             }
@@ -15,17 +17,19 @@ myApp.filter('toTrusted', ['$sce', function($sce) {
     }]);
 /**
  * Strip HTML tags from input
+ * @function stripTags
  */
-myApp.filter('stripTags', function() {
-    return function(text) {
-      return String(text).replace(/<[^>]+>/gm, '');
+myApp.filter('stripTags', function () {
+    return function (text) {
+        return String(text).replace(/<[^>]+>/gm, '');
     };
 });
 /**
- * Cut text into x chars
+ * Shorten the text to the specified number of characters
+ * @function cutText
  */
-myApp.filter('cutText', function() {
-    return function(value, wordwise, max, tail) {
+myApp.filter('cutText', function () {
+    return function (value, wordwise, max, tail) {
         if (!value)
             return '';
 
@@ -48,11 +52,12 @@ myApp.filter('cutText', function() {
 });
 /**
  * Convert val to int
+ * @function toInt
  */
-myApp.filter('toInt', function() {
-    return function(val, a) {
+myApp.filter('toInt', function () {
+    return function (val, a) {
         a = typeof a !== 'undefined' ? a : 10;
-        if (isNaN(val)) {
+        if (val === null || val === '' || isNaN(val)) {
             return 0;
         }
         return parseInt(val, a);
@@ -60,19 +65,93 @@ myApp.filter('toInt', function() {
 });
 
 /**
- * Get type of a Javascript variable
+ * Convert val to bool
+ * @function toBool
  */
-myApp.filter('typeOf', function() {
-    return function(obj) {
-         return {}.toString.call(obj).split(' ')[1].slice(0, -1).toLowerCase();
+myApp.filter('toBool', function () {
+    return function (val) {
+        return (String(val).toLowerCase() === 'true');
     };
 });
 
 /**
- * Set the max dec. lenghth
+ * Get type of a Javascript variable
+ * @function typeOf
  */
-myApp.filter('numberFixedLen', function() {
-    return function(val) {
+myApp.filter('typeOf', function () {
+    return function (obj) {
+        return {}.toString.call(obj).split(' ')[1].slice(0, -1).toLowerCase();
+    };
+});
+
+/**
+ * Convert a dec value to hex
+ * @function dec2hex
+ */
+myApp.filter('dec2hex', function () {
+    return function (i) {
+       var result = "0000";
+        if (i >= 0 && i <= 15) {
+            result = "000" + i.toString(16);
+        }
+        else if (i >= 16 && i <= 255) {
+            result = "00" + i.toString(16);
+        }
+        else if (i >= 256 && i <= 4095) {
+            result = "0" + i.toString(16);
+        }
+        else if (i >= 4096 && i <= 65535) {
+            result = i.toString(16);
+        }
+        return result;
+    };
+});
+
+/**
+ * Get a file extension from the path
+ * @function fileExtension
+ */
+myApp.filter('fileExtension', function () {
+    return function (path) {
+        // extract file name from full path ...
+        // (supports `\\` and `/` separators)
+        var basename = path.split(/[\\/]/).pop(),
+                // get last position of `.`                                      
+                pos = basename.lastIndexOf(".");
+        // if file name is empty or ...
+        //  `.` not found (-1) or comes first (0)
+        if (basename === '' || pos < 1) {
+            return '';
+        }
+
+        // extract extension ignoring `.`
+        return basename.slice(pos + 1);
+    };
+});
+
+/**
+ * Convert file size in bytes to human readable with a scale type
+ * @function fileSizeString
+ */
+myApp.filter('fileSizeString', function () {
+    return function (bytes) {
+        var i = -1;
+    var byteUnits = [' kB', ' MB', ' GB', ' TB', 'PB', 'EB', 'ZB', 'YB'];
+    do {
+        bytes = bytes / 1024;
+        i++;
+    } while (bytes > 1024);
+
+    return Math.max(bytes, 0.1).toFixed(1) + byteUnits[i];
+    };
+});
+
+/**
+ * Set max length of the number entered
+ * @function numberFixedLen
+ */
+myApp.filter('numberFixedLen', function () {
+    return function (val) {
         if (val == 0) {
             return 0;
         }
@@ -95,10 +174,11 @@ myApp.filter('numberFixedLen', function() {
 });
 
 /**
- * Check if JSON keys/nodes exist
+ * Check if an object exists and has a node.
+ * @function hasNode
  */
-myApp.filter('hasNode', function() {
-    return function(obj, path) {
+myApp.filter('hasNode', function () {
+    return function (obj, path) {
         if (!obj || !path) {
             return null;
         }
@@ -115,25 +195,13 @@ myApp.filter('hasNode', function() {
     };
 });
 /**
- * Get segment from url
+ * Builds an element icon path
+ * @function getElementIcon
  */
-myApp.filter('getUrlSegment', function($location) {
-    return function(segment) {
-        var ret = false;
-        var data = $location.path().split('/');
-        if (data[segment]) {
-            ret = data[segment];
-        }
-        return ret;
-    };
-});
-/**
- * Get current time
- */
-myApp.filter('getElementIcon', function(cfg) {
-    return function(input, device,level) {
+myApp.filter('getElementIcon', function (cfg) {
+    return function (input, device, level) {
         var icon = cfg.img.icons + 'placeholder.png';
-        
+
         if (input) {
             if ((/^https?:\/\//.test(input))) {
                 return input;
@@ -148,10 +216,23 @@ myApp.filter('getElementIcon', function(cfg) {
                 case 'door':
                     icon = cfg.img.icons + (level == 'open' || level == 'on' ? 'door-open.png' : 'door-closed.png');
                     break;
-                 case 'doorlockcontrol':
-                     icon = cfg.img.icons + 'lock-closed.png';
+
+                case 'window':
+                    if (typeof (level) === 'number') {
+                        if (level == 0) {
+                            icon = cfg.img.icons + 'window-down.png';
+                        } else if (level >= 99) {
+                            icon = cfg.img.icons + 'window-up.png';
+                        } else {
+                            icon = cfg.img.icons + 'window-half.png';
+                        }
+                    } else {
+                        icon = cfg.img.icons + (level == 'open' || level == 'on' ? 'window-open.png' : 'window-closed.png');
+                    }
                     break;
-                    
+                case 'doorlockcontrol':
+                    icon = cfg.img.icons + 'lock-closed.png';
+                    break;
 
                 case 'switch':
                     icon = cfg.img.icons + (level == 'on' ? 'switch-on.png' : 'switch-off.png');
@@ -181,8 +262,7 @@ myApp.filter('getElementIcon', function(cfg) {
                     }
                     break;
                 case 'thermostat':
-                     icon = cfg.img.icons + (level == 'on' ? 'switch-on.png' : 'switch-off.png');
-                    //icon = cfg.img.icons + 'thermostat.png';
+                    icon = cfg.img.icons + 'thermostat.png';
                     break;
 
                 case 'energy':
@@ -212,6 +292,15 @@ myApp.filter('getElementIcon', function(cfg) {
                 case 'luminosity':
                     icon = cfg.img.icons + 'luminosity.png';
                     break;
+                case 'humidity':
+                    icon = cfg.img.icons + 'humidity.png';
+                    break;
+                case 'ultraviolet':
+                    icon = cfg.img.icons + 'ultraviolet.png';
+                    break;
+                case 'barometer':
+                    icon = cfg.img.icons + 'barometer.png';
+                    break;
                 case 'new':
                     icon = cfg.img.icons + 'new.png';
                     break;
@@ -219,53 +308,54 @@ myApp.filter('getElementIcon', function(cfg) {
                     break;
             }
 
-        }else{
-           switch (device.deviceType) {
+        } else {
+            switch (device.deviceType) {
                 case 'switchControl':
                     icon = cfg.img.icons + 'switch-control.png';
                     break;
                 default:
                     break;
-              }
+            }
         }
         return icon;
     };
 });
 
 /**
- * Get event icon
+ * Builds an event icon path
+ * @function getEventIcon
  */
-myApp.filter('getEventIcon', function() {
-    return function(input,message) {
-        var icon = 'placeholder.png';
+myApp.filter('getEventIcon', function (cfg) {
+    return function (input, message) {
+        var icon = cfg.img.icons + 'placeholder.png';
         switch (input) {
             case 'device-temperature':
-                icon = 'device-temperature.png';
+                icon = cfg.img.icons + 'event-device-temperature.png';
                 break;
-             case 'device-electric':
-                icon = 'device-electric.png';
+            case 'device-electric':
+                icon = cfg.img.icons + 'event-device-electric.png';
                 break;
-             case 'device-power':
-                icon = 'device-power.png';
+            case 'device-power':
+                icon = cfg.img.icons + 'event-device-power.png';
                 break;
             case 'device-status':
-                icon = 'device-status.png';
+                icon = cfg.img.icons + 'event-device-status.png';
                 break
             case 'device-OnOff':
-                if(angular.isObject(message)){
-                    icon = (message.l == 'on'? 'device-on.png': 'device-off.png'); 
-                }else{
-                    icon = 'device-on.png';
+                if (angular.isObject(message)) {
+                    icon = (message.l == 'on' ? cfg.img.icons + 'event-device-on.png' : cfg.img.icons + 'event-device-off.png');
+                } else {
+                    icon = cfg.img.icons + 'event-device-on.png';
                 }
                 break
-             case 'device-luminiscence':
-                icon = 'device-luminiscence.png';
+            case 'device-luminiscence':
+                icon = cfg.img.icons + 'event-device-luminiscence.png';
                 break
             case 'device':
-                icon = 'device.png';
+                icon = cfg.img.icons + 'event-device.png';
                 break
             case 'module':
-                icon = 'module.png';
+                icon = cfg.img.icons + 'event-module.png';
                 break
             default:
                 break;
@@ -275,76 +365,155 @@ myApp.filter('getEventIcon', function() {
 });
 
 /**
- * Get battery icon
+ * Builds a battery icon path
+ * @function getBatteryIcon
  */
-myApp.filter('getBatteryIcon', function() {
-    return function(input) {
-        var icon = 'battery.png';
+myApp.filter('getBatteryIcon', function (cfg) {
+    return function (input) {
+        var icon = cfg.img.icons + 'battery.png';
         if (isNaN(input)) {
             return icon;
         }
         var level = parseInt(input);
-        if(level > 95){
-            icon = 'battery-100.png';
-        }else if(level >= 70 && level <= 95){
-            icon = 'battery-80.png';
-        }else if(level >= 50 && level < 70){
-            icon = 'battery-50.png';
-        }else if(level > 20 && level < 50){
-            icon = 'battery-30.png';
-        }else if(level >= 5 && level <= 20){
-            icon = 'battery-20.png';
-        }else{
-            icon = 'battery-0.png';
+        if (level > 95) {
+            icon = cfg.img.icons + 'battery-100.png';
+        } else if (level >= 70 && level <= 95) {
+            icon = cfg.img.icons + 'battery-80.png';
+        } else if (level >= 50 && level < 70) {
+            icon = cfg.img.icons + 'battery-50.png';
+        } else if (level > 20 && level < 50) {
+            icon = cfg.img.icons + 'battery-30.png';
+        } else if (level >= 5 && level <= 20) {
+            icon = cfg.img.icons + 'battery-20.png';
+        } else {
+            icon = cfg.img.icons + 'battery-0.png';
         }
         return icon;
     };
 });
 
 /**
- * Get max level
+ * Get a category icon in the Elements sections
+ * @function getElCategoryIcon
  */
-myApp.filter('getMaxLevel', function() {
-    return function(input) {
-        var maxLevel = 100;
-        var levelVal = (input < 100 ? input : 99);
+myApp.filter('getElCategoryIcon', function () {
+    return function (input) {
+        var array = {
+            text: 'fa-file-text-o',
+            camera: 'fa-video-camera',
+            switchRGBW: 'fa-star-half-o',
+            switchControl: 'fa-toggle-off',
+            switchBinary: 'fa-toggle-on',
+            sensorMultiline: 'fa-list-ul',
+            switchMultilevel: 'fa-cogs',
+            toggleButton: 'fa-dot-circle-o',
+            sensorMultilevel: 'fa-clock-o',
+            sensorBinary: 'fa-fire'
+        };
+        // Default icon
+        if (!array[input]) {
+            return 'fa-caret-right';
+        }
+
+        return array[input];
+    };
+});
+
+/**
+ * Get a category icon in the APPs sections
+ * @function getAppCategoryIcon
+ */
+myApp.filter('getAppCategoryIcon', function () {
+    return function (input) {
+        var array = {
+            basic_gateway_modules: 'fa-cube',
+            legacy_products_workaround: 'fa-wrench',
+            support_external_ui: 'fa-object-group',
+            support_external_dev: 'fa-cubes',
+            automation_basic: 'fa-refresh',
+            device_enhancements: 'fa-plus-square',
+            developers_stuff: 'fa-file-code-o',
+            complex_applications: 'fa-link',
+            //automation: '',
+            security: 'fa-shield',
+            peripherals: 'fa-bolt',
+            logging: 'fa-list-ul',
+            //scripting: '',
+            devices: 'fa-cogs',
+            scheduling: 'fa-calendar-plus-o',
+            //climate: '',
+            environment: 'fa-puzzle-piece',
+            //scenes: '',
+            notifications: 'fa-calendar',
+            tagging: 'fa-tags'
+        };
+        // Default icon
+        if (!array[input]) {
+            return 'fa-caret-right';
+        }
+
+        return array[input];
+    };
+});
+
+/**
+ * Get max level by probeType from the devices data holder
+ * @function getMaxLevel
+ */
+myApp.filter('getMaxLevel', function () {
+    return function (input, probeType) {
+        var levelVal = 100;
+        switch (probeType) {
+            case 'test':
+                levelVal = (input < 255 ? input : 255);
+                break;
+
+            default:
+                levelVal = (input < 100 ? input : 100);
+                break;
+        }
         return levelVal;
     };
 });
 
 /**
- * Today from unix - ExpertUI filter
+ * Today from unix - ExpertUI filter used in the device hardware configuration
+ * @function isTodayFromUnix
  */
-myApp.filter('isTodayFromUnix', function() {
-    return function(input) {
-        if(isNaN(input)){
+myApp.filter('isTodayFromUnix', function () {
+    return function (input) {
+        if (isNaN(input)) {
             return '?';
         }
         var d = new Date(input * 1000);
         var day = (d.getDate() < 10 ? '0' + d.getDate() : d.getDate());
         var mon = d.getMonth() + 1; //Months are zero based
-        mon = ( mon < 10 ? '0' +  mon :  mon);
+        mon = (mon < 10 ? '0' + mon : mon);
         var year = d.getFullYear();
         var hrs = (d.getHours() < 10 ? '0' + d.getHours() : d.getHours());
         var min = (d.getMinutes() < 10 ? '0' + d.getMinutes() : d.getMinutes());
         var sec = (d.getSeconds() < 10 ? '0' + d.getSeconds() : d.getSeconds());
 
         if (d.toDateString() == (new Date()).toDateString()) {
-            //return hrs + ':' + min + ':' + sec;
             return hrs + ':' + min;
 
         } else {
-            //return day + '.' + mon + '.' + year + ' ' + hrs + ':' + min + ':' + sec;
             return day + '.' + mon + '.' + year;
         }
     };
 });
 /**
- * Get current time
+ * Get current time in the hrs:min:sec format
+ * @function getCurrentTime
  */
-myApp.filter('getCurrentTime', function() {
-    return function() {
-        var d = new Date();
+myApp.filter('getCurrentTime', function () {
+    return function (timestamp) {
+        if (timestamp) {
+            var d = new Date(timestamp * 1000);
+        } else {
+            var d = new Date();
+        }
+        //var d = new Date();
         var hrs = (d.getHours() < 10 ? '0' + d.getHours() : d.getHours());
         var min = (d.getMinutes() < 10 ? '0' + d.getMinutes() : d.getMinutes());
         var sec = (d.getSeconds() < 10 ? '0' + d.getSeconds() : d.getSeconds());
@@ -353,10 +522,11 @@ myApp.filter('getCurrentTime', function() {
     };
 });
 /**
- * Get current time
+ * Get a day from the unix timstamp for filtering events
+ * @function unixStartOfDay
  */
-myApp.filter('unixStartOfDay', function() {
-    return function(input, value) {
+myApp.filter('unixStartOfDay', function () {
+    return function (input, value) {
         var now = new Date();
         var startOfDay = new Date(now.getFullYear(), now.getMonth(), now.getDate());
         var timestamp = (startOfDay / 1000) + (3600 * 2);
@@ -377,9 +547,10 @@ myApp.filter('unixStartOfDay', function() {
 });
 /**
  * If is today display h:m otherwise d:m:y
+ * @function isToday
  */
-myApp.filter('isToday', function() {
-    return function(input, fromunix,days,yesterday) {
+myApp.filter('isToday', function () {
+    return function (input, fromunix, days, yesterday) {
         if (fromunix) {
             var d = new Date(input * 1000);
             var startDate = new Date(input * 1000);  // 2000-01-01
@@ -420,10 +591,11 @@ myApp.filter('isToday', function() {
 });
 
 /**
- * If is today display h:m otherwise d:m:y
+ * Renders an event date - If is today display h:m otherwise d:m:y
+ * @function eventDate
  */
-myApp.filter('eventDate', function() {
-    return function(input) {
+myApp.filter('eventDate', function () {
+    return function (input) {
         var d = new Date(input);
         var day = d.getDate();
         var mon = d.getMonth() + 1; //Months are zero based
@@ -442,10 +614,25 @@ myApp.filter('eventDate', function() {
 });
 
 /**
- * Get only unique values
+ * Convert MySql DateTime stamp into JavaScript's Date format
+ * @function mysqlToUnixTs
  */
-myApp.filter('unique', function() {
-    return function(items, filterOn) {
+myApp.filter('mysqlToUnixTs', function () {
+    return function (input) {
+        //function parses mysql datetime string and returns javascript Date object
+        //input has to be in this format: 2007-06-05 15:26:02
+        var regex = /^([0-9]{2,4})-([0-1][0-9])-([0-3][0-9]) (?:([0-2][0-9]):([0-5][0-9]):([0-5][0-9]))?$/;
+        var parts = input.replace(regex, "$1 $2 $3 $4 $5 $6").split(' ');
+        return Math.floor(new Date(parts[0], parts[1] - 1, parts[2], parts[3], parts[4], parts[5]).getTime() / 1000);
+    };
+});
+
+/**
+ * Set an object with unique key-values only
+ * @function unique
+ */
+myApp.filter('unique', function () {
+    return function (items, filterOn) {
 
         if (filterOn === false) {
             return items;
@@ -454,7 +641,7 @@ myApp.filter('unique', function() {
         if ((filterOn || angular.isUndefined(filterOn)) && angular.isArray(items)) {
             var hashCheck = {}, newItems = [];
 
-            var extractValueToCompare = function(item) {
+            var extractValueToCompare = function (item) {
                 if (angular.isObject(item) && angular.isString(filterOn)) {
                     return item[filterOn];
                 } else {
@@ -462,7 +649,7 @@ myApp.filter('unique', function() {
                 }
             };
 
-            angular.forEach(items, function(item) {
+            angular.forEach(items, function (item) {
                 var valueToCheck, isDuplicate = false;
 
                 for (var i = 0; i < newItems.length; i++) {
@@ -483,20 +670,21 @@ myApp.filter('unique', function() {
 });
 /**
  * Get uri segment
+ * @function uri
  */
-myApp.filter('uri', function($location) {
+myApp.filter('uri', function ($location) {
     return {
-        segment: function(segment) {
+        segment: function (segment) {
             var data = $location.path().split("/");
             if (data[segment]) {
                 return data[segment];
             }
             return false;
         },
-        total_segments: function() {
+        total_segments: function () {
             var data = $location.path().split("/");
             var i = 0;
-            angular.forEach(data, function(value) {
+            angular.forEach(data, function (value) {
                 if (value.length) {
                     i++;
                 }
@@ -507,11 +695,12 @@ myApp.filter('uri', function($location) {
 });
 
 /**
- * Display device name
+ * Build a device name
+ * @function deviceName
  */
-myApp.filter('deviceName', function() {
-    return function(deviceId, device) {
-        var name = (deviceId == 1 ? 'RaZberry' : 'Device ' + '_' + deviceId);
+myApp.filter('deviceName', function () {
+    return function (deviceId, device) {
+        var name = (deviceId == 1 ? 'Z-Way' : 'Device ' + '_' + deviceId);
         if (device === undefined) {
             return name;
         }
@@ -524,9 +713,10 @@ myApp.filter('deviceName', function() {
 
 /**
  * Convert text to slug
+ * @function deviceName
  */
-myApp.filter('stringToSlug', function() {
-    return function(str) {
+myApp.filter('stringToSlug', function () {
+    return function (str) {
         str = str.replace(/^\s+|\s+$/g, ''); // trim
         str = str.toLowerCase();
 
