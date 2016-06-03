@@ -6,7 +6,7 @@
 /**
  * Icon controller
  */
-myAppController.controller('IconController', function($scope, $location, dataFactory, dataService, paginationService) {
+myAppController.controller('IconController', function($scope, $location, dataFactory, dataService) {
     //Set elements to expand/collapse
     angular.copy({
         addnew: false

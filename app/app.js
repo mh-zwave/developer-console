@@ -83,6 +83,11 @@ myApp.config(['$routeProvider', function($routeProvider) {
                     templateUrl: 'app/views/admin/users_id.html',
                     requireLogin: true
                 }).
+                //Public modules
+                when('/web/apps', {
+                    templateUrl: 'app/views/web/apps.html',
+                    requireLogin: true
+                }).
                 // Error page
                 when('/error/:code?', {
                     templateUrl: 'app/views/error.html'
@@ -133,6 +138,7 @@ myApp.config(function($provide, $httpProvider) {
     $httpProvider.defaults.timeout = 5000; 
     // Intercept http calls.
     $provide.factory('MyHttpInterceptor', function($q,$location,dataService) {
+         var path = $location.path().split('/');
         return {
             // On request success
             request: function(config) {
@@ -153,7 +159,10 @@ myApp.config(function($provide, $httpProvider) {
             responseError: function(rejection) {
                 //dataService.logError(rejection);
                if(rejection.status == 401){
-                    window.location.href='?uri=logout';
+                   if (path[1] !== 'web') {
+                        window.location.href='?uri=logout';
+
+                    }
                    return $q.reject(rejection);
                     
                 }else{

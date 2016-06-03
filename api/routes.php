@@ -200,11 +200,17 @@ elseif ($route->match('passwordupdate', null)) {
 // Report page
 elseif ($route->match('report', null)) {
     $view->view = 'report';
+
+}
+//Public page
+elseif ($route->match('public', null)) {
+    $view->layout = 'layout_public';
+}
 // User page
-} elseif ($route->match('user', null)) {
-    if (!$auth) {
-        Ut::redirectTo(Ut::uri('home'), array('You are not authorized. Please login or create an account'));
-    }
+elseif ($route->match('user', null)) {
+//    if (!$auth) {
+//        Ut::redirectTo(Ut::uri('home'), array('You are not authorized. Please login or create an account'));
+//    }
     $view->layout = 'layout_user';
 }
 
@@ -917,6 +923,11 @@ elseif ($route->match('api-modules', null)) {
     }
 
     $response->data = $model->apiModulesAll(array('verified' => 1, 'active' => 1), $ids);
+    $response->json($response);
+}
+// Public API modules
+elseif ($route->match('api-modulesweb', null)) {
+    $response->data = $model-> modulesAll(array('verified' => 1, 'active' => 1));
     $response->json($response);
 }
 // Public API module id

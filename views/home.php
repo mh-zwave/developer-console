@@ -38,7 +38,7 @@
 <h2><i class="fa fa-arrow-circle-down" aria-hidden="true"></i> Newest Apps</h2>
 <?php require_once 'views/apps/apps_list.php' ?>
 <div class="text-right">
-    <a class="btn btn-primary btn-lg" href="<?php echo Ut::uri('apps') ?>">All Apps <i class="fa fa-arrow-right" aria-hidden="true"></i></a>
+    <a class="btn btn-primary btn-lg" href="<?php echo Ut::uri('public') ?>#/web/apps">All Apps <i class="fa fa-arrow-right" aria-hidden="true"></i></a>
 </div>
 
 

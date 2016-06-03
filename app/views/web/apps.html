@@ -1,0 +1,60 @@
+<!-- Web app -->
+<div ng-controller="WebAppController">
+    <bb-loader></bb-loader>
+    <!--Apps list  -->
+    <div class="app-row clearfix">
+        <div class="widget-entry" ng-repeat="v in apps.all">
+            <div class="widget-entry-in clickable" ng-click="apps.find = v;handleModal('webAppModal', $event)">
+                <div class="widget-header">
+                    <span class="widget-img">
+                        <img class="widget-preview-img" ng-src="modules/{{v.icon}}" alt="{{v.title}}">
+                    </span>
+                    <h3>{{v.title|cutText:true:30}}</h3>
+                </div>
+                <div class="widget-footer">
+                    <i class="fa widget-rating" title="{{r}}"
+                       ng-class="r > v.rating ? 'fa-star-o' : 'fa-star israted'" 
+                       ng-repeat="r in apps.ratingRange"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="webAppModal" class="appmodal" ng-if="modalArr.webAppModal">
+        <div class="appmodal-in">
+            <div class="appmodal-header">
+                <span class="appmodal-close" ng-click="handleModal('webAppModal', $event)"><i class="fa fa-times"></i></span>
+                <h3>{{apps.find.title|cutText:true:30}}</h3>
+            </div>
+            <div class="appmodal-body appmodal-body-overflow">
+                <div class="widget-detail-header clearfix">
+                    <img class="widget-detail-img" ng-src="modules/{{apps.find.icon}}"  alt="{{apps.find.title}}" />
+                    <h1>{{apps.find.title}}</h1>
+                    <div class="widget-detail-perex" ng-bind-html="apps.find.description | toTrusted"></div>
+                </div>
+                <div class="widget-detail-body">
+                    <div class="widget-detail-list"><strong>Author:</strong> {{apps.find.author}}</div>
+                    <div class="widget-detail-list" ng-if="apps.find.homepage">
+                        <strong>Homepage:</strong> <a ng-href="{{apps.find.homepage}}">{{apps.find.homepage}}</a>
+                    </div>
+                    <div class="widget-detail-list"><strong>Version:</strong> {{apps.find.version}}</div>
+                    <div class="widget-detail-list"><strong>Installed:</strong> {{apps.find.installed}}x</div>
+                    <div class="widget-detail-list"><strong>Updated:</strong> {{apps.find.last_updated}}</div>
+                    <div class="widget-detail-list">
+                        <strong>Rating:</strong>
+                        <i class="fa widget-rating" title="{{r}}"
+                           ng-class="r > apps.find.rating ? 'fa-star-o' : 'fa-star israted'" 
+                           ng-repeat="r in apps.ratingRange"></i>
+                        ({{apps.find.ratingscnt}} <i class="fa fa-user"></i>)
+                    </div>
+                </div>
+            </div>
+            <div class="appmodal-footer">
+                <button type="button" class="btn btn-default" ng-click="handleModal('webAppModal', $event)"><i class="fa fa-times text-danger"></i> {{_t('lb_close')}}</button>
+                <a class="btn btn-submit" href="modules/{{apps.find.file}}" title="Download">
+                    <i class="fa fa-download"></i> <span class="btn-name">Download</span>
+                </a>
+            </div>
+        </div>
+    </div>
+</div>

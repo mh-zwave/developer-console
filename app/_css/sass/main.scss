@@ -1,0 +1,41 @@
+// Settings
+@import "globals/_variables";
+@import "globals/_variables_new";
+@import "globals/_mixins";
+// CSS3
+@import "css3/_box-shadow.scss"; 
+// Core Bootstrap variables and mixins
+@import "bootstrap/_variables";
+@import "bootstrap/_mixins";
+
+// Web css
+@import "web/_home"; 
+@import "web/_widget"; 
+// Vendors
+//@import "vendor/_colorpicker";
+// App css
+//@import "globals/_grid";
+@import "globals/_body";
+@import "globals/_header";
+@import "globals/_footer";
+@import "globals/_navi";
+@import "globals/_table"; 
+@import "globals/_button"; 
+@import "globals/_form";
+@import "globals/_tab"; 
+@import "globals/_dropdown"; 
+@import "globals/_comments"; 
+@import "globals/_loader"; 
+@import "globals/_alertify";
+@import "globals/_alert";
+@import "globals/_modal";
+@import "globals/_pagination"; 
+
+// Modules
+@import "modules/_icons";
+//@import "modules/_login";
+
+// Mobile
+@import "responsive/_mixins";
+@import "responsive/_modules";
+@import "responsive/_responsive"; 

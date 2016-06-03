@@ -11,6 +11,7 @@ var config_data = {
             'usersession': '?uri=usersession',
             'mymodules': '?uri=mymodules',
             'modules': '?uri=modules',
+            'modulesweb': '?uri=api-modulesweb',
             'module': '?uri=module',
             'moduleupdate': '?uri=moduleupdate',
             'moduledelete': '?uri=moduledelete',
