@@ -211,9 +211,9 @@ elseif ($route->match('public', null)) {
 }
 // User page
 elseif ($route->match('user', null)) {
-//    if (!$auth) {
-//        Ut::redirectTo(Ut::uri('home'), array('You are not authorized. Please login or create an account'));
-//    }
+    if (!$auth) {
+        Ut::redirectTo(Ut::uri('home'), array('You are not authorized. Please login or create an account'));
+    }
     $view->layout = 'layout_user';
 }
 
