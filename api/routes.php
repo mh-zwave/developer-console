@@ -933,6 +933,19 @@ elseif ($route->match('api-modulesweb', null)) {
     $response->data = $model-> modulesAll(array('verified' => 1, 'active' => 1));
     $response->json($response);
 }
+// Public API module ID
+elseif ($route->match('api-modulesidweb', 1)) {
+     // Prepare and sanitize post input
+    $api->setInputs(array('id' => $route->getParam(0)));
+    $module = $model->moduleFindJoin(array('m.id' => $api->getInputVal('id')));
+    if (!$module) {
+        $response->status = 404;
+        $response->message = 'Not found';
+        $response->json($response);
+    }
+    $response->data = $module;
+    $response->json($response);
+}
 // Public API module id
 elseif ($route->match('api-modulesid', null)) {
     // Prepare and sanitize post input

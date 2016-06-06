@@ -83,9 +83,14 @@ myApp.config(['$routeProvider', function($routeProvider) {
                     templateUrl: 'app/views/admin/users_id.html',
                     requireLogin: true
                 }).
-                //Public modules
+                //Public spps
                 when('/web/apps', {
                     templateUrl: 'app/views/web/apps.html',
+                    requireLogin: true
+                }).
+                //Public spps
+                when('/web/apps/:id', {
+                    templateUrl: 'app/views/web/apps_id.html',
                     requireLogin: true
                 }).
                 // Error page
@@ -112,7 +117,7 @@ angular.forEach(config_data, function(key, value) {
  * @function run
  */
 myApp.run(function ($rootScope, $location, dataService, cfg) {
-    // Run ubderscore js in views
+    // Run underscore js in views
     $rootScope._ = _;
     
 });

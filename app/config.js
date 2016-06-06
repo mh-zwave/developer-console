@@ -13,6 +13,7 @@ var config_data = {
             'modules': '?uri=modules',
             'modulesweb': '?uri=api-modulesweb',
             'module': '?uri=module',
+            'modulesidweb': '?uri=api-modulesidweb',
             'moduleupdate': '?uri=moduleupdate',
             'moduledelete': '?uri=moduledelete',
             'moduleupload': '?uri=moduleupload',

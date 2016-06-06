@@ -155,26 +155,11 @@ class Model {
         $q .= $this->where($param);
         $q .= " GROUP BY m.id ORDER BY m.id DESC ";
         $q .= ($limit ? ' LIMIT ' . $limit : '');
-        $result = $this->db->query($q);
+        //$result = $this->db->query($q);
         
-        return $this-> _modulesAll($result);
+        return $this->setModule($this->db->query($q));
     }
-    /**
-     * Set all modules data
-     * @param object $result
-     * @return array
-     */
-    private function _modulesAll($result) {
-        $data = array();
-        if ($result->num_rows > 0) {
-            while ($row = $result->fetch_object()) {
-                $row->icon_path = $this->cfg['server'].Ut::getImageOrPlaceholder('modules/' . $row->icon);
-                $row->file_path = (is_file('modules/' . $row->file) ? $this->cfg['server'].'modules/' . $row->file : NULL);
-                array_push($data, $row);
-            }
-        }
-        return $data;
-    }
+    
 
     /**
      * Load list ofAPI  modules
@@ -223,6 +208,24 @@ class Model {
         }
         return $data;
     }
+    
+    /**
+     * Set module data
+     * @param object $result
+     * @return array
+     */
+    private function setModule($result,$single = false) {
+        $data = array();
+        if ($result->num_rows > 0) {
+            while ($row = $result->fetch_object()) {
+                $row->icon_path = $this->cfg['server'].Ut::getImageOrPlaceholder('modules/' . $row->icon);
+                $row->file_path = (is_file('modules/' . $row->file) ? $this->cfg['server'].'modules/' . $row->file : NULL);
+                 $row->server_path = $this->cfg['server'];
+                $single ? $data = $row : array_push($data, $row);
+            }
+        }
+        return $data;
+    }
 
     /**
      * Load a single module
@@ -261,13 +264,7 @@ class Model {
                 . " LEFT JOIN comments c ON m.id = c.module_id ";
         $q .= $this->where($param);
         $q .= " GROUP BY m.id ORDER BY m.id DESC ";
-        $result = $this->db->query($q);
-        if ($result->num_rows > 0) {
-            while ($row = $result->fetch_object()) {
-                $data = $row;
-            }
-        }
-        return $data;
+         return $this->setModule($this->db->query($q),true);
     }
 
     /**
