@@ -155,8 +155,6 @@ class Model {
         $q .= $this->where($param);
         $q .= " GROUP BY m.id ORDER BY m.id DESC ";
         $q .= ($limit ? ' LIMIT ' . $limit : '');
-        //$result = $this->db->query($q);
-        
         return $this->setModule($this->db->query($q));
     }
     
@@ -252,7 +250,6 @@ class Model {
      * @return array
      */
     public function moduleFindJoin($param) {
-        $data = array();
         $q = "SELECT m.*,u.mail,"
                 . " ROUND(AVG(IFNULL(r.score, 0))) AS rating, "
                 . " ROUND(AVG(IFNULL(r.score, 0)),1) AS ratingsavg, "

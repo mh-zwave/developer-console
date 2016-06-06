@@ -64,7 +64,7 @@
             <tbody>
                 <tr ng-repeat_="v in module.data| orderBy:predicate:reverse | filter:q  track by v.id" dir-paginate="v in module.data| orderBy:predicate:reverse | filter:q | itemsPerPage: pageSize" current-page="currentPage">
                     <td class="td-img">
-                        <img class="report-img" ng-src="{{cfg.img.module + v.icon}}" alt="img" />
+                        <img class="report-img" ng-src="{{v.icon_path}}" alt="img" />
                     </td>
                     <td>{{v.title}}</td>
                     <td>{{v.category}}</td>

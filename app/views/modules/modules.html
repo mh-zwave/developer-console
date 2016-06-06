@@ -74,7 +74,7 @@
             <tbody>
                 <tr ng-class="v.active == 0 ? 'active-false' : ''" dir-paginate="v in module.data| orderBy:predicate:reverse | filter:q | itemsPerPage: pageSize" current-page="currentPage">
                     <td class="td-img">
-                        <a ng-href="#modules/{{v.id}}/author"><img class="report-img" ng-src="{{cfg.img.module + v.icon}}" alt="img" /></a>
+                        <a ng-href="#modules/{{v.id}}/author"><img class="report-img" ng-src="{{v.icon_path}}" alt="img" /></a>
                     </td>
                     <td><a ng-href="#modules/{{v.id}}/author">{{v.title}}</a></td>
                     <td>{{v.category}}</td>
