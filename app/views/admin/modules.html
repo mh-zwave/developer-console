@@ -87,7 +87,7 @@
                         <a class="btn btn-default" ng-href="" ng-click="verifiModule(v.id,1)" ng-if="v.verified == 0  || v.verified == 2"><i class="fa fa-check text-success"></i></a>
                         <a class="btn btn-default" href="" ng-click="verifiModule(v.id,0)" ng-if="v.verified == 1"><i class="fa fa-ban text-danger"></i></a>
                         <a class="btn btn-default" ng-href="#admin-modules/{{v.id}}"><i class="fa fa-envelope text-info"></i></a>
-                        <a class="btn btn-default" ng-href="{{cfg.path.module + v.file}}"><i class="fa fa-download"></i></a>
+                        <a class="btn btn-default" ng-href="{{v.file_path}}" ng-if="v.file_path"><i class="fa fa-download"></i></a>
                         <a class="btn btn-default" ng-href="#modules/{{v.id}}"><i class="fa fa-pencil text-info"></i></a>
                         <a class="btn btn-default" href="" ng-click="deleteModule(v.id,_t('lb_delete_confirm'))"><i class="fa fa-times text-danger"></i></a>
                     </td>

@@ -89,7 +89,7 @@
                     </td>
                     <td class="td-action">
                         <span ng-if="v.commentsnew > 0">{{v.commentsnew}} <i class="fa fa-comments text-success"></i></span> 
-                        <a class="btn btn-default" ng-href="{{cfg.path.module + v.file}}"><i class="fa fa-download"></i></a>
+                        <a class="btn btn-default" ng-href="{{v.file_path}}" ng-if="v.file_path"><i class="fa fa-download"></i></a>
                         <a class="btn btn-default" ng-href="#modules/{{v.id}}/author"><i class="fa fa-pencil text-info"></i></a>
                          <a class="btn btn-default" href="" ng-click="updateModule({id: v.id,active:1})" ng-if="v.active == 0"><i class="fa fa-fire text-success"></i></a>
                          <a class="btn btn-default" href="" ng-click="updateModule({id: v.id,active:0})" ng-if="v.active == 1"><i class="fa fa-ban text-danger"></i></a>
