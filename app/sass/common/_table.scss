@@ -13,10 +13,17 @@
 .table-report{
     border: 0 !important;
     margin-bottom: 0 !important;
+    
     tbody{
+        tr{
+           background-color: $report-bcg-color; 
+        }
+        tr.bcg-active.false{
+    background-color: $app-bcg-danger;
+}
         td{
             vertical-align: middle !important;
-            background-color: $report-bcg-color;
+            //background-color: $report-bcg-color;
         }
         .td-img{
             width: 30px;

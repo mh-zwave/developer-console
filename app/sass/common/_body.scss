@@ -116,8 +116,8 @@ a {
         font-size: $app-updatetime-icon-size; 
     }
 }
-.bcg-active.false,.bcg-danger{
-    background-color: $app-bcg-danger;
+.bcg-danger{
+    background-color: $app-bcg-danger; 
 }
 
 .clickable{

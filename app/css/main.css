@@ -1226,7 +1226,7 @@ a:focus {
 }
 
 /* line 119, ../sass/common/_body.scss */
-.bcg-active.false, .bcg-danger {
+.bcg-danger {
   background-color: #f2dede;
 }
 
@@ -1838,31 +1838,38 @@ img {
   border: 0 !important;
   margin-bottom: 0 !important;
 }
-/* line 17, ../sass/common/_table.scss */
-.table-report tbody td {
-  vertical-align: middle !important;
+/* line 18, ../sass/common/_table.scss */
+.table-report tbody tr {
   background-color: #FFFFFF;
 }
 /* line 21, ../sass/common/_table.scss */
+.table-report tbody tr.bcg-active.false {
+  background-color: #f2dede;
+}
+/* line 24, ../sass/common/_table.scss */
+.table-report tbody td {
+  vertical-align: middle !important;
+}
+/* line 28, ../sass/common/_table.scss */
 .table-report tbody .td-img {
   width: 30px;
 }
-/* line 24, ../sass/common/_table.scss */
+/* line 31, ../sass/common/_table.scss */
 .table-report tbody .td-action {
   text-align: right;
 }
 
-/* line 30, ../sass/common/_table.scss */
+/* line 37, ../sass/common/_table.scss */
 .table-products td {
   vertical-align: middle !important;
 }
 
-/* line 35, ../sass/common/_table.scss */
+/* line 42, ../sass/common/_table.scss */
 .td20 {
   width: 20%;
 }
 
-/* line 38, ../sass/common/_table.scss */
+/* line 45, ../sass/common/_table.scss */
 .td30 {
   width: 30%;
 }
