@@ -62,8 +62,7 @@
             <tbody>
                 <tr class="bcg-active" ng-class="v.active == 1 ? 'true': 'false'" dir-paginate="v in skin.data| orderBy:predicate:reverse | filter:q | itemsPerPage: pageSize" current-page="currentPage">
                     <td class="td-img">
-                        <img class="report-img" ng-src="{{cfg.img.skin + v.icon}}" alt="img" ng-if="v.icon" />
-                        <img class="report-img" ng-src="{{cfg.img.iconPlaceholder}}" alt="img" ng-if="!v.icon" />
+                        <img class="report-img" ng-src="{{v.icon_path}}" alt="img" />
                     </td>
                     <td>{{v.title}}</td>
                     <td>{{v.version}}</td>

@@ -24,7 +24,7 @@ $response = new Response;
 $db = new Db($cfg['db_' . $environment]);
 $db->openConnection();
 // Model init
-$model = new Model($db,$cfg);
+$model = new Model($db, $cfg);
 
 
 // User init
@@ -52,7 +52,7 @@ $api = new AppApi($model, $cfg, $user);
 
 // Home page
 if ($route->match('home', null)) {
-    $modules = $model-> modulesAll(array('verified' => 1, 'active' => 1),4);
+    $modules = $model->modulesAll(array('verified' => 1, 'active' => 1), 4);
 //    var_dump(Ut::user());
 //    var_dump(Ut::formData('mail'));
 //    $form->mail = Ut::formData('mail');
@@ -203,7 +203,6 @@ elseif ($route->match('passwordupdate', null)) {
 // Report page
 elseif ($route->match('report', null)) {
     $view->view = 'report';
-
 }
 //Public page
 elseif ($route->match('public', null)) {
@@ -276,7 +275,33 @@ elseif ($route->match('moduleverify', null)) {
 // API module update
 elseif ($route->match('moduleupdate', null)) {
     // Prepare and sanitize post input
-    $api->setInputs($_POST);
+    $api->setInputs($_POST, array(
+        "id",
+        "patchnotes",
+        "category",
+        "author",
+        "homepage",
+        "icon",
+        "version",
+        "maturity",
+        "title",
+        "description",
+        "last_updated",
+        "user_id",
+        "modulename",
+        "modulejson",
+        "dependencies",
+        "file",
+        "detail_images",
+        "verified",
+        "contributed",
+        "featured",
+        "active",
+        "installed",
+        "mail",
+    ));
+    var_dump($api->getInputs());
+    die;
     $where = ($user->role > 1 ? array('id' => $api->getInputVal('id'), 'user_id' => $user->id) : array('id' => $api->getInputVal('id')));
     $module = $model->moduleFind($where);
     if (!$module) {
@@ -284,6 +309,8 @@ elseif ($route->match('moduleupdate', null)) {
         $response->message = 'Forbidden';
         $response->json($response);
     }
+    $input = array(
+    );
     $model->moduleUpdate($api->getInputs(), array('id' => $api->getInputVal('id')));
     $response->json($response);
 }
@@ -406,12 +433,12 @@ elseif ($route->match('skincreate', null)) {
     $skin = $model->skinFind(array('name' => $name));
     if ($skin) {
         $response->status = 409;
-        $response->message = 'The skin with the name '.$name.' already exists! Please rename your skin and try it to upload again.';
+        $response->message = 'The skin with the name ' . $name . ' already exists! Please rename your skin and try it to upload again.';
         $response->json($response);
     }
     $skin_path = 'storage/skins/';
     $skin_path_temp = 'storage/skins/temp/';
-    
+
     $uploader = new Uploader();
     $uploader->setDir($skin_path);
     $uploader->setExtensions(array('gz', 'zip'));  //allowed extensions list//
@@ -421,14 +448,14 @@ elseif ($route->match('skincreate', null)) {
     $uploader->setUniqueFile();
 
     // Upload a file
-    if(!$file = $api->uploadSkin($uploader, $skin_path,$skin_path_temp)){
+    if (!$file = $api->uploadSkin($uploader, $skin_path, $skin_path_temp)) {
         $error = $api->getErrors();
         $response->status = 500;
         $response->message = $error[0];
         $response->json($response);
     }
     $file_name = strtok($file, '.');
-    
+
     if ($file) {
         $input = array(
             'user_id' => $user->id,
@@ -491,12 +518,12 @@ elseif ($route->match('skindelete', null)) {
 }
 // API skin upload
 elseif ($route->match('skinupload', 1)) {
-     $api->setInputs(array('name' => $route->getParam(0)));
-     $name = Ut::toSlug(strtok($_FILES['file']['name'], '.'));
-     // Check if skin name and uploaded name are equal
-     if ($api->getInputVal('name') !== $name) {
+    $api->setInputs(array('name' => $route->getParam(0)));
+    $name = Ut::toSlug(strtok($_FILES['file']['name'], '.'));
+    // Check if skin name and uploaded name are equal
+    if ($api->getInputVal('name') !== $name) {
         $response->status = 500;
-        $response->message = 'The uploaded file must be named:  ' . $api->getInputVal('name').'!!! Your file name is: '.$name;
+        $response->message = 'The uploaded file must be named:  ' . $api->getInputVal('name') . '!!! Your file name is: ' . $name;
         $response->json($response);
     }
     // Check if model skin exists
@@ -508,7 +535,7 @@ elseif ($route->match('skinupload', 1)) {
     }
     $skin_path = 'storage/skins/';
     $skin_path_temp = 'storage/skins/temp/';
-    
+
     $uploader = new Uploader();
     $uploader->setDir($skin_path);
     $uploader->setExtensions(array('gz', 'zip'));  //allowed extensions list//
@@ -516,7 +543,7 @@ elseif ($route->match('skinupload', 1)) {
     $uploader->sameName(true);
 
     // Atempt to upload a file
-    if(!$file = $api->uploadSkin($uploader, $skin_path,$skin_path_temp)){
+    if (!$file = $api->uploadSkin($uploader, $skin_path, $skin_path_temp)) {
         $error = $api->getErrors();
         $response->status = 500;
         $response->message = $error[0];
@@ -524,9 +551,9 @@ elseif ($route->match('skinupload', 1)) {
     }
     $file_name = strtok($file, '.');
     $input = array(
-            'file' => $file,
-            'updated_at' => date("Y-m-d H:i:s"),
-        );
+        'file' => $file,
+        'updated_at' => date("Y-m-d H:i:s"),
+    );
     $model->skinUpdate($input, array('id' => $skin->id));
     $response->json($response);
 }
@@ -546,7 +573,7 @@ elseif ($route->match('skinimgupload', null)) {
     $uploader->setDir('storage/skins/');
     $uploader->setExtensions(array('png', 'jpg', 'gif'));  //allowed extensions list//
     $uploader->setMaxSize(.2);
-    $uploader->setCustomName($skin->name.'-'.$api->getInputVal('id') . '-' . time());
+    $uploader->setCustomName($skin->name . '-' . $api->getInputVal('id') . '-' . time());
 
     if (!$uploader->uploadFile('file')) {
         $response->status = 500;
@@ -590,14 +617,14 @@ elseif ($route->match('iconcreate', null)) {
     if ($icon) {
         $response->status = 409;
         $response->message = '';
-        if($original_name !== $name){
-             $response->message .= 'The file '.$original_name.' will be renamed to '.$name.'. ';
+        if ($original_name !== $name) {
+            $response->message .= 'The file ' . $original_name . ' will be renamed to ' . $name . '. ';
         }
-        $response->message .= 'The icon set with the name '.$name.' already exists! Please rename your icon set and try to upload again.';
+        $response->message .= 'The icon set with the name ' . $name . ' already exists! Please rename your icon set and try to upload again.';
         $response->json($response);
     }
     $icon_path = 'storage/icons/';
-    $icon_path_temp = 'storage/icons/'.$name.'/';
+    $icon_path_temp = 'storage/icons/' . $name . '/';
     // Uploader init
     $uploader = new Uploader();
     $uploader->setDir($icon_path);
@@ -606,18 +633,18 @@ elseif ($route->match('iconcreate', null)) {
     $uploader->setCustomName($name);
     $uploader->sameName(true);
     $uploader->setUniqueFile();
-   
+
     // Upload a file
-    if(!$file = $api->uploadRepackFile('file',$uploader, $icon_path,$icon_path)){
+    if (!$file = $api->uploadRepackFile('file', $uploader, $icon_path, $icon_path)) {
         $error = $api->getErrors();
         $response->status = 500;
         $response->message = $error[0];
         $response->json($response);
     }
     $file_name = strtok($file, '.');
-     //var_dump($uploader,$icon_path,$icon_path_temp,$file_name);
+    //var_dump($uploader,$icon_path,$icon_path_temp,$file_name);
     //return;
-    
+
     if ($file) {
         $input = array(
             'user_id' => $user->id,
@@ -641,7 +668,7 @@ elseif ($route->match('iconcreate', null)) {
 }
 // API Icon update
 elseif ($route->match('iconupdate', null)) {
-   // Prepare and sanitize post input
+    // Prepare and sanitize post input
     $_POST['updated_at'] = date("Y-m-d H:i:s");
     $api->setInputs($_POST);
     $skin = $model->iconFind(array('id' => $api->getInputVal('id'), 'user_id' => $user->id, 'name' => $api->getInputVal('name')));
@@ -669,23 +696,23 @@ elseif ($route->match('icondelete', null)) {
         $response->json($response);
     }
     $path = 'storage/icons/';
-    if (is_file($path.$icon->file)) {
-        unlink($path.$icon->file);
+    if (is_file($path . $icon->file)) {
+        unlink($path . $icon->file);
     }
-    if (is_file($path.$icon->icon)) {
-        unlink($path.$icon->icon);
+    if (is_file($path . $icon->icon)) {
+        unlink($path . $icon->icon);
     }
-    Ut::cleanDirectory($path.$icon->name);
+    Ut::cleanDirectory($path . $icon->name);
     $response->json($response);
 }
 // API Icon upload
 elseif ($route->match('iconupload', 1)) {
-     $api->setInputs(array('name' => $route->getParam(0)));
-     $name = Ut::toSlug(strtok($_FILES['file']['name'], '.'));
-     // Check if skin name and uploaded name are equal
-     if ($api->getInputVal('name') !== $name) {
+    $api->setInputs(array('name' => $route->getParam(0)));
+    $name = Ut::toSlug(strtok($_FILES['file']['name'], '.'));
+    // Check if skin name and uploaded name are equal
+    if ($api->getInputVal('name') !== $name) {
         $response->status = 500;
-        $response->message = 'The uploaded file must be named:  ' . $api->getInputVal('name').'!!! Your file name is: '.$name;
+        $response->message = 'The uploaded file must be named:  ' . $api->getInputVal('name') . '!!! Your file name is: ' . $name;
         $response->json($response);
     }
     // Check if model exists
@@ -695,9 +722,9 @@ elseif ($route->match('iconupload', 1)) {
         $response->message = 'Icon not found';
         $response->json($response);
     }
-     $icon_path = 'storage/icons/';
-    $icon_path_temp = 'storage/icons/'.$name.'/';
-    
+    $icon_path = 'storage/icons/';
+    $icon_path_temp = 'storage/icons/' . $name . '/';
+
     $uploader = new Uploader();
     $uploader->setDir($icon_path);
     $uploader->setExtensions(array('gz', 'zip'));  //allowed extensions list//
@@ -706,7 +733,7 @@ elseif ($route->match('iconupload', 1)) {
     $uploader->sameName(true);
 
     // Atempt to upload a file
-    if(!$file = $api->uploadRepackFile('file',$uploader, $icon_path,$icon_path)){
+    if (!$file = $api->uploadRepackFile('file', $uploader, $icon_path, $icon_path)) {
         $error = $api->getErrors();
         $response->status = 500;
         $response->message = $error[0];
@@ -714,9 +741,9 @@ elseif ($route->match('iconupload', 1)) {
     }
     $file_name = strtok($file, '.');
     $input = array(
-            'file' => $file,
-            'updated_at' => date("Y-m-d H:i:s"),
-        );
+        'file' => $file,
+        'updated_at' => date("Y-m-d H:i:s"),
+    );
     $model->iconUpdate($input, array('id' => $icon->id));
     $response->json($response);
 }
@@ -735,7 +762,7 @@ elseif ($route->match('iconimgupload', null)) {
     $uploader->setDir('storage/icons/');
     $uploader->setExtensions(array('png', 'jpg', 'gif'));  //allowed extensions list//
     $uploader->setMaxSize(.2);
-    $uploader->setCustomName($icon->name.'-'.$api->getInputVal('id') . '-' . time());
+    $uploader->setCustomName($icon->name . '-' . $api->getInputVal('id') . '-' . time());
 
     if (!$uploader->uploadFile('file')) {
         $response->status = 500;
@@ -930,12 +957,12 @@ elseif ($route->match('api-modules', null)) {
 }
 // Public API modules
 elseif ($route->match('api-modulesweb', null)) {
-    $response->data = $model-> modulesAll(array('verified' => 1, 'active' => 1));
+    $response->data = $model->modulesAll(array('verified' => 1, 'active' => 1));
     $response->json($response);
 }
 // Public API module ID
 elseif ($route->match('api-modulesidweb', 1)) {
-     // Prepare and sanitize post input
+    // Prepare and sanitize post input
     $api->setInputs(array('id' => $route->getParam(0)));
     $module = $model->moduleFindJoin(array('m.id' => $api->getInputVal('id')));
     if (!$module) {
@@ -1068,8 +1095,8 @@ elseif ($route->match('api-icons', null)) {
 elseif ($route->match('api-iconpreview', 1)) {
     // Prepare and sanitize input
     $api->setInputs(array('name' => $route->getParam(0)));
-    $dir = 'storage/icons/'.$api->getInputVal('name').'/';
-    $files = Ut::getFilesIndDir($dir,array('jpg','jpeg','png','gif'));
+    $dir = 'storage/icons/' . $api->getInputVal('name') . '/';
+    $files = Ut::getFilesIndDir($dir, array('jpg', 'jpeg', 'png', 'gif'));
     // Response
     $response->data = $files;
     $response->json($response);

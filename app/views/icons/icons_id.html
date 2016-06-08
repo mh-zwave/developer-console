@@ -23,24 +23,6 @@
                         <i class="fa fa-exclamation-triangle"></i> Title is required.
                     </div>
                 </div>
-
-                <!-- maturity, version
-                <div class="form-group form-inline">
-                    <label class="isrequired" for="ui_version">{{_t('UI version')}}</label>
-                    <select name="ui_version" id="ui_version" class="form-control" ng-model="icon.input.ui_version" ng-required="true">
-                        <option value="">--- Select one ---</option>
-                        <option ng-repeat="v in cfg.ui_version" ng-selected="icon.input.ui_version == v" value="{{v}}">{{v}}</option>
-                    </select>
-                    <label class="isrequired" for="version">{{_t('Version')}}</label>
-                    <input name="version" id="version" type="text" class="form-control" value="{{icon.input.version}}" ng-model="icon.input.version" ng-required="true" />
-                    <div class="valid-error text-danger" ng-show="(form_icon.ui_version.$dirty && form_icon.ui_version.$invalid) || (submitted && form_icon.ui_version.$error.required)">
-                        <i class="fa fa-exclamation-triangle"></i> UI Version is required.
-                    </div>
-                    <div class="valid-error text-danger" ng-show="(form_icon.version.$dirty && form_icon.version.$invalid) || (submitted && form_icon.version.$error.required)">
-                        <i class="fa fa-exclamation-triangle"></i> Version is required.
-                    </div>
-                </div>-->
-
             </fieldset>
             <fieldset>
                 <!-- Upload icon -->
@@ -52,7 +34,7 @@
                 <!-- Upload icon image -->
                 <h2><span ng-bind="_t('Upload screenshot')"></span></h2>
                 <input class="form-control" type="file" name="file" onchange="angular.element(this).scope().uploadIconImg(this.files)"/>
-                <img class="product-img" ng-src="{{cfg.img.icon + icon.input.icon}}" alt="img" ng-if="icon.input.icon" />
+                <img class="product-img" ng-src="{{icon.input.icon_path}}" alt="img" />
             </fieldset>
             <fieldset>
                 <!-- description

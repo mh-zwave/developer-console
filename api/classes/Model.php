@@ -469,10 +469,7 @@ class Model {
                 $row->icon_path = $this->cfg['server'].Ut::getImageOrPlaceholder('storage/skins/' . $row->icon);
                 $row->file_path = (is_file('storage/skins/' . $row->file) ? $this->cfg['server'].'storage/skins/' . $row->file : NULL);
                  $row->server_path = $this->cfg['server'];
-                 if(is_null($row->file_path)){
-                     continue;
-                 }
-                $single ? $data = $row : array_push($data, $row);
+                 $single ? $data = $row : array_push($data, $row);
             }
         }
         return $data;
@@ -552,10 +549,7 @@ class Model {
                 $row->file_path = (is_file('storage/icons/' . $row->file) ? $this->cfg['server'].'storage/icons/' . $row->file : NULL);
                 $row->preview_path = $this->cfg['server'].'storage/icons/' . $row->name . '/';
                  $row->server_path = $this->cfg['server'];
-                 if(is_null($row->file_path)){
-                     continue;
-                 }
-                $single ? $data = $row : array_push($data, $row);
+                 $single ? $data = $row : array_push($data, $row);
             }
         }
         return $data;

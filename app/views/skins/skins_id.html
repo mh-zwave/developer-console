@@ -52,7 +52,7 @@
              <!-- Upload skin image -->
             <h2><span ng-bind="_t('Upload image')"></span></h2>
             <input class="form-control" type="file" name="file" onchange="angular.element(this).scope().uploadSkinImg(this.files)"/>
-           <img class="product-img" ng-src="{{cfg.img.skin + skin.input.icon}}" alt="img" ng-if="skin.input.icon" />
+           <img class="product-img" ng-src="{{skin.input.icon_path}}" alt="img" />
         </fieldset>
         <fieldset>
              <!-- description -->

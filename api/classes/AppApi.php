@@ -31,8 +31,11 @@ class AppApi {
      * @param type $array
      * @return void
      */
-    public function setInputs($array) {
+    public function setInputs($array,$white_list = array()) {
         foreach ($array as $key => $value) {
+            if(count($white_list) && !in_array($key,$white_list)){
+                continue;
+            }
             $this->inputs[$key] = addslashes(strip_tags($value));
         }
     }
