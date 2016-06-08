@@ -440,17 +440,10 @@ class Model {
      * @return array
      */
     public function skinsAll($param = array()) {
-        $data = array();
         $q = "SELECT * FROM skins ";
         $q .= $this->where($param);
         $q .= " ORDER BY id DESC";
-        $result = $this->db->query($q);
-        if ($result->num_rows > 0) {
-            while ($row = $result->fetch_object()) {
-                array_push($data, $row);
-            }
-        }
-        return $data;
+        return $this->setSkin($this->db->query($q));
     }
 
     /**
@@ -460,16 +453,31 @@ class Model {
      * @return array
      */
     public function skinFind($param) {
-        $data = array();
         $q = "SELECT * FROM skins " . $this->where($param);
-        $result = $this->db->query($q);
+        return $this->setSkin($this->db->query($q),true);
+    }
+    
+     /**
+     * Set skin data
+     * @param object $result
+     * @return array
+     */
+    private function setSkin($result,$single = false) {
+        $data = array();
         if ($result->num_rows > 0) {
             while ($row = $result->fetch_object()) {
-                $data = $row;
+                $row->icon_path = $this->cfg['server'].Ut::getImageOrPlaceholder('storage/skins/' . $row->icon);
+                $row->file_path = (is_file('storage/skins/' . $row->file) ? $this->cfg['server'].'storage/skins/' . $row->file : NULL);
+                 $row->server_path = $this->cfg['server'];
+                 if(is_null($row->file_path)){
+                     continue;
+                 }
+                $single ? $data = $row : array_push($data, $row);
             }
         }
         return $data;
     }
+
 
     /**
      * Create a skin
@@ -514,17 +522,10 @@ class Model {
      * @return array
      */
     public function iconsAll($param = array()) {
-        $data = array();
         $q = "SELECT * FROM icons ";
         $q .= $this->where($param);
         $q .= " ORDER BY id DESC";
-        $result = $this->db->query($q);
-        if ($result->num_rows > 0) {
-            while ($row = $result->fetch_object()) {
-                array_push($data, $row);
-            }
-        }
-        return $data;
+        return $this->setIcon($this->db->query($q));
     }
 
     /**
@@ -534,12 +535,27 @@ class Model {
      * @return array
      */
     public function iconFind($param) {
-        $data = array();
         $q = "SELECT * FROM icons " . $this->where($param);
-        $result = $this->db->query($q);
+        return $this->setIcon($this->db->query($q),true);
+    }
+    
+     /**
+     * Set icon data
+     * @param object $result
+     * @return array
+     */
+    private function setIcon($result,$single = false) {
+        $data = array();
         if ($result->num_rows > 0) {
             while ($row = $result->fetch_object()) {
-                $data = $row;
+                $row->icon_path = $this->cfg['server'].Ut::getImageOrPlaceholder('storage/icons/' . $row->icon);
+                $row->file_path = (is_file('storage/icons/' . $row->file) ? $this->cfg['server'].'storage/icons/' . $row->file : NULL);
+                $row->preview_path = $this->cfg['server'].'storage/icons/' . $row->name . '/';
+                 $row->server_path = $this->cfg['server'];
+                 if(is_null($row->file_path)){
+                     continue;
+                 }
+                $single ? $data = $row : array_push($data, $row);
             }
         }
         return $data;
