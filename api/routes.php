@@ -275,33 +275,7 @@ elseif ($route->match('moduleverify', null)) {
 // API module update
 elseif ($route->match('moduleupdate', null)) {
     // Prepare and sanitize post input
-    $api->setInputs($_POST, array(
-        "id",
-        "patchnotes",
-        "category",
-        "author",
-        "homepage",
-        "icon",
-        "version",
-        "maturity",
-        "title",
-        "description",
-        "last_updated",
-        "user_id",
-        "modulename",
-        "modulejson",
-        "dependencies",
-        "file",
-        "detail_images",
-        "verified",
-        "contributed",
-        "featured",
-        "active",
-        "installed",
-        "mail",
-    ));
-    var_dump($api->getInputs());
-    die;
+    $api->setInputs($_POST, $model->getWhitelist('modules'));
     $where = ($user->role > 1 ? array('id' => $api->getInputVal('id'), 'user_id' => $user->id) : array('id' => $api->getInputVal('id')));
     $module = $model->moduleFind($where);
     if (!$module) {
@@ -309,8 +283,6 @@ elseif ($route->match('moduleupdate', null)) {
         $response->message = 'Forbidden';
         $response->json($response);
     }
-    $input = array(
-    );
     $model->moduleUpdate($api->getInputs(), array('id' => $api->getInputVal('id')));
     $response->json($response);
 }
@@ -481,7 +453,7 @@ elseif ($route->match('skincreate', null)) {
 elseif ($route->match('skinupdate', null)) {
     // Prepare and sanitize post input
     $_POST['updated_at'] = date("Y-m-d H:i:s");
-    $api->setInputs($_POST);
+    $api->setInputs($_POST,$model->getWhitelist('skins'));
     $skin = $model->skinFind(array('id' => $api->getInputVal('id'), 'user_id' => $user->id, 'name' => $api->getInputVal('name')));
     if (!$skin) {
         $response->status = 404;
@@ -670,7 +642,7 @@ elseif ($route->match('iconcreate', null)) {
 elseif ($route->match('iconupdate', null)) {
     // Prepare and sanitize post input
     $_POST['updated_at'] = date("Y-m-d H:i:s");
-    $api->setInputs($_POST);
+    $api->setInputs($_POST,$model->getWhitelist('icons'));
     $skin = $model->iconFind(array('id' => $api->getInputVal('id'), 'user_id' => $user->id, 'name' => $api->getInputVal('name')));
     if (!$skin) {
         $response->status = 404;

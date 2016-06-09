@@ -8,7 +8,67 @@
 class Model {
 
     private $db;
-     private $cfg;
+    private $cfg;
+    // Table whit lists
+    private $whitelist = array(
+        'modules' => array(
+            "id",
+            "patchnotes",
+            "category",
+            "author",
+            "homepage",
+            "icon",
+            "version",
+            "maturity",
+            "title",
+            "description",
+            "last_updated",
+            "user_id",
+            "modulename",
+            "modulejson",
+            "dependencies",
+            "file",
+            "detail_images",
+            "verified",
+            "contributed",
+            "featured",
+            "active",
+            "installed",
+            "mail",
+        ),
+        'icons' => array(
+            "id",
+            "user_id",
+            "name",
+            "file",
+            "title",
+            "description",
+            "version",
+            "author",
+            "homepage",
+            "license",
+            "active",
+            "icon",
+            "created_at",
+            "updated_at",
+        ),
+        'skins' => array(
+            "id",
+            "user_id",
+            "name",
+            "file",
+            "title",
+            "description",
+            "version",
+            "ui_version",
+            "author",
+            "homepage",
+            "active",
+            "icon",
+            "created_at",
+            "updated_at",
+        ),
+    );
 
     /**
      * Class constructor
@@ -17,9 +77,9 @@ class Model {
      * @param array $cfg
      * @return void
      */
-    public function __construct($db,$cfg) {
+    public function __construct($db, $cfg) {
         $this->db = $db;
-         $this->cfg = $cfg;
+        $this->cfg = $cfg;
     }
 
     /**
@@ -56,6 +116,10 @@ class Model {
             $attr .= $key . ' = \'' . $value . '\',';
         }
         return rtrim($attr, ',');
+    }
+
+    public function getWhitelist($table) {
+        return (array_key_exists($table, $this->whitelist) ? $this->whitelist[$table] : array());
     }
 
     /**
@@ -157,7 +221,6 @@ class Model {
         $q .= ($limit ? ' LIMIT ' . $limit : '');
         return $this->setModule($this->db->query($q));
     }
-    
 
     /**
      * Load list ofAPI  modules
@@ -206,19 +269,19 @@ class Model {
         }
         return $data;
     }
-    
+
     /**
      * Set module data
      * @param object $result
      * @return array
      */
-    private function setModule($result,$single = false) {
+    private function setModule($result, $single = false) {
         $data = array();
         if ($result->num_rows > 0) {
             while ($row = $result->fetch_object()) {
-                $row->icon_path = $this->cfg['server'].Ut::getImageOrPlaceholder('modules/' . $row->icon);
-                $row->file_path = (is_file('modules/' . $row->file) ? $this->cfg['server'].'modules/' . $row->file : NULL);
-                 $row->server_path = $this->cfg['server'];
+                $row->icon_path = $this->cfg['server'] . Ut::getImageOrPlaceholder('modules/' . $row->icon);
+                $row->file_path = (is_file('modules/' . $row->file) ? $this->cfg['server'] . 'modules/' . $row->file : NULL);
+                $row->server_path = $this->cfg['server'];
                 $single ? $data = $row : array_push($data, $row);
             }
         }
@@ -261,7 +324,7 @@ class Model {
                 . " LEFT JOIN comments c ON m.id = c.module_id ";
         $q .= $this->where($param);
         $q .= " GROUP BY m.id ORDER BY m.id DESC ";
-         return $this->setModule($this->db->query($q),true);
+        return $this->setModule($this->db->query($q), true);
     }
 
     /**
@@ -454,27 +517,26 @@ class Model {
      */
     public function skinFind($param) {
         $q = "SELECT * FROM skins " . $this->where($param);
-        return $this->setSkin($this->db->query($q),true);
+        return $this->setSkin($this->db->query($q), true);
     }
-    
-     /**
+
+    /**
      * Set skin data
      * @param object $result
      * @return array
      */
-    private function setSkin($result,$single = false) {
+    private function setSkin($result, $single = false) {
         $data = array();
         if ($result->num_rows > 0) {
             while ($row = $result->fetch_object()) {
-                $row->icon_path = $this->cfg['server'].Ut::getImageOrPlaceholder('storage/skins/' . $row->icon);
-                $row->file_path = (is_file('storage/skins/' . $row->file) ? $this->cfg['server'].'storage/skins/' . $row->file : NULL);
-                 $row->server_path = $this->cfg['server'];
-                 $single ? $data = $row : array_push($data, $row);
+                $row->icon_path = $this->cfg['server'] . Ut::getImageOrPlaceholder('storage/skins/' . $row->icon);
+                $row->file_path = (is_file('storage/skins/' . $row->file) ? $this->cfg['server'] . 'storage/skins/' . $row->file : NULL);
+                $row->server_path = $this->cfg['server'];
+                $single ? $data = $row : array_push($data, $row);
             }
         }
         return $data;
     }
-
 
     /**
      * Create a skin
@@ -533,23 +595,23 @@ class Model {
      */
     public function iconFind($param) {
         $q = "SELECT * FROM icons " . $this->where($param);
-        return $this->setIcon($this->db->query($q),true);
+        return $this->setIcon($this->db->query($q), true);
     }
-    
-     /**
+
+    /**
      * Set icon data
      * @param object $result
      * @return array
      */
-    private function setIcon($result,$single = false) {
+    private function setIcon($result, $single = false) {
         $data = array();
         if ($result->num_rows > 0) {
             while ($row = $result->fetch_object()) {
-                $row->icon_path = $this->cfg['server'].Ut::getImageOrPlaceholder('storage/icons/' . $row->icon);
-                $row->file_path = (is_file('storage/icons/' . $row->file) ? $this->cfg['server'].'storage/icons/' . $row->file : NULL);
-                $row->preview_path = $this->cfg['server'].'storage/icons/' . $row->name . '/';
-                 $row->server_path = $this->cfg['server'];
-                 $single ? $data = $row : array_push($data, $row);
+                $row->icon_path = $this->cfg['server'] . Ut::getImageOrPlaceholder('storage/icons/' . $row->icon);
+                $row->file_path = (is_file('storage/icons/' . $row->file) ? $this->cfg['server'] . 'storage/icons/' . $row->file : NULL);
+                $row->preview_path = $this->cfg['server'] . 'storage/icons/' . $row->name . '/';
+                $row->server_path = $this->cfg['server'];
+                $single ? $data = $row : array_push($data, $row);
             }
         }
         return $data;
