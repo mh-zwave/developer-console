@@ -6,7 +6,7 @@
 /**
  * Error controller
  */
-myAppController.controller('ErrorController', function ($scope, $routeParams, dataService) {
+myAppController.controller('ErrorController', function($scope, $routeParams, dataService) {
     $scope.errorCfg = {
         code: false,
         icon: 'fa-warning'
@@ -14,7 +14,7 @@ myAppController.controller('ErrorController', function ($scope, $routeParams, da
     /**
      * Load error
      */
-    $scope.loadError = function (code) {
+    $scope.loadError = function(code) {
         if (code) {
             $scope.errorCfg.code = code;
         } else {

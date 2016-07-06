@@ -4,7 +4,7 @@
  */
 
 /*** Controllers ***/
-var myAppController = angular.module('myAppController', ['ui.bootstrap','hljs']);
+var myAppController = angular.module('myAppController', ['ui.bootstrap','hljs','ngRoute']);
 /**
  * Base controller
  */
