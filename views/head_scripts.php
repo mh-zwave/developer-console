@@ -30,10 +30,16 @@
 <script src="app/filters/filters.js"></script>
 <script src="app/controllers/base.js"></script> 
 <script src="app/controllers/controllers.js"></script>
-
+<script src="app/controllers/module.js"></script>
+<script src="app/controllers/skin.js"></script>
+<script src="app/controllers/icon.js"></script>
+<script src="app/controllers/mysettings.js"></script>
+<script src="app/controllers/adminmodule.js"></script>
+<script src="app/controllers/adminuser.js"></script>
 <!-- Public -->
 <script src="app/controllers/web_app.js"></script>
 <!--Libarys for the helpside -->
+<link rel="stylesheet" href="app/vendor/helplib/bootstrap.css">
 <link rel="stylesheet" href="app/vendor/helplib/github.min.css">
 <script src="app/vendor/helplib/highlight.min.js"></script>
 <script src="app/vendor/helplib/ui-bootstrap-tpls-1.3.2.min.js"></script>

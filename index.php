@@ -20,7 +20,7 @@ if(ini_get('session.auto_start') != 1) {
  */
 // Config
 $cfg = require_once 'api/config.php';
-if($_SERVER['HTTP_HOST'] == 'localhost'){
+if($_SERVER['HTTP_HOST'] === 'localhost' || $_SERVER['HTTP_HOST'] === 'dev.dev'){
     $environment = 'local';
 
 }else{
