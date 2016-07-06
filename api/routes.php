@@ -403,12 +403,13 @@ elseif ($route->match('skin', 1)) {
 }
 // API skin create
 elseif ($route->match('skincreate', null)) {
+    $response->loggit = true;
     $name = Ut::toSlug(strtok($_FILES['file']['name'], '.'));
     // Check if model skin exists
     $skin = $model->skinFind(array('name' => $name));
     if ($skin) {
         $response->status = 409;
-        $response->message = 'The skin with the name ' . $name . ' already exists! Please rename your skin and try it to upload again.';
+        $response->message = $name.': The skin with the name ' . $name . ' already exists! Please rename your skin and try it to upload again.';
         $response->json($response);
     }
     $skin_path = 'storage/skins/';
@@ -426,7 +427,7 @@ elseif ($route->match('skincreate', null)) {
     if (!$file = $api->uploadSkin($uploader, $skin_path, $skin_path_temp)) {
         $error = $api->getErrors();
         $response->status = 500;
-        $response->message = $error[0];
+        $response->message = $name.': '. $error[0];
         $response->json($response);
     }
     $file_name = strtok($file, '.');
@@ -444,11 +445,12 @@ elseif ($route->match('skincreate', null)) {
         );
         if (!$model->skinCreate($input)) {
             $response->status = 500;
-            $response->message = 'Unable to upload a skin';
+            $response->message = $name.': DB ERROR - Unable to upload a skin';
             $response->json($response);
         }
         $input['id'] = $db->inserId();
     }
+    $response->loggit = false;
     $response->data = $input;
     $response->json($response);
 }
@@ -493,19 +495,20 @@ elseif ($route->match('skindelete', null)) {
 }
 // API skin upload
 elseif ($route->match('skinupload', 1)) {
+    $response->loggit = true;
     $api->setInputs(array('name' => $route->getParam(0)));
     $name = Ut::toSlug(strtok($_FILES['file']['name'], '.'));
     // Check if skin name and uploaded name are equal
     if ($api->getInputVal('name') !== $name) {
         $response->status = 500;
-        $response->message = 'The uploaded file must be named:  ' . $api->getInputVal('name') . '!!! Your file name is: ' . $name;
+        $response->message = $name .': The uploaded file must be named:  ' . $api->getInputVal('name') . '!!! Your file name is: ' . $name;
         $response->json($response);
     }
     // Check if model skin exists
     $skin = $model->skinFind(array('user_id' => $user->id, 'name' => $api->getInputVal('name')));
     if (!$skin) {
         $response->status = 404;
-        $response->message = 'Skin not found';
+        $response->message = $name .': Skin not found';
         $response->json($response);
     }
     $skin_path = 'storage/skins/';
@@ -521,7 +524,7 @@ elseif ($route->match('skinupload', 1)) {
     if (!$file = $api->uploadSkin($uploader, $skin_path, $skin_path_temp)) {
         $error = $api->getErrors();
         $response->status = 500;
-        $response->message = $error[0];
+        $response->message = $name .': '.$error[0];
         $response->json($response);
     }
     $file_name = strtok($file, '.');
@@ -529,19 +532,21 @@ elseif ($route->match('skinupload', 1)) {
         'file' => $file,
         'updated_at' => date("Y-m-d H:i:s"),
     );
+    $response->loggit = false;
     $model->skinUpdate($input, array('id' => $skin->id));
     $response->json($response);
 }
 
 // API skin img upload
 elseif ($route->match('skinimgupload', null)) {
+     $response->loggit = true;
     // Prepare and sanitize post input
     $api->setInputs($_POST);
 
     $skin = $model->skinFind(array('id' => $api->getInputVal('id'), 'user_id' => $user->id));
     if (!$skin) {
         $response->status = 404;
-        $response->message = 'Not found';
+        $response->message = 'Skin not found';
         $response->json($response);
     }
     $uploader = new Uploader();
@@ -552,7 +557,7 @@ elseif ($route->match('skinimgupload', null)) {
 
     if (!$uploader->uploadFile('file')) {
         $response->status = 500;
-        $response->message = $uploader->getMessage();
+        $response->message = $skin->name.': '.$uploader->getMessage();
         $response->json($response);
     }
     $model->skinUpdate(array('icon' => $uploader->getUploadName(), 'updated_at' => date("Y-m-d H:i:s")), array('id' => $skin->id));
@@ -560,6 +565,7 @@ elseif ($route->match('skinimgupload', null)) {
     if (is_file($path)) {
         unlink($path);
     }
+    $response->loggit = true;
     $response->data = array('icon' => $uploader->getUploadName());
     $response->json($response);
 }
