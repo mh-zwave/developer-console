@@ -33,6 +33,7 @@ require_once 'api/classes/Db.php';
 require_once 'api/classes/Model.php';
 require_once 'api/classes/AppApi.php';
 require_once 'api/classes/Ut.php';
+require_once 'api/classes/Loggit.php';
 require_once 'api/vendor/phpmailer/PHPMailerAutoload.php';
 require_once 'api/vendor/upload/Uploader.php';
 // Routes

@@ -11,6 +11,9 @@ $cfg['server'] = Ut::serverPath();
 // Route init
 $route = new Route(trim($_GET['uri'], '/'));
 
+// Loggitinit
+$loggit = new Loggit();
+
 // Wiews
 $view = new stdClass();
 $view->layout = 'layout_web';
