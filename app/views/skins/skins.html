@@ -53,25 +53,30 @@
                 </a>
             </th>
             <th>
-                <a href="" ng-click="orderBy('last_updated')">Updated
-                    <span ng-show="predicate == 'last_updated'"><i ng-show="!reverse" class="fa fa-sort-asc"></i><i ng-show="reverse" class="fa fa-sort-desc"></i></span>
+                <a href="" ng-click="orderBy('created_at')">Created
+                    <span ng-show="predicate == 'created_at'"><i ng-show="!reverse" class="fa fa-sort-asc"></i><i ng-show="reverse" class="fa fa-sort-desc"></i></span>
                 </a>
             </th>
             <th>&nbsp;</th>
             </thead>
             <tbody>
-                <tr class="bcg-active"  ng-class="v.active == 1 ? 'true': 'false'" dir-paginate="v in skin.data| orderBy:predicate:reverse | filter:q | itemsPerPage: pageSize" current-page="currentPage">
+                <tr class="bcg-active" ng-class="v.active == 1 ? 'true': 'false'" dir-paginate="v in skin.data| orderBy:predicate:reverse | filter:q | itemsPerPage: pageSize" current-page="currentPage">
                     <td class="td-img">
-                        <img class="report-img" ng-src="{{cfg.img.skin + v.icon}}" alt="img" ng-if="v.icon" />
-                        <img class="report-img" ng-src="{{cfg.img.iconPlaceholder}}" alt="img" ng-if="!v.icon" />
+                        <img class="report-img" ng-src="{{v.icon_path}}" alt="img" />
                     </td>
                     <td>{{v.title}}</td>
                     <td>{{v.version}}</td>
                     <td>{{v.ui_version}}</td>
-                    <td>{{v.updated_at}}</td>
+                    <td>{{v.created_at}}</td>
                     <td class="td-action">
                         <a class="btn btn-default" ng-href="{{cfg.path.skin + v.file}}"><i class="fa fa-download"></i></a>
                         <a class="btn btn-default" ng-href="#skins/{{v.id}}"><i class="fa fa-pencil text-info"></i></a>
+                        <a class="btn btn-default" href="" 
+                           ng-click="updateSkin({id: v.id,name: v.name,active:v.active == 1 ? 0:1})" 
+                           ng-class="v.active == 1 ? 'active':''">
+                            <i class="fa fa-fire text-success"></i>
+                        </a>
+                         <!--<a class="btn btn-default" href="" ng-click="updateSkin({id: v.id,name: v.name,active:0})" ng-if="v.active == 1"><i class="fa fa-ban text-danger"></i></a>-->
                         <a class="btn btn-default" href="" ng-click="deleteSkin(v.id,_t('lb_delete_confirm'))"><i class="fa fa-times text-danger"></i></a>
                     </td>
                 </tr>

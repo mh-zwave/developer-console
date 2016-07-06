@@ -1,5 +1,9 @@
 z-wave.Me - Developer Console
 ===============
+## v1.0.2 
+#### New features 
+- Public page with Apps.
+- Home page updated.
 
 ## v1.0.1 
 #### New features 

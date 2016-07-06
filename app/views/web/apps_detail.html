@@ -1,0 +1,24 @@
+<!-- Web apps ditail -->
+<div class="widget-detail-header clearfix">
+    <img class="widget-detail-img" ng-src="{{apps.find.icon_path}}"  alt="{{apps.find.title}}" />
+    <h1>{{apps.find.title}}</h1>
+    <div class="widget-detail-perex" ng-bind-html="apps.find.description | toTrusted"></div>
+</div>
+<div class="widget-detail-body">
+    <div class="widget-detail-list"><strong>Permanent link:</strong> {{apps.find.server_path}}?uri=public#/web/apps/{{apps.find.id}}</div>
+    <div class="widget-detail-list"><strong>Category:</strong> {{apps.find.category_name}}</div>
+    <div class="widget-detail-list"><strong>Author:</strong> {{apps.find.author}}</div>
+    <div class="widget-detail-list" ng-if="apps.find.homepage">
+        <strong>Homepage:</strong> <a ng-href="{{apps.find.homepage}}">{{apps.find.homepage}}</a>
+    </div>
+    <div class="widget-detail-list"><strong>Version:</strong> {{apps.find.version}}</div>
+    <div class="widget-detail-list"><strong>Installed:</strong> {{apps.find.installed}}x</div>
+    <div class="widget-detail-list"><strong>Updated:</strong> {{apps.find.last_updated}}</div>
+    <div class="widget-detail-list">
+        <strong>Rating:</strong>
+        <i class="fa widget-rating" title="{{r}}"
+           ng-class="r > apps.find.rating ? 'fa-star-o' : 'fa-star israted'" 
+           ng-repeat="r in apps.ratingRange"></i>
+        ({{apps.find.ratingscnt}} <i class="fa fa-user"></i>)
+    </div>
+</div>

@@ -11,7 +11,9 @@ var config_data = {
             'usersession': '?uri=usersession',
             'mymodules': '?uri=mymodules',
             'modules': '?uri=modules',
+            'modulesweb': '?uri=api-modulesweb',
             'module': '?uri=module',
+            'modulesidweb': '?uri=api-modulesidweb',
             'moduleupdate': '?uri=moduleupdate',
             'moduledelete': '?uri=moduledelete',
             'moduleupload': '?uri=moduleupload',
@@ -26,6 +28,14 @@ var config_data = {
             'skindelete': '?uri=skindelete',
             'skinupload': '?uri=skinupload',
             'skinimgupload': '?uri=skinimgupload',
+            'icons': '?uri=icons',
+            'icon': '?uri=icon',
+            'iconpreview': '?uri=api-iconpreview',
+            'iconcreate': '?uri=iconcreate',
+            'iconupdate': '?uri=iconupdate',
+            'icondelete': '?uri=icondelete',
+            'iconupload': '?uri=iconupload',
+            'iconimgupload': '?uri=iconimgupload',
             'userread': '?uri=userread',
             'userupdate': '?uri=userupdate',
             'adminmodules': '?uri=adminmodules',
@@ -47,13 +57,15 @@ var config_data = {
         'path': {
             'module': 'modules/',
             'archive': 'archiv/',
-            'skin': 'storage/skins/'
+            'skin': 'storage/skins/',
+            'icon': 'storage/icons/'
         },
         // List of image pathes
         'img': {
             'module': 'modules/',
             'archive': 'archiv/',
             'skin': 'storage/skins/',
+             'icon': 'storage/icons/',
             'iconPlaceholder': 'storage/icon-placeholder.png'
         },
         'categories': [
@@ -184,6 +196,17 @@ var config_data = {
                 "icon": ""
             }
         ],
+        // Order by
+        orderby: {
+            apps: {
+                'mostRatedDESC': '-rating',
+                'creationTimeDESC': '-id',
+                'creationTimeASC': 'id',
+                'titleASC': 'title',
+                'titleDESC': '-title',
+                'updateTimeDESC': '-updateTime'
+            },
+        },
          // Default toke
         'default_token': 'Beta_zwe_internal',
         // Maturity

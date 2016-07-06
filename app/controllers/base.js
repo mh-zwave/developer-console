@@ -108,6 +108,25 @@ myAppController.controller('BaseController', function ($scope, $cookies, $locati
     $scope.expandElement = function (key) {
         $scope.expand[key] = !($scope.expand[key]);
     };
+    
+    $scope.modalArr = {};
+    /**
+     * Open/close a modal window
+     * @param {string} key
+     * @param {object} $event
+     * @param {boolean} status
+     * @returns {undefined}
+     */
+    $scope.handleModal = function (key, $event, status) {
+        if (typeof status === 'boolean') {
+            $scope.modalArr[key] = status;
+        } else {
+            $scope.modalArr[key] = !($scope.modalArr[key]);
+        }
+
+        $event.stopPropagation();
+    };
+    $scope.expand = {};
 
 
     /**

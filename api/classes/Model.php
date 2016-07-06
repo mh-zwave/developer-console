@@ -8,15 +8,78 @@
 class Model {
 
     private $db;
+    private $cfg;
+    // Table whit lists
+    private $whitelist = array(
+        'modules' => array(
+            "id",
+            "patchnotes",
+            "category",
+            "author",
+            "homepage",
+            "icon",
+            "version",
+            "maturity",
+            "title",
+            "description",
+            "last_updated",
+            "user_id",
+            "modulename",
+            "modulejson",
+            "dependencies",
+            "file",
+            "detail_images",
+            "verified",
+            "contributed",
+            "featured",
+            "active",
+            "installed",
+            "mail",
+        ),
+        'icons' => array(
+            "id",
+            "user_id",
+            "name",
+            "file",
+            "title",
+            "description",
+            "version",
+            "author",
+            "homepage",
+            "license",
+            "active",
+            "icon",
+            "created_at",
+            "updated_at",
+        ),
+        'skins' => array(
+            "id",
+            "user_id",
+            "name",
+            "file",
+            "title",
+            "description",
+            "version",
+            "ui_version",
+            "author",
+            "homepage",
+            "active",
+            "icon",
+            "created_at",
+            "updated_at",
+        ),
+    );
 
     /**
      * Class constructor
      * 
      * @param string $db
+     * @param array $cfg
      * @return void
      */
-    public function __construct($db) {
+    public function __construct($db, $cfg) {
         $this->db = $db;
+        $this->cfg = $cfg;
     }
 
     /**
@@ -53,6 +116,10 @@ class Model {
             $attr .= $key . ' = \'' . $value . '\',';
         }
         return rtrim($attr, ',');
+    }
+
+    public function getWhitelist($table) {
+        return (array_key_exists($table, $this->whitelist) ? $this->whitelist[$table] : array());
     }
 
     /**
@@ -138,8 +205,8 @@ class Model {
      * @param array $param
      * @return array
      */
-    public function modulesAll($param = array()) {
-        $data = array();
+    public function modulesAll($param = array(), $limit = false) {
+        //$data = array();
         $q = "SELECT m.*,u.mail,"
                 . " ROUND(AVG(IFNULL(r.score, 0))) AS rating, "
                 . " SUM(IFNULL(c.isnew, 0)) AS commentsnew, "
@@ -151,13 +218,8 @@ class Model {
                 . " LEFT JOIN comments c ON m.id = c.module_id ";
         $q .= $this->where($param);
         $q .= " GROUP BY m.id ORDER BY m.id DESC ";
-        $result = $this->db->query($q);
-        if ($result->num_rows > 0) {
-            while ($row = $result->fetch_object()) {
-                array_push($data, $row);
-            }
-        }
-        return $data;
+        $q .= ($limit ? ' LIMIT ' . $limit : '');
+        return $this->setModule($this->db->query($q));
     }
 
     /**
@@ -209,6 +271,24 @@ class Model {
     }
 
     /**
+     * Set module data
+     * @param object $result
+     * @return array
+     */
+    private function setModule($result, $single = false) {
+        $data = array();
+        if ($result->num_rows > 0) {
+            while ($row = $result->fetch_object()) {
+                $row->icon_path = $this->cfg['server'] . Ut::getImageOrPlaceholder('modules/' . $row->icon);
+                $row->file_path = (is_file('modules/' . $row->file) ? $this->cfg['server'] . 'modules/' . $row->file : NULL);
+                $row->server_path = $this->cfg['server'];
+                $single ? $data = $row : array_push($data, $row);
+            }
+        }
+        return $data;
+    }
+
+    /**
      * Load a single module
      * 
      * @param int $param
@@ -225,6 +305,7 @@ class Model {
         }
         return $data;
     }
+
     /**
      * Load a single module with joined data
      * 
@@ -232,8 +313,7 @@ class Model {
      * @return array
      */
     public function moduleFindJoin($param) {
-        $data = array();
-         $q = "SELECT m.*,u.mail,"
+        $q = "SELECT m.*,u.mail,"
                 . " ROUND(AVG(IFNULL(r.score, 0))) AS rating, "
                 . " ROUND(AVG(IFNULL(r.score, 0)),1) AS ratingsavg, "
                 . " COUNT(distinct r.id) AS ratingscnt, "
@@ -244,13 +324,7 @@ class Model {
                 . " LEFT JOIN comments c ON m.id = c.module_id ";
         $q .= $this->where($param);
         $q .= " GROUP BY m.id ORDER BY m.id DESC ";
-        $result = $this->db->query($q);
-        if ($result->num_rows > 0) {
-            while ($row = $result->fetch_object()) {
-                $data = $row;
-            }
-        }
-        return $data;
+        return $this->setModule($this->db->query($q), true);
     }
 
     /**
@@ -306,8 +380,8 @@ class Model {
         }
         return $data;
     }
-    
-     /**
+
+    /**
      * Load a single archive
      * 
      * @param int $param
@@ -324,7 +398,7 @@ class Model {
         }
         return $data;
     }
-    
+
     /**
      * Load list of archives
      * 
@@ -344,7 +418,8 @@ class Model {
         }
         return $data;
     }
-     /**
+
+    /**
      * Delete an archive
      * 
      * @param int $param
@@ -428,17 +503,10 @@ class Model {
      * @return array
      */
     public function skinsAll($param = array()) {
-        $data = array();
         $q = "SELECT * FROM skins ";
         $q .= $this->where($param);
         $q .= " ORDER BY id DESC";
-        $result = $this->db->query($q);
-        if ($result->num_rows > 0) {
-            while ($row = $result->fetch_object()) {
-                array_push($data, $row);
-            }
-        }
-        return $data;
+        return $this->setSkin($this->db->query($q));
     }
 
     /**
@@ -448,12 +516,23 @@ class Model {
      * @return array
      */
     public function skinFind($param) {
-        $data = array();
         $q = "SELECT * FROM skins " . $this->where($param);
-        $result = $this->db->query($q);
+        return $this->setSkin($this->db->query($q), true);
+    }
+
+    /**
+     * Set skin data
+     * @param object $result
+     * @return array
+     */
+    private function setSkin($result, $single = false) {
+        $data = array();
         if ($result->num_rows > 0) {
             while ($row = $result->fetch_object()) {
-                $data = $row;
+                $row->icon_path = $this->cfg['server'] . Ut::getImageOrPlaceholder('storage/skins/' . $row->icon);
+                $row->file_path = (is_file('storage/skins/' . $row->file) ? $this->cfg['server'] . 'storage/skins/' . $row->file : NULL);
+                $row->server_path = $this->cfg['server'];
+                $single ? $data = $row : array_push($data, $row);
             }
         }
         return $data;
@@ -492,6 +571,85 @@ class Model {
             return false;
         }
         $q = "DELETE FROM skins " . $this->where($param);
+        return $this->db->query($q);
+    }
+
+    /**
+     * Load list of icons
+     * 
+     * @param array $param
+     * @return array
+     */
+    public function iconsAll($param = array()) {
+        $q = "SELECT * FROM icons ";
+        $q .= $this->where($param);
+        $q .= " ORDER BY id DESC";
+        return $this->setIcon($this->db->query($q));
+    }
+
+    /**
+     * Load a single icon
+     * 
+     * @param int $param
+     * @return array
+     */
+    public function iconFind($param) {
+        $q = "SELECT * FROM icons " . $this->where($param);
+        return $this->setIcon($this->db->query($q), true);
+    }
+
+    /**
+     * Set icon data
+     * @param object $result
+     * @return array
+     */
+    private function setIcon($result, $single = false) {
+        $data = array();
+        if ($result->num_rows > 0) {
+            while ($row = $result->fetch_object()) {
+                $row->icon_path = $this->cfg['server'] . Ut::getImageOrPlaceholder('storage/icons/' . $row->icon);
+                $row->file_path = (is_file('storage/icons/' . $row->file) ? $this->cfg['server'] . 'storage/icons/' . $row->file : NULL);
+                $row->preview_path = $this->cfg['server'] . 'storage/icons/' . $row->name . '/';
+                $row->server_path = $this->cfg['server'];
+                $single ? $data = $row : array_push($data, $row);
+            }
+        }
+        return $data;
+    }
+
+    /**
+     * Create an icon
+     * 
+     * @param array $param
+     * @return bool
+     */
+    public function iconCreate($param = array()) {
+        $q = "INSERT icons SET " . $this->setAttributes($param);
+        return $this->db->query($q);
+    }
+
+    /**
+     * Update an icon
+     * 
+     * @param array $param
+     * @return bool
+     */
+    public function iconUpdate($param, $where) {
+        $q = "UPDATE icons SET " . $this->setAttributes($param) . $this->where($where);
+        return $this->db->query($q);
+    }
+
+    /**
+     * Delete an icon
+     * 
+     * @param int $param
+     * @return array
+     */
+    public function iconDelete($param) {
+        if (!is_array($param) || count($param) < 1) {
+            return false;
+        }
+        $q = "DELETE FROM icons " . $this->where($param);
         return $this->db->query($q);
     }
 
@@ -629,7 +787,7 @@ class Model {
         }
         return $data;
     }
-    
+
     /**
      * Load a single rating
      * 
@@ -658,7 +816,7 @@ class Model {
         $q = "INSERT ratings SET " . $this->setAttributes($param);
         return $this->db->query($q);
     }
-    
+
     /**
      * Delete a rating
      * 
@@ -672,7 +830,7 @@ class Model {
         $q = "DELETE FROM ratings " . $this->where($param);
         return $this->db->query($q);
     }
-    
+
     /**
      * Delete a lang
      * 

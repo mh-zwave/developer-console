@@ -1,0 +1,27 @@
+/* Medium Devices, Desktops
+-------------------------------------------------- */
+$app-container-w: 100%;
+$app-body-font-size: 14px;
+$header-h: 50px;
+$subnavigation-margin: 0 0 0 50%;
+$page-navi-h: 30px;
+$page-navi-w:  33.33333%;
+$checkbox-scale: 1.2;
+$radio-scale: 1.2;
+$app-input-padding: 6px 12px;
+$app-btn-icon-size: 120%;
+//$app-btn-tag-font-size: 110%;
+$app-btn-tag-icon-size: 120%;
+$dropdown-w: 360px;
+$widget-col-w: 33.33333%;
+$widget-col-h: 230px;
+$widget-icon-size: 140%;
+$report-img: 40px;
+$modal-w: 60%;
+$modal-close-size: 140%;
+$footer-h: 40px;
+/*-------------------------------------*/
+// Shared styles
+@import "_mq_shared"; 
+
+

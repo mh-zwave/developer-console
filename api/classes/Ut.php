@@ -314,6 +314,57 @@ class Ut {
     }
 
     /**
+     * Delete a file or recursively delete a directory
+     * 
+     * @param string $dir Path to file or directory
+     * @return void
+     */
+    public static function cleanDirectory($dir) {
+//        var_dump($dir);
+//        return;
+        if (is_dir($dir)) {
+            $objects = scandir($dir);
+            foreach ($objects as $object) {
+                if ($object != "." && $object != "..") {
+                    if (filetype($dir . "/" . $object) === "dir") {
+                        Ut::cleanDirectory($dir . "/" . $object);
+                    } else {
+                        unlink($dir . "/" . $object);
+                    }
+                }
+            }
+            reset($objects);
+            rmdir($dir);
+        }
+    }
+
+    /**
+     * Get files in the directory
+     * 
+     * @param string $dir Path to file or directory
+     * @param array $ext List of allowed extensions
+     * @return void
+     */
+    public static function getFilesIndDir($dir, $ext = array()) {
+        $files = array();
+        if (is_dir($dir)) {
+            $objects = scandir($dir);
+            foreach ($objects as $object) {
+                if ($object != "." && $object != ".." && is_file($dir . $object)) {
+                    if (!empty($ext)) {
+                        if (in_array(strtolower(pathinfo($object, PATHINFO_EXTENSION)), $ext)) {
+                            array_push($files, $object);
+                        }
+                    } else {
+                        array_push($files, $object);
+                    }
+                }
+            }
+        }
+        return $files;
+    }
+
+    /**
      * Fill template with data
      *
      * @resource string $resource
@@ -341,6 +392,18 @@ class Ut {
     }
 
     /**
+     * Get image or placeholder
+     *
+     * @resource string $resource
+     */
+    public static function getImageOrPlaceholder($image, $placeholder = 'app/img/icon-placeholder.png') {
+        if (!is_file($image)) {
+            return $placeholder;
+        }
+        return $image;
+    }
+
+    /**
      * Convert string to slug
      *
      * @param string $str
@@ -354,6 +417,40 @@ class Ut {
 
 
         //return strtr($string, $table);
+    }
+
+    /**
+     * Cut text after (x) amount of characters
+     *
+     * @param string $str
+     * @param int $chars
+     * @param string $end
+     * @return  string
+     */
+    public static function cutText($str, $chars, $end = '...') {
+        if (strlen($str) <= $chars) {
+            return $str;
+        }
+        $new = substr($str, 0, $chars + 1);
+        return substr($new, 0, strrpos($new, ' ')) . $end;
+    }
+    /**
+     * Build a server path
+     * @return string
+     */
+    public static function serverPath() {
+        $s = &$_SERVER;
+        $ssl = (!empty($s['HTTPS']) && $s['HTTPS'] == 'on') ? true : false;
+        $sp = strtolower($s['SERVER_PROTOCOL']);
+        $protocol = substr($sp, 0, strpos($sp, '/')) . (($ssl) ? 's' : '');
+        $port = $s['SERVER_PORT'];
+        $port = ((!$ssl && $port == '80') || ($ssl && $port == '443')) ? '' : ':' . $port;
+        $host = isset($s['HTTP_X_FORWARDED_HOST']) ? $s['HTTP_X_FORWARDED_HOST'] : (isset($s['HTTP_HOST']) ? $s['HTTP_HOST'] : null);
+        $host = isset($host) ? $host : $s['SERVER_NAME'] . $port;
+        $uri = $protocol . '://' . $host . $s['REQUEST_URI'];
+        $segments = explode('?', $uri, 2);
+        $url = $segments[0];
+        return $url;
     }
 
 }

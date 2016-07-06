@@ -38,6 +38,16 @@ myApp.config(['$routeProvider', function($routeProvider) {
                     templateUrl: 'app/views/skins/skins_id.html',
                     requireLogin: true
                 }).
+                // Icons
+                when('/icons', {
+                    requireLogin: true,
+                    templateUrl: 'app/views/icons/icons.html',
+                }).
+                //Icon ID
+                when('/icons/:id', {
+                    templateUrl: 'app/views/icons/icons_id.html',
+                    requireLogin: true
+                }).
                 //My settings
                 when('/mysettings', {
                     templateUrl: 'app/views/mysettings/mysettings.html',
@@ -73,6 +83,16 @@ myApp.config(['$routeProvider', function($routeProvider) {
                     templateUrl: 'app/views/admin/users_id.html',
                     requireLogin: true
                 }).
+                //Public spps
+                when('/web/apps', {
+                    templateUrl: 'app/views/web/apps.html',
+                    requireLogin: true
+                }).
+                //Public spps
+                when('/web/apps/:id', {
+                    templateUrl: 'app/views/web/apps_id.html',
+                    requireLogin: true
+                }).
                 // Error page
                 when('/error/:code?', {
                     templateUrl: 'app/views/error.html'
@@ -93,36 +113,21 @@ angular.forEach(config_data, function(key, value) {
 });
 
 /**
- * Route Access Control and Authentication
+ * Angular run function
+ * @function run
  */
-//myApp.run(function($rootScope, $location, dataService) {
-//    $rootScope.$on("$routeChangeStart", function(event, next, current) {
-//        var user;
-//        if (next.requireLogin) {
-//            user = dataService.getUser();
-//            if (!user) {
-//                //alert('You need to be authenticated to see this page!');
-//                //event.preventDefault();
-//                $location.path('/');
-//                return;
-//            }
-//            if (next.roles && angular.isArray(next.roles)) {
-//                if (next.roles.indexOf(user.role) === -1) {
-//                    //alert('You have no permissions to see this page!');
-//                    //$location.path('/elements');
-//                     $location.path('/error/403');
-//                    return;
-//                }
-//            }
-//        }
-//    });
-//});
+myApp.run(function ($rootScope, $location, dataService, cfg) {
+    // Run underscore js in views
+    $rootScope._ = _;
+    
+});
 
 // Intercepting HTTP calls with AngularJS.
 myApp.config(function($provide, $httpProvider) {
     $httpProvider.defaults.timeout = 5000; 
     // Intercept http calls.
     $provide.factory('MyHttpInterceptor', function($q,$location,dataService) {
+         var path = $location.path().split('/');
         return {
             // On request success
             request: function(config) {
@@ -143,7 +148,10 @@ myApp.config(function($provide, $httpProvider) {
             responseError: function(rejection) {
                 //dataService.logError(rejection);
                if(rejection.status == 401){
-                    window.location.href='?uri=logout';
+                   if (path[1] !== 'web') {
+                        window.location.href='?uri=logout';
+
+                    }
                    return $q.reject(rejection);
                     
                 }else{

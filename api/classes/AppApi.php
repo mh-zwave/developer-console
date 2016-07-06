@@ -11,7 +11,7 @@ class AppApi {
     private $inputs = array();
     private $errors = array();
     private $cfg = array();
-     private $user;
+    private $user;
 
     /**
      * Class constructor
@@ -19,7 +19,7 @@ class AppApi {
      * @param string $db
      * @return void
      */
-    public function __construct($model, $cfg,$user) {
+    public function __construct($model, $cfg, $user) {
         $this->model = $model;
         $this->cfg = $cfg;
         $this->user = $user;
@@ -31,8 +31,11 @@ class AppApi {
      * @param type $array
      * @return void
      */
-    public function setInputs($array) {
+    public function setInputs($array,$white_list = array()) {
         foreach ($array as $key => $value) {
+            if(count($white_list) && !in_array($key,$white_list)){
+                continue;
+            }
             $this->inputs[$key] = addslashes(strip_tags($value));
         }
     }
@@ -282,7 +285,7 @@ class AppApi {
             'to' => $this->cfg['email']['module_verification'],
             'subject' => 'Module-Store Verification request for module ',
             'body' => $this->getTemplate('views/emails/verification_request.html', $data),
-            //'body' => 'Please verify module ' . $input['title'] . '. ID: ' . $input['id'],
+                //'body' => 'Please verify module ' . $input['title'] . '. ID: ' . $input['id'],
         );
         if ($this->sendEmail($email)) {
             $this->model->moduleUpdate(array('verified' => 2), array('id' => $input['id']));
@@ -341,7 +344,7 @@ class AppApi {
             'to' => $user->mail, //$this->cfg['email']['module_verification'],
             'subject' => $input['subject'],
             'body' => $this->getTemplate('views/emails/verification_failed.html', $data),
-            //'body' => $input['body'],
+                //'body' => $input['body'],
         );
         $this->sendEmail($email);
     }
@@ -376,6 +379,222 @@ class AppApi {
             $this->setErrors($e->errorMessage());
             return false;
         }
+    }
+
+    /**
+     * Unpack a zip file
+     * 
+     * @param string $path
+     * @param string $target
+     * return bool
+     */
+    public function unpackZip($path, $target) {
+        $zip = new ZipArchive;
+        if ($zip->open($path) === TRUE) {
+            $zip->extractTo($target);
+            $zip->close();
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    /**
+     * Unpack a tar.gz file
+     * 
+     * @param string $path
+     * @param string $target
+     * return bool
+     */
+    public function unpackTarGz($path,$target) {
+       
+        // decompress from gz
+        $p = new PharData($path);
+        $p->decompress(); // creates /path/to/my.tar
+// unarchive from the tar
+        $phar = new PharData(strtok($path, '.').'.gz');
+        $phar->extractTo(strtok($path, '.'));
+        return true;
+        //var_dump($path,$target,strtok($path, '.'));
+        //die;
+    }
+
+    /**
+     * Unpack a tar.gz file
+     * 
+     * @param string $path
+     * @param string $target
+     * return bool
+     */
+    public function unpackTarGz_($path, $target) {
+        if (!is_dir($target)) {
+            mkdir($target);
+        }
+        // This input should be from somewhere else, hard-coded in this example
+        $file_name = $path;
+
+        // Raising this value may increase performance
+        $buffer_size = 4096; // read 4kb at a time
+        $out_file_name = str_replace('.gz', '', $file_name);
+
+        // Open our files (in binary mode)
+        $file = gzopen($file_name, 'rb');
+        $out_file = fopen($out_file_name, 'wb');
+
+        // Keep repeating until the end of the input file
+        while (!gzeof($file)) {
+            // Read buffer-size bytes
+            // Both fwrite and gzread and binary-safe
+            fwrite($out_file, gzread($file, $buffer_size));
+        }
+        // Files are done, close files
+        fclose($out_file);
+        gzclose($file);
+
+        //var_dump($out_file_name);
+        //return;
+
+        $phar_data = new PharData($out_file_name);
+        $phar_data->extractTo(str_replace(".tar", "", $out_file_name));
+
+        //unlink($out_file_name);
+        unset($phar_data);
+        Phar::unlinkArchive($out_file_name);
+        return true;
+    }
+
+    /**
+     * Pack to a tar.gz archive
+     * 
+     * @param string $path
+     * @param string $target
+     * return bool
+     */
+    public function packTargz($source, $target) {
+        try {
+            $a = new PharData($target . '.tar');
+            $a->buildFromDirectory($source);
+            $a->compress(Phar::GZ);
+            unset($a);
+            Phar::unlinkArchive($target . '.tar');
+            return true;
+        } catch (Exception $e) {
+            return false;
+        }
+    }
+
+    /**
+     * Upload and repack a file
+     * 
+     * @param string $input
+     * @param object $uploader
+     * @param string  $file_path
+     * @param string $file_path_temp
+     * return bool
+     */
+    public function uploadRepackFile($input, $uploader, $file_path, $file_path_temp) {
+        //file is the filebrowse element name
+        if (!$uploader->uploadFile($input)) {
+            $this->setErrors($uploader->getMessage());
+            return false;
+        }
+        //get uploaded file name, renames on upload//
+        $file = $uploader->getUploadName();
+        $file_name = strtok($file, '.');
+        $file_extension = $uploader->getExtension($file);
+        switch ($file_extension) {
+            case 'gz':
+                //unpackTarGz($path, $target)
+                if (!$this->unpackTarGz($file_path . $file_name.'.tar.gz', $file_path_temp . $file_name)) {
+                    $this->setErrors('Unable to unpack file "' . $file . '"');
+                    return false;
+                }
+                //$this->setErrors('Unknown file extension in "' . $file . '"');
+                //return $file_name . '.tar.gz';
+                break;
+            case 'zip':
+                if (!$this->unpackZip($file_path . $file, $file_path_temp . $file_name)) {
+                    $this->setErrors('Unable to unpack file "' . $file . '"');
+                    return false;
+                }
+                break;
+            default:
+                $this->setErrors('Unknown file extension in "' . $file . '"');
+                return false;
+        }
+        //do {
+        /* if ($file_extension !== 'zip') {
+          break;
+          } */
+        // Unpack zip file
+        // Unlink uploaded Zip file
+        unlink($file_path . $file);
+        if (is_file($file_path . $file_name . '.tar.gz')) {
+            unlink($file_path . $file_name . '.tar.gz');
+        }
+        // Create a tar.gz archive
+        if (!$this->packTargz($file_path_temp . $file_name, $file_path . $file_name)) {
+            $this->setErrors('Unable to create tar.gz from file "' . $file . '"');
+            return false;
+        }
+        // Clean temp directory
+        //Ut::cleanDirectory($file_path_temp . $file_name);
+        $file = $file_name . '.tar.gz';
+        //} while (false);
+        return $file;
+    }
+
+    /**
+     * Pack to a tar.gz archive
+     * 
+     * @param string $path
+     * @param string $target
+     * return bool
+     */
+    public function uploadSkin($uploader, $skin_path, $skin_path_temp) {
+        //file is the filebrowse element name
+        if (!$uploader->uploadFile('file')) {
+            $this->setErrors($uploader->getMessage());
+            return false;
+        }
+        //get uploaded file name, renames on upload//
+        $file = $uploader->getUploadName();
+        $file_name = strtok($file, '.');
+        $file_extension = $uploader->getExtension($file);
+
+        // Filename default is not allowed
+        if ($file_name === 'default') {
+            if (is_file($skin_path . $file)) {
+                unlink($skin_path . $file);
+            }
+            $this->setErrors('File name "' . $file_name . '" is not allowed. Please select a different name and try again.');
+            return false;
+        }
+        do {
+            if ($file_extension !== 'zip') {
+                break;
+            }
+            // Unpack zip file
+            if (!$this->unpackZip($skin_path . $file, $skin_path_temp . $file_name)) {
+                $this->setErrors('Unable to unpack file "' . $file . '"');
+                return false;
+            }
+            // Unlink uploaded Zip file
+            unlink($skin_path . $file);
+            if (is_file($skin_path . $file_name . '.tar.gz')) {
+                unlink($skin_path . $file_name . '.tar.gz');
+            }
+            // Create a tar.gz archive
+            if (!$this->packTargz($skin_path_temp . $file_name, $skin_path . $file_name)) {
+                $this->setErrors('Unable to create tar.gz from file "' . $file . '"');
+                return false;
+            }
+            // Clean temp directory
+            Ut::cleanDirectory($skin_path_temp . $file_name);
+            $file = $file_name . '.tar.gz';
+        } while (false);
+
+        return $file;
     }
 
 }

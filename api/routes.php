@@ -5,6 +5,9 @@
  *
  * @author Martin Vach
  */
+// Set config
+$cfg['server'] = Ut::serverPath();
+
 // Route init
 $route = new Route(trim($_GET['uri'], '/'));
 
@@ -21,7 +24,7 @@ $response = new Response;
 $db = new Db($cfg['db_' . $environment]);
 $db->openConnection();
 // Model init
-$model = new Model($db);
+$model = new Model($db, $cfg);
 
 
 // User init
@@ -49,10 +52,27 @@ $api = new AppApi($model, $cfg, $user);
 
 // Home page
 if ($route->match('home', null)) {
+    $modules = $model->modulesAll(array('verified' => 1, 'active' => 1), 4);
 //    var_dump(Ut::user());
 //    var_dump(Ut::formData('mail'));
 //    $form->mail = Ut::formData('mail');
 }
+// App list
+//elseif ($route->match('apps', null)) {
+//    $view->view = 'apps/apps';
+//    $modules = $model-> modulesAll(array('verified' => 1, 'active' => 1));
+//}
+//// App id
+//elseif ($route->match('app/id', 2)) {
+//    // Prepare and sanitize post input
+//    $api->setInputs(array('id' => $route->getParam(0)));
+//    //die($route->getParam(0));
+//    $module = $model->moduleFindJoin(array('m.id' => $api->getInputVal('id')));
+//    if (!$module) {
+//       Ut::redirectTo(Ut::uri('report'), array('404 Page not found'));
+//    }
+//    $view->view = 'apps/apps_id';
+//}
 // Login page
 elseif ($route->match('login', null)) {
     $view->view = 'login';
@@ -183,8 +203,13 @@ elseif ($route->match('passwordupdate', null)) {
 // Report page
 elseif ($route->match('report', null)) {
     $view->view = 'report';
+}
+//Public page
+elseif ($route->match('public', null)) {
+    $view->layout = 'layout_public';
+}
 // User page
-} elseif ($route->match('user', null)) {
+elseif ($route->match('user', null)) {
     if (!$auth) {
         Ut::redirectTo(Ut::uri('home'), array('You are not authorized. Please login or create an account'));
     }
@@ -250,7 +275,7 @@ elseif ($route->match('moduleverify', null)) {
 // API module update
 elseif ($route->match('moduleupdate', null)) {
     // Prepare and sanitize post input
-    $api->setInputs($_POST);
+    $api->setInputs($_POST, $model->getWhitelist('modules'));
     $where = ($user->role > 1 ? array('id' => $api->getInputVal('id'), 'user_id' => $user->id) : array('id' => $api->getInputVal('id')));
     $module = $model->moduleFind($where);
     if (!$module) {
@@ -337,14 +362,14 @@ elseif ($route->match('archivedelete', null)) {
 
     // Prepare and sanitize post input
     $api->setInputs($_POST);
-   
+
     $archive = $model->archiveFind($api->getInputs());
     if (!$archive) {
         $response->status = 404;
         $response->message = 'Not found';
         $response->json($response);
     }
-    $model->archiveDelete(array('id'=>$archive->id));
+    $model->archiveDelete(array('id' => $archive->id));
     if (is_file('archiv/' . $archive->image)) {
         unlink('archiv/' . $archive->image);
     }
@@ -361,7 +386,7 @@ elseif ($route->match('skins', null)) {
 }
 // API skin id
 elseif ($route->match('skin', 1)) {
-    // Prepare and sanitize post input
+    // Prepare and sanitize input
     $api->setInputs(array('id' => $route->getParam(0)));
     $where = ($user->role > 1 ? array('id' => $api->getInputVal('id'), 'user_id' => $user->id) : array('id' => $api->getInputVal('id')));
     $skin = $model->skinFind($where);
@@ -375,28 +400,34 @@ elseif ($route->match('skin', 1)) {
 }
 // API skin create
 elseif ($route->match('skincreate', null)) {
-    // Prepare and sanitize post input
-    //$api->setInputs($_POST);
+    $name = Ut::toSlug(strtok($_FILES['file']['name'], '.'));
+    // Check if model skin exists
+    $skin = $model->skinFind(array('name' => $name));
+    if ($skin) {
+        $response->status = 409;
+        $response->message = 'The skin with the name ' . $name . ' already exists! Please rename your skin and try it to upload again.';
+        $response->json($response);
+    }
+    $skin_path = 'storage/skins/';
+    $skin_path_temp = 'storage/skins/temp/';
 
-    $ext = pathinfo($_FILES['file']['name'], PATHINFO_EXTENSION);
-    //var_dump(Ut::toSlug($_FILES['file']['name']));
-    $file = false;
     $uploader = new Uploader();
-    $uploader->setDir('storage/skins/');
+    $uploader->setDir($skin_path);
     $uploader->setExtensions(array('gz', 'zip'));  //allowed extensions list//
     $uploader->setMaxSize(.5); //set max file size to be allowed in MB//
+    $uploader->setCustomName($name);
     $uploader->sameName(true);
     $uploader->setUniqueFile();
 
-    if ($uploader->uploadFile('file')) {   //txtFile is the filebrowse element name //     
-        $file = $uploader->getUploadName(); //get uploaded file name, renames on upload//
-        $file_name = strtok($file,  '.'); //get uploaded file name, renames on upload//
-    } else {//upload failed
-        //get upload error message 
+    // Upload a file
+    if (!$file = $api->uploadSkin($uploader, $skin_path, $skin_path_temp)) {
+        $error = $api->getErrors();
         $response->status = 500;
-        $response->message = $uploader->getMessage();
+        $response->message = $error[0];
         $response->json($response);
     }
+    $file_name = strtok($file, '.');
+
     if ($file) {
         $input = array(
             'user_id' => $user->id,
@@ -405,6 +436,8 @@ elseif ($route->match('skincreate', null)) {
             'file' => $file,
             'author' => trim($user->first_name . ' ' . $user->last_name),
             'homepage' => $user->homepage,
+            'created_at' => date("Y-m-d H:i:s"),
+            'updated_at' => date("Y-m-d H:i:s"),
         );
         if (!$model->skinCreate($input)) {
             $response->status = 500;
@@ -419,9 +452,8 @@ elseif ($route->match('skincreate', null)) {
 // API skin update
 elseif ($route->match('skinupdate', null)) {
     // Prepare and sanitize post input
-    $_POST['active'] = 1;
-    $_POST['created_at'] = date("Y-m-d H:i:s");
-    $api->setInputs($_POST);
+    $_POST['updated_at'] = date("Y-m-d H:i:s");
+    $api->setInputs($_POST,$model->getWhitelist('skins'));
     $skin = $model->skinFind(array('id' => $api->getInputVal('id'), 'user_id' => $user->id, 'name' => $api->getInputVal('name')));
     if (!$skin) {
         $response->status = 404;
@@ -457,24 +489,44 @@ elseif ($route->match('skindelete', null)) {
     $response->json($response);
 }
 // API skin upload
-elseif ($route->match('skinupload', null)) {
-    // Prepare and sanitize post input
-    //$api->setInputs($_POST);
-
-    $ext = pathinfo($_FILES['file']['name'], PATHINFO_EXTENSION);
-    //var_dump(Ut::toSlug($_FILES['file']['name']));
-    $file = false;
-    $uploader = new Uploader();
-    $uploader->setDir('storage/skins/');
-    $uploader->setExtensions(array('gz', 'zip'));  //allowed extensions list//
-    $uploader->setMaxSize(.5);
-    $uploader->sameName(true);
-
-    if (!$uploader->uploadFile('file')) {
+elseif ($route->match('skinupload', 1)) {
+    $api->setInputs(array('name' => $route->getParam(0)));
+    $name = Ut::toSlug(strtok($_FILES['file']['name'], '.'));
+    // Check if skin name and uploaded name are equal
+    if ($api->getInputVal('name') !== $name) {
         $response->status = 500;
-        $response->message = $uploader->getMessage();
+        $response->message = 'The uploaded file must be named:  ' . $api->getInputVal('name') . '!!! Your file name is: ' . $name;
         $response->json($response);
     }
+    // Check if model skin exists
+    $skin = $model->skinFind(array('user_id' => $user->id, 'name' => $api->getInputVal('name')));
+    if (!$skin) {
+        $response->status = 404;
+        $response->message = 'Skin not found';
+        $response->json($response);
+    }
+    $skin_path = 'storage/skins/';
+    $skin_path_temp = 'storage/skins/temp/';
+
+    $uploader = new Uploader();
+    $uploader->setDir($skin_path);
+    $uploader->setExtensions(array('gz', 'zip'));  //allowed extensions list//
+    $uploader->setMaxSize(.5); //set max file size to be allowed in MB//
+    $uploader->sameName(true);
+
+    // Atempt to upload a file
+    if (!$file = $api->uploadSkin($uploader, $skin_path, $skin_path_temp)) {
+        $error = $api->getErrors();
+        $response->status = 500;
+        $response->message = $error[0];
+        $response->json($response);
+    }
+    $file_name = strtok($file, '.');
+    $input = array(
+        'file' => $file,
+        'updated_at' => date("Y-m-d H:i:s"),
+    );
+    $model->skinUpdate($input, array('id' => $skin->id));
     $response->json($response);
 }
 
@@ -493,15 +545,204 @@ elseif ($route->match('skinimgupload', null)) {
     $uploader->setDir('storage/skins/');
     $uploader->setExtensions(array('png', 'jpg', 'gif'));  //allowed extensions list//
     $uploader->setMaxSize(.2);
-    $uploader->setCustomName($api->getInputVal('id') . '-' . time());
+    $uploader->setCustomName($skin->name . '-' . $api->getInputVal('id') . '-' . time());
 
     if (!$uploader->uploadFile('file')) {
         $response->status = 500;
         $response->message = $uploader->getMessage();
         $response->json($response);
     }
-    $model->skinUpdate(array('icon' => $uploader->getUploadName()), array('id' => $skin->id));
+    $model->skinUpdate(array('icon' => $uploader->getUploadName(), 'updated_at' => date("Y-m-d H:i:s")), array('id' => $skin->id));
     $path = 'storage/skins/' . $api->getInputVal('current');
+    if (is_file($path)) {
+        unlink($path);
+    }
+    $response->data = array('icon' => $uploader->getUploadName());
+    $response->json($response);
+}
+// API icons
+elseif ($route->match('icons', null)) {
+    $where = ($user->role > 1 ? array('user_id' => $user->id) : null);
+    $response->data = $model->iconsAll($where);
+    $response->json($response);
+}
+// API icon
+elseif ($route->match('icon', 1)) {
+    // Prepare and sanitize input
+    $api->setInputs(array('id' => $route->getParam(0)));
+    $where = ($user->role > 1 ? array('id' => $api->getInputVal('id'), 'user_id' => $user->id) : array('id' => $api->getInputVal('id')));
+    $skin = $model->iconFind($where);
+    if (!count($skin)) {
+        $response->status = 404;
+        $response->message = 'Not found';
+        $response->json($response);
+    }
+    $response->data = $skin;
+    $response->json($response);
+}
+// API Icon create
+elseif ($route->match('iconcreate', null)) {
+    $original_name = strtok($_FILES['file']['name'], '.');
+    $name = Ut::toSlug(strtok($_FILES['file']['name'], '.'));
+    // Check if model skin exists
+    $icon = $model->iconFind(array('name' => $name));
+    if ($icon) {
+        $response->status = 409;
+        $response->message = '';
+        if ($original_name !== $name) {
+            $response->message .= 'The file ' . $original_name . ' will be renamed to ' . $name . '. ';
+        }
+        $response->message .= 'The icon set with the name ' . $name . ' already exists! Please rename your icon set and try to upload again.';
+        $response->json($response);
+    }
+    $icon_path = 'storage/icons/';
+    $icon_path_temp = 'storage/icons/' . $name . '/';
+    // Uploader init
+    $uploader = new Uploader();
+    $uploader->setDir($icon_path);
+    $uploader->setExtensions(array('gz', 'zip'));  //allowed extensions list//
+    $uploader->setMaxSize(2); //set max file size to be allowed in MB//
+    $uploader->setCustomName($name);
+    $uploader->sameName(true);
+    $uploader->setUniqueFile();
+
+    // Upload a file
+    if (!$file = $api->uploadRepackFile('file', $uploader, $icon_path, $icon_path)) {
+        $error = $api->getErrors();
+        $response->status = 500;
+        $response->message = $error[0];
+        $response->json($response);
+    }
+    $file_name = strtok($file, '.');
+    //var_dump($uploader,$icon_path,$icon_path_temp,$file_name);
+    //return;
+
+    if ($file) {
+        $input = array(
+            'user_id' => $user->id,
+            'name' => Ut::toSlug($file_name),
+            'title' => $file_name,
+            'file' => $file,
+            'author' => trim($user->first_name . ' ' . $user->last_name),
+            'homepage' => $user->homepage,
+            'created_at' => date("Y-m-d H:i:s"),
+            'updated_at' => date("Y-m-d H:i:s"),
+        );
+        if (!$model->iconCreate($input)) {
+            $response->status = 500;
+            $response->message = 'Unable to upload a icon set';
+            $response->json($response);
+        }
+        $input['id'] = $db->inserId();
+    }
+    $response->data = $input;
+    $response->json($response);
+}
+// API Icon update
+elseif ($route->match('iconupdate', null)) {
+    // Prepare and sanitize post input
+    $_POST['updated_at'] = date("Y-m-d H:i:s");
+    $api->setInputs($_POST,$model->getWhitelist('icons'));
+    $skin = $model->iconFind(array('id' => $api->getInputVal('id'), 'user_id' => $user->id, 'name' => $api->getInputVal('name')));
+    if (!$skin) {
+        $response->status = 404;
+        $response->message = 'Not found';
+        $response->json($response);
+    }
+    $model->iconUpdate($api->getInputs(), array('id' => $api->getInputVal('id')));
+    $response->json($response);
+}
+// API Icon delete
+elseif ($route->match('icondelete', null)) {
+    // Prepare and sanitize post input
+    $api->setInputs($_POST);
+    $icon = $model->iconFind(array('id' => $api->getInputVal('id'), 'user_id' => $user->id));
+    if (!count($icon)) {
+        $response->status = 404;
+        $response->message = 'Not found';
+        $response->json($response);
+    }
+    if (!$model->iconDelete(array('id' => $api->getInputVal('id'), 'user_id' => $user->id))) {
+        $response->status = 500;
+        $response->message = 'Unable to delete the icon';
+        $response->json($response);
+    }
+    $path = 'storage/icons/';
+    if (is_file($path . $icon->file)) {
+        unlink($path . $icon->file);
+    }
+    if (is_file($path . $icon->icon)) {
+        unlink($path . $icon->icon);
+    }
+    Ut::cleanDirectory($path . $icon->name);
+    $response->json($response);
+}
+// API Icon upload
+elseif ($route->match('iconupload', 1)) {
+    $api->setInputs(array('name' => $route->getParam(0)));
+    $name = Ut::toSlug(strtok($_FILES['file']['name'], '.'));
+    // Check if skin name and uploaded name are equal
+    if ($api->getInputVal('name') !== $name) {
+        $response->status = 500;
+        $response->message = 'The uploaded file must be named:  ' . $api->getInputVal('name') . '!!! Your file name is: ' . $name;
+        $response->json($response);
+    }
+    // Check if model exists
+    $icon = $model->iconFind(array('user_id' => $user->id, 'name' => $api->getInputVal('name')));
+    if (!$icon) {
+        $response->status = 404;
+        $response->message = 'Icon not found';
+        $response->json($response);
+    }
+    $icon_path = 'storage/icons/';
+    $icon_path_temp = 'storage/icons/' . $name . '/';
+
+    $uploader = new Uploader();
+    $uploader->setDir($icon_path);
+    $uploader->setExtensions(array('gz', 'zip'));  //allowed extensions list//
+    $uploader->setMaxSize(.5); //set max file size to be allowed in MB//
+    $uploader->setCustomName($name);
+    $uploader->sameName(true);
+
+    // Atempt to upload a file
+    if (!$file = $api->uploadRepackFile('file', $uploader, $icon_path, $icon_path)) {
+        $error = $api->getErrors();
+        $response->status = 500;
+        $response->message = $error[0];
+        $response->json($response);
+    }
+    $file_name = strtok($file, '.');
+    $input = array(
+        'file' => $file,
+        'updated_at' => date("Y-m-d H:i:s"),
+    );
+    $model->iconUpdate($input, array('id' => $icon->id));
+    $response->json($response);
+}
+// API Icon image upload
+elseif ($route->match('iconimgupload', null)) {
+    // Prepare and sanitize post input
+    $api->setInputs($_POST);
+
+    $icon = $model->iconFind(array('id' => $api->getInputVal('id'), 'user_id' => $user->id));
+    if (!$icon) {
+        $response->status = 404;
+        $response->message = 'Not found';
+        $response->json($response);
+    }
+    $uploader = new Uploader();
+    $uploader->setDir('storage/icons/');
+    $uploader->setExtensions(array('png', 'jpg', 'gif'));  //allowed extensions list//
+    $uploader->setMaxSize(.2);
+    $uploader->setCustomName($icon->name . '-' . $api->getInputVal('id') . '-' . time());
+
+    if (!$uploader->uploadFile('file')) {
+        $response->status = 500;
+        $response->message = $uploader->getMessage();
+        $response->json($response);
+    }
+    $model->iconUpdate(array('icon' => $uploader->getUploadName(), 'updated_at' => date("Y-m-d H:i:s")), array('id' => $icon->id));
+    $path = 'storage/icons/' . $api->getInputVal('current');
     if (is_file($path)) {
         unlink($path);
     }
@@ -683,7 +924,25 @@ elseif ($route->match('api-modules', null)) {
         $ids = $model->apiTokensModuleIds(rtrim($tokens, ','));
     }
 
-    $response->data = $model->apiModulesAll(array('verified' => 1), $ids);
+    $response->data = $model->apiModulesAll(array('verified' => 1, 'active' => 1), $ids);
+    $response->json($response);
+}
+// Public API modules
+elseif ($route->match('api-modulesweb', null)) {
+    $response->data = $model->modulesAll(array('verified' => 1, 'active' => 1));
+    $response->json($response);
+}
+// Public API module ID
+elseif ($route->match('api-modulesidweb', 1)) {
+    // Prepare and sanitize post input
+    $api->setInputs(array('id' => $route->getParam(0)));
+    $module = $model->moduleFindJoin(array('m.id' => $api->getInputVal('id')));
+    if (!$module) {
+        $response->status = 404;
+        $response->message = 'Not found';
+        $response->json($response);
+    }
+    $response->data = $module;
     $response->json($response);
 }
 // Public API module id
@@ -712,12 +971,18 @@ elseif ($route->match('api-modulesid', null)) {
 }
 // Public API module archives
 elseif ($route->match('api-module-archive', 1)) {
-    if(!$route->getParam(0)){
-         $response->status = 404;
+    if (!$route->getParam(0)) {
+        $response->status = 404;
         $response->message = 'Not found';
         $response->json($response);
     }
     $response->data = $model->archiveAll(array('modulename' => $route->getParam(0)));
+
+    if (empty($response->data)) {
+        $response->status = 404;
+        $response->message = 'Not found';
+        $response->json($response);
+    }
     $response->json($response);
 }
 // Public API modules installed
@@ -747,16 +1012,16 @@ elseif ($route->match('api-comments-create', null)) {
         $response->message = 'Unable to add a comment';
         $response->json($response);
     }
-     if($api->getInputVal('type') != 1 && $module = $model->moduleFindJoin(array('m.id' => $api->getInputVal('module_id')))){
-         $email = array(
+    if ($api->getInputVal('type') != 1 && $module = $model->moduleFindJoin(array('m.id' => $api->getInputVal('module_id')))) {
+        $email = array(
             'from' => 'noreply@zwaveeurope.com',
             'from_name' => $api->getInputVal('name'),
             'to' => $module->mail,
-            'subject' => $module->title.' - new comment',
-            'body' => $api->getInputVal('content'), 
+            'subject' => $module->title . ' - new comment',
+            'body' => $api->getInputVal('content'),
         );
         $api->sendEmail($email);
-     }
+    }
     $input['id'] = $db->inserId();
     $response->data = $input;
     $response->json($response);
@@ -773,13 +1038,13 @@ elseif ($route->match('api-rating-create', null)) {
     // Prepare and sanitize post input
     $api->setInputs($_POST);
     // Already rated
-    $rating = $model->ratingFind(array('module_id' => $api->getInputVal('module_id'),'remote_id' => $api->getInputVal('remote_id')));
+    $rating = $model->ratingFind(array('module_id' => $api->getInputVal('module_id'), 'remote_id' => $api->getInputVal('remote_id')));
     if ($rating) {
         $response->status = 409;
         $response->message = 'Already rated';
         $response->json($response);
     }
-    if ((int)$api->getInputVal('score') > 5 || !$model->ratingCreate($api->getInputs())) {
+    if ((int) $api->getInputVal('score') > 5 || !$model->ratingCreate($api->getInputs())) {
         $response->status = 500;
         $response->message = 'Unable to rate the module';
         $response->json($response);
@@ -791,6 +1056,21 @@ elseif ($route->match('api-rating-create', null)) {
 // Public API skins
 elseif ($route->match('api-skins', null)) {
     $response->data = $model->skinsAll(array('active' => 1));
+    $response->json($response);
+}
+// Public API icons
+elseif ($route->match('api-icons', null)) {
+    $response->data = $model->iconsAll(array('active' => 1));
+    $response->json($response);
+}
+// API icon previews
+elseif ($route->match('api-iconpreview', 1)) {
+    // Prepare and sanitize input
+    $api->setInputs(array('name' => $route->getParam(0)));
+    $dir = 'storage/icons/' . $api->getInputVal('name') . '/';
+    $files = Ut::getFilesIndDir($dir, array('jpg', 'jpeg', 'png', 'gif'));
+    // Response
+    $response->data = $files;
     $response->json($response);
 }
 // Logout

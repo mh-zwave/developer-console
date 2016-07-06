@@ -1,0 +1,89 @@
+<!-- Icons -->
+<div ng-controller="IconController">
+    <bb-loader></bb-loader>
+    <div class="entry-header row">
+        <div class="col col-md-6">
+            <h1>{{_t('Icons')}}</h1>
+        </div>
+        <div class="col col-md-6">
+            <div class="page-control form-inline">
+                <div class="input-group search-form hide-on-mobile">
+                <input type="text" ng-model="q" class="form-control" value="{{q}}">
+                <span class="input-group-addon"><i class="fa fa-search"></i></span> 
+            </div>
+                <button class="btn btn-success" ng-click="expandElement('addnew')" ng-if="!expand.addnew"><i class="fa fa-plus"></i> {{_t('Upload new icon')}}</button>
+            </div>
+        </div>
+    </div>
+    <div ng-if="expand.addnew">
+        <form name="form_icon" id="form_icon" class="form form-page form-inline" novalidate>
+            <fieldset>
+                <div class="row">
+                    <div class="col col-md-4">
+                        <input class="form-control" type="file" name="file" onchange="angular.element(this).scope().uploadIcon(this.files)"/>
+                    </div>
+                    <div class="col col-md-8">
+                         <!--<button type="button" class="btn btn-submit" ng-click="uploadModule()"><i class="fa fa-upload"></i> {{_t('Upload module')}}</button>-->
+                        <button type="button" class="btn btn-default" ng-click="expandElement('addnew')"><i class="fa fa-times  text-danger"></i> <span ng-bind="_t('Cancel')"></span></button>
+                    </div>
+                </div>
+
+
+
+            </fieldset>
+        </form>
+    </div>
+    <div>
+        <table class="table table-condensed table-report">
+            <thead>
+            <th>&nbsp;</th>
+            <th>
+                <a href="" ng-click="orderBy('title')">Title
+                    <span ng-show="predicate == 'title'"><i ng-show="!reverse" class="fa fa-sort-asc"></i><i ng-show="reverse" class="fa fa-sort-desc"></i></span>
+                </a>
+            </th>
+            <th>
+                <a href="" ng-click="orderBy('version')">Version
+                    <span ng-show="predicate == 'version'"><i ng-show="!reverse" class="fa fa-sort-asc"></i><i ng-show="reverse" class="fa fa-sort-desc"></i></span>
+                </a>
+            </th>
+            <th>
+                <a href="" ng-click="orderBy('ui_version')">UI version
+                    <span ng-show="predicate == 'ui_version'"><i ng-show="!reverse" class="fa fa-sort-asc"></i><i ng-show="reverse" class="fa fa-sort-desc"></i></span>
+                </a>
+            </th>
+            <th>
+                <a href="" ng-click="orderBy('created_at')">Created
+                    <span ng-show="predicate == 'created_at'"><i ng-show="!reverse" class="fa fa-sort-asc"></i><i ng-show="reverse" class="fa fa-sort-desc"></i></span>
+                </a>
+            </th>
+            <th>&nbsp;</th>
+            </thead>
+            <tbody>
+                <tr class="bcg-active" ng-class="v.active == 1 ? 'true': 'false'" dir-paginate="v in icon.data| orderBy:predicate:reverse | filter:q | itemsPerPage: pageSize" current-page="currentPage">
+                    <td class="td-img">
+                        <img class="report-img" ng-src="{{v.icon_path}}" alt="img" />
+                    </td>
+                    <td>{{v.title}}</td>
+                    <td>{{v.version}}</td>
+                    <td>{{v.ui_version}}</td>
+                    <td>{{v.created_at}}</td>
+                    <td class="td-action">
+                        <a class="btn btn-default" ng-href="{{cfg.path.icon + v.file}}"><i class="fa fa-download"></i></a>
+                        <a class="btn btn-default" ng-href="#icons/{{v.id}}"><i class="fa fa-pencil text-info"></i></a>
+                        <a class="btn btn-default" href=""
+                           ng-click="updateIcon({id: v.id,name: v.name,active:v.active == 1 ? 0:1})" 
+                           ng-class="v.active == 1 ? 'active':''">
+                            <i class="fa fa-fire text-success"></i>
+                        </a>
+                          <!--<a class="btn btn-default" href="" ng-click="updateIcon({id: v.id,name: v.name,active:0})" ng-if="v.active == 1"><i class="fa fa-ban text-danger"></i></a>-->
+                        <a class="btn btn-default" href="" ng-click="deleteIcon(v.id,_t('lb_delete_confirm'))"><i class="fa fa-times text-danger"></i></a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <div class="text-center mobile-padding" ng-if_="collection.length > 0">
+            <dir-pagination-controls boundary-links="true"></dir-pagination-controls>
+        </div>
+    </div>
+</div>
