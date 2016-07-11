@@ -1,33 +1,60 @@
 <!DOCTYPE html>
 <div ng-controller="SideCtrl">
     <uib-accordion close-others="false">
-        <uib-accordion-group   heading="Upload - Process" is-open="true" is-disabled="false">
+        <uib-accordion-group heading="Packing - Process" is-open="true" is-disabled="false">
+            <p class="text-justify">
+
+            </p>
+            Before uploading you have to pack your Module as an "tar.gz" file.
+            <div class="alert alert-danger" role="alert">
+                Danger: only pack the Content of the Module folder not the Module Folder itself.
+            </div>
+            for Example in Unix u can use this commands.
+            <div class="alert alert-info" role="alert">
+                cd /opt/z-way-server/automation/userModules/#yourmodule#
+            </div>
+            <div class="alert alert-info" role="alert">
+                sudo tar -cvzf #yourmodule#.tar.gz *
+            </div>
+        </uib-accordion-group>
+        <uib-accordion-group heading="Upload - Process" is-open="true" is-disabled="false">
             <p class="text-justify">
                 The first step before you are able to upload your first own module is to pack them correct.
-                At the moment we only support the filetype "tar.gz". Make sure that you use this filetype. 
-                If you have finished your module and packed them correct then you can start uploading on the main-screen of our developer-center 
-                and click "Add new module" and follow the instrutctions. 
-                Was your upload successful then you should see your module in your overview with all the correct values like 
-                "Title", "Icon", "Category", "Version", "Maturity" 
+                At the moment we only support the filetype "tar.gz". Make sure that you use this filetype.
+                If you have finished your module and packed them correct then you can start uploading on the main-screen
+                of our developer-center
+                and click "Add new module" and follow the instrutctions.
+                Was your upload successful then you should see your module in your overview with all the correct values
+                like
+                "Title", "Icon", "Category", "Version", "Maturity"
                 and the last-updated-timestamp.
             </p>
         </uib-accordion-group>
-        <uib-accordion-group   heading="Publishing - Process" is-open="true" is-disabled="false">
+        <uib-accordion-group heading="Publishing - Process" is-open="true" is-disabled="false">
             <p class="text-justify">
-                Before your apps is fully integrated in our app-store you need to verify them (read more on "Verification - Process"). 
-                That means the we prove your applikation and test them. 
-                This cost some time and maybe you don´t want to wait or want that your friends oder co-workers are also able to test them. 
-                In this case you can define your own "token" in your module-management. You only need to click on edit (at the right side on your module-overview) and add your own token. 
-                Then you can share them like you want and everyone which have these token can download the application in his software.
+                Before your apps is fully integrated in our app-store you need to verify them (read more on
+                "Verification - Process").
+                That means the we prove your applikation and test them.
+                This cost some time and maybe you don´t want to wait or want that your friends oder co-workers are also
+                able to test them.
+                In this case you can define your own "token" in your module-management. You only need to click on edit
+                (at the right side on your module-overview) and add your own token.
+                Then you can share them like you want and everyone which have these token can download the application
+                in his software.
             </p>
         </uib-accordion-group>
-        <uib-accordion-group   heading="Verification - Process" is-open="true" is-disabled="false">
+        <uib-accordion-group heading="Verification - Process" is-open="true" is-disabled="false">
             <p class="text-justify">
-                The verification-process can startet by a click on "Send a request" in your module-overview. Now is your verification in process. 
-                You got a mail from us if we accept or decline your module. In that case if we decline you also got a reason from us and can fix/change them and start the verification again. 
-                After a successful verification everyone can access your module in our app-store. 
+                The verification-process can startet by a click on "Send a request" in your module-overview. Now is your
+                verification in process.
+                You got a mail from us if we accept or decline your module. In that case if we decline you also got a
+                reason from us and can fix/change them and start the verification again.
+                After a successful verification everyone can access your module in our app-store.
             </p>
-            <div class="alert alert-warning" role="alert">    Important: if you update your module you need to verify them again.  </div>
+            <div class="alert alert-warning" role="alert"> Important: if you update your module you need to verify them
+                again.
+            </div>
         </uib-accordion-group>
+
     </uib-accordion>
 </div>
