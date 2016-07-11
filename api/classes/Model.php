@@ -530,7 +530,7 @@ class Model {
         if ($result->num_rows > 0) {
             while ($row = $result->fetch_object()) {
                 $row->icon_path = $this->cfg['server'] . Ut::getImageOrPlaceholder('storage/skins/' . $row->icon);
-                $row->file_path = (is_file('storage/skins/' . $row->file) ? $this->cfg['server'] . 'storage/skins/' . $row->file : NULL);
+                $row->file_path = (is_file('storage/skins/' . $row->file) ? $this->cfg['server'] . 'storage/skins/' . $row->file : false);
                 $row->server_path = $this->cfg['server'];
                 $single ? $data = $row : array_push($data, $row);
             }

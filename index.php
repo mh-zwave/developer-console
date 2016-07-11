@@ -20,7 +20,7 @@ if(ini_get('session.auto_start') != 1) {
  */
 // Config
 $cfg = require_once 'api/config.php';
-if($_SERVER['HTTP_HOST'] == 'localhost'){
+if($_SERVER['HTTP_HOST'] === 'localhost' || $_SERVER['HTTP_HOST'] === 'dev.dev'){
     $environment = 'local';
 
 }else{
@@ -33,6 +33,7 @@ require_once 'api/classes/Db.php';
 require_once 'api/classes/Model.php';
 require_once 'api/classes/AppApi.php';
 require_once 'api/classes/Ut.php';
+require_once 'api/classes/Loggit.php';
 require_once 'api/vendor/phpmailer/PHPMailerAutoload.php';
 require_once 'api/vendor/upload/Uploader.php';
 // Routes

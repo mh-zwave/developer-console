@@ -3,10 +3,10 @@
         <?php require_once 'head_scripts.php' ?>
 <!--Libarys for the helpside -->
 <link rel="stylesheet" href="app/vendor/helplib/bootstrap.css">
-<link rel="stylesheet" href="app/vendor/helplib/github.min.css">
+<!--  <link rel="stylesheet" href="app/vendor/helplib/github.min.css">
 <script src="app/vendor/helplib/highlight.min.js"></script>
 <script src="app/vendor/helplib/ui-bootstrap-tpls-1.3.2.min.js"></script>
-<script src="app/vendor/helplib/angular-highlightjs.min.js"></script>
+<script src="app/vendor/helplib/angular-highlightjs.min.js"></script> -->
 
 
 

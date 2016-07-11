@@ -71,25 +71,25 @@ var config_data = {
         'categories': [
             {
                 "id": "basic_gateway_modules",
-                "name": "Basic Gateway Modules",
+                "name": "Basic Modules",
                 "description": "Basic Gateway Modules",
                 "icon": ""
             },
             {
                 "id": "legacy_products_workaround",
-                "name": "Legacy Products / Workaround",
+                "name": "Products / Workaround",
                 "description": "Legacy Products / Workaround",
                 "icon": ""
             },
             {
                 "id": "support_external_ui",
-                "name": "Support of external UIs",
+                "name": "Ext. UIs",
                 "description": "Support of external UIs",
                 "icon": ""
             },
             {
                 "id": "support_external_dev",
-                "name": "Support of external Devices/Services",
+                "name": "Ext. Devices/Services",
                 "description": "Support of external Devices/Services",
                 "icon": ""
             },

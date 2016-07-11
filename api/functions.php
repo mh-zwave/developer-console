@@ -13,6 +13,7 @@ mysql_select_db($db) or die("Datenbank konnte nicht gefunden werden.");
 
 function unpack_zip($path) {
     $response = new Response;
+     $response->loggit = true;
     $zip = new ZipArchive;
     $target = str_replace('.zip', '', $path);
     if ($zip->open($path) === TRUE) {
@@ -21,13 +22,14 @@ function unpack_zip($path) {
         //echo 'ok';
     } else {
         $response->status = 500;
-        $response->message = 'Unable to unpack ZIP file';
+        $response->message = $path.': Unable to unpack ZIP file';
         $response->json($response);
     }
 }
 
 function unpack_tar($path) {
     $response = new Response;
+     $response->loggit = true;
     //echo "Unpack.\n";
     //echo "path:".$path;
     /*
@@ -73,6 +75,8 @@ function unpack_tar($path) {
 
 function read_json($path, $user_id, $filetype, $wrong_folder) {
     $response = new Response;
+     $response->loggit = true;
+    $fileName = substr($path, strrpos($path, '/') + 1);
     if ($filetype == "gz") {
         $path = str_replace(".tar.gz", "", $path);
     }
@@ -82,19 +86,26 @@ function read_json($path, $user_id, $filetype, $wrong_folder) {
     // Heck correct package path
     if (is_dir($path . '/' . $wrong_folder)) {
         $response->status = 500;
-        $response->message = 'Package file has an invalid path. Need to repack file again';
+        $response->message = $fileName.': '.'Package file has an invalid path. Need to repack file again';
         $response->json($response);
     }
     //var_dump($path);
     $targetdir = $path . "/module.json";
     if (!file_exists($targetdir)) {
         $response->status = 500;
-        $response->message = 'Unable to read module.json file';
+        $response->message = $fileName.': '.'The module.json file not found';
         $response->json($response);
     }
 
     $jsonfile = @file_get_contents("$targetdir");
-    $jsonarray = json_decode($jsonfile, true);
+    $jsonarray = json_decode(iconv('UTF-8', 'UTF-8//IGNORE', utf8_encode($jsonfile)), true);
+    if (Ut:: jsonHasError(json_last_error())) {
+        $response->status = 500;
+        $response->message =$fileName.': '.Ut:: jsonHasError(json_last_error()).' in the module.json';
+        $response->json($response);
+    }
+    //var_dump(Ut:: jsonHasError(json_last_error()));
+    //exit;
     $category = $jsonarray['category'];
     $author = $jsonarray['author'];
     $homepage = $jsonarray['homepage'];
@@ -124,14 +135,14 @@ function read_json($path, $user_id, $filetype, $wrong_folder) {
         $jsonarray_lang = json_decode($jsonfile_lang, true);
         if (!$jsonarray_lang['m_descr'] || !$jsonarray_lang['m_title']) {
             $response->status = 500;
-            $response->message = 'Missing m_title or m_descr in lang/en.json';
+            $response->message = $fileName.': '.'Missing m_title or m_descr in lang/en.json';
             $response->json($response);
         }
         $en_desc = $jsonarray_lang['m_descr'];
         $en_title = $jsonarray_lang['m_title'];
     } else {
         $response->status = 500;
-        $response->message = 'Missing file: lang/en.json';
+        $response->message = $fileName.': '.'Missing file lang/en.json';
         $response->json($response);
     }
 
@@ -148,7 +159,7 @@ function read_json($path, $user_id, $filetype, $wrong_folder) {
     }
     if ($en_title == "" || $en_desc == '') {
         $response->status = 500;
-        $response->message = 'Empty m_title or m_descr in lang/en.json';
+        $response->message =  $fileName.': '.'Empty m_title or m_descr in lang/en.json';
         $response->json($response);
     }
 
@@ -171,6 +182,7 @@ function read_json($path, $user_id, $filetype, $wrong_folder) {
 
 function check_available($user_id, $en_title, $path, $moduleName, $filetype) {
     $response = new Response;
+     $response->loggit = true;
     include("configuration.php");
 
     mysql_connect($server, $db_user, $db_pw);
@@ -180,6 +192,7 @@ function check_available($user_id, $en_title, $path, $moduleName, $filetype) {
     $result = mysql_query($sql);
     $count = 0;
     $current_module_id = 0;
+    $fileName = substr($path, strrpos($path, '/') + 1);
     while ($row = mysql_fetch_object($result)) {
         $count++;
         $current_module_id = $row->id;
@@ -237,6 +250,7 @@ function check_available($user_id, $en_title, $path, $moduleName, $filetype) {
         if (!copy($file, $newfile)) {
             $response->status = 500;
             $response->message = 'Unable to copy file: ' . $file;
+            $response->message =  $fileName.': '.'Unable to copy file: ' . $file;
             $response->json($response);
         } else {
             $copy_tar = "ok";
@@ -263,6 +277,7 @@ function check_available($user_id, $en_title, $path, $moduleName, $filetype) {
 function store_json($jsonarray, $targetdir, $path, $user_id, $filetype,$jsonfile) {
 
     $response = new Response;
+     $response->loggit = true;
     $category = $jsonarray['category'];
     //$author = $jsonarray['author'];
     $author = iconv(mb_detect_encoding($jsonarray['author'], mb_detect_order(), true), 'UTF-8', $jsonarray['author']);
@@ -272,7 +287,9 @@ function store_json($jsonarray, $targetdir, $path, $user_id, $filetype,$jsonfile
     $moduleName = $jsonarray['moduleName'];
     $dependencies = implode(', ',$jsonarray['dependencies']);
     $modulejson = $jsonfile;
-
+    
+    $fileName = $moduleName;
+    
     $lang_target = $path . "/lang";
 
     if (file_exists($lang_target . "/de.json")) {
@@ -301,7 +318,7 @@ function store_json($jsonarray, $targetdir, $path, $user_id, $filetype,$jsonfile
         
     } else {
         $response->status = 500;
-        $response->message = 'Missing file: lang/en.json';
+        $response->message = $fileName.': '.'Missing file: lang/en.json';
         $response->json($response);
     }
 
@@ -326,7 +343,7 @@ function store_json($jsonarray, $targetdir, $path, $user_id, $filetype,$jsonfile
     }
     if (!$en_title || empty($en_title)) {
         $response->status = 500;
-        $response->message = 'Missing module title';
+        $response->message =  $fileName.': '.'Empty or missing m_title in lang/en.json';
         $response->json($response);
     }
 
@@ -516,7 +533,7 @@ function store_json($jsonarray, $targetdir, $path, $user_id, $filetype,$jsonfile
             //module_name exist;
             rrmdir("temp/" . $user_id);
             $response->status = 500;
-            $response->message = 'Module_name exist';
+            $response->message =  $fileName.': '.'The module with the name ' . $moduleName . ' already exists! Please rename your module and try it to upload again.';
             $response->json($response);
             //Header("Location: main.php?error=11");
             //exit;
