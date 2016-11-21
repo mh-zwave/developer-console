@@ -418,7 +418,7 @@ elseif ($route->match('skincreate', null)) {
     $uploader = new Uploader();
     $uploader->setDir($skin_path);
     $uploader->setExtensions(array('gz', 'zip'));  //allowed extensions list//
-    $uploader->setMaxSize(.5); //set max file size to be allowed in MB//
+    $uploader->setMaxSize(2.5); //set max file size to be allowed in MB//
     $uploader->setCustomName($name);
     $uploader->sameName(true);
     $uploader->setUniqueFile();
@@ -517,7 +517,7 @@ elseif ($route->match('skinupload', 1)) {
     $uploader = new Uploader();
     $uploader->setDir($skin_path);
     $uploader->setExtensions(array('gz', 'zip'));  //allowed extensions list//
-    $uploader->setMaxSize(.5); //set max file size to be allowed in MB//
+    $uploader->setMaxSize(2.5); //set max file size to be allowed in MB//
     $uploader->sameName(true);
 
     // Atempt to upload a file
