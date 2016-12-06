@@ -8,3 +8,5 @@
 /upload/*
 /api/config.php
 /api/configuration.php
+*.iml
+/.idea

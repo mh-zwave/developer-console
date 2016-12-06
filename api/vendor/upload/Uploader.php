@@ -39,11 +39,17 @@ class Uploader {
 
     function getExtension($string) {
         $ext = "";
-        try {
-            $parts = explode(".", $string);
-            $ext = strtolower($parts[count($parts) - 1]);
-        } catch (Exception $c) {
-            $ext = "";
+        if (strpos($string, '.tar.gz') !== false) {
+            $ext = 'tar.gz';
+        }else{
+            try {
+                $parts = explode(".", $string);
+
+
+                $ext = strtolower($parts[count($parts) - 1]);
+            } catch (Exception $c) {
+                $ext = "";
+            }
         }
         return $ext;
     }
