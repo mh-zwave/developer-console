@@ -37,15 +37,15 @@
                             <li class="subnavi-users" ng-class="isActive('admin-users')">
                                 <a href="#admin-users"><i class="fa fa-users"></i> {{_t('Users')}} <i class="fa fa-chevron-right subnavi-arrow"></i></a>
                             </li>
-                            <!-- Skins -->
-                            <li class="subnavi-skins" ng-class="isActive('skins')">
-                                <a href="#skins"><i class="fa fa-puzzle-piece"></i> {{_t('Skins')}} <i class="fa fa-chevron-right subnavi-arrow"></i></a>
-                            </li>
                             <!-- icons -->
                             <li class="subnavi-skins" ng-class="isActive('icons')">
                                 <a href="#icons"><i class="fa fa-picture-o"></i> {{_t('Icons')}} <i class="fa fa-chevron-right subnavi-arrow"></i></a>
                             </li>
                              <?php endif; ?>
+                            <!-- Skins -->
+                            <li class="subnavi-skins" ng-class="isActive('skins')">
+                                <a href="#skins"><i class="fa fa-puzzle-piece"></i> {{_t('Skins')}} <i class="fa fa-chevron-right subnavi-arrow"></i></a>
+                            </li>
                             <!-- My access -->
                             <li class="subnavi-myaccess" ng-class="isActive('mysettings')">
                                 <a href="#mysettings"><i class="fa fa-user"></i> {{_t('nav_myaccess')}} <i class="fa fa-chevron-right subnavi-arrow"></i></a>
